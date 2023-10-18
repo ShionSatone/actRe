@@ -292,21 +292,21 @@ void CEdit::Control(void)
 	if (pInputKeyboard->GetPress(DIK_RIGHT) == true)
 	{//→キーを押したら
 
-		if (pInputKeyboard->GetTrigger(DIK_UP) == true)
-		{//↑キーを押したら
+		//if (pInputKeyboard->GetTrigger(DIK_UP) == true)
+		//{//↑キーを押したら
 
-			//右奥
-			m_pos.x += sinf(m_rot.y + D3DX_PI * 0.25f) * MOVE_MODEL;
-			m_pos.y += cosf(m_rot.y + D3DX_PI * 0.25f) * MOVE_MODEL;
-		}
-		else if (pInputKeyboard->GetTrigger(DIK_DOWN) == true)
-		{//↓キーを押したら
+		//	//右奥
+		//	m_pos.x += sinf(m_rot.y + D3DX_PI * 0.25f) * MOVE_MODEL;
+		//	m_pos.y += cosf(m_rot.y + D3DX_PI * 0.25f) * MOVE_MODEL;
+		//}
+		//else if (pInputKeyboard->GetTrigger(DIK_DOWN) == true)
+		//{//↓キーを押したら
 
-			//右手前
-			m_pos.x += sinf(m_rot.y + D3DX_PI * 0.75f) * MOVE_MODEL;
-			m_pos.y += cosf(m_rot.y + D3DX_PI * 0.75f) * MOVE_MODEL;
-		}
-		else if (pInputKeyboard->GetTrigger(DIK_RIGHT) == true)
+		//	//右手前
+		//	m_pos.x += sinf(m_rot.y + D3DX_PI * 0.75f) * MOVE_MODEL;
+		//	m_pos.y += cosf(m_rot.y + D3DX_PI * 0.75f) * MOVE_MODEL;
+		//}
+		/*else */if (pInputKeyboard->GetTrigger(DIK_RIGHT) == true)
 		{
 			//右
 			m_pos.x += sinf(m_rot.y + D3DX_PI * 0.5f) * MOVE_MODEL;
@@ -316,21 +316,21 @@ void CEdit::Control(void)
 	else if (pInputKeyboard->GetPress(DIK_LEFT) == true)
 	{//←キーを押したら
 
-		if (pInputKeyboard->GetTrigger(DIK_UP) == true)
-		{//↑キーを押したら
+		//if (pInputKeyboard->GetTrigger(DIK_UP) == true)
+		//{//↑キーを押したら
 
-			//左奥
-			m_pos.x += sinf(m_rot.y + -D3DX_PI * 0.25f) * MOVE_MODEL;
-			m_pos.y += cosf(m_rot.y + -D3DX_PI * 0.25f) * MOVE_MODEL;
-		}
-		else if (pInputKeyboard->GetTrigger(DIK_DOWN) == true)
-		{//↓キーを押したら
+		//	//左奥
+		//	m_pos.x += sinf(m_rot.y + -D3DX_PI * 0.25f) * MOVE_MODEL;
+		//	m_pos.y += cosf(m_rot.y + -D3DX_PI * 0.25f) * MOVE_MODEL;
+		//}
+		//else if (pInputKeyboard->GetTrigger(DIK_DOWN) == true)
+		//{//↓キーを押したら
 
-			//左手前
-			m_pos.x += sinf(m_rot.y + -D3DX_PI * 0.75f) * MOVE_MODEL;
-			m_pos.y += cosf(m_rot.y + -D3DX_PI * 0.75f) * MOVE_MODEL;
-		}
-		else if (pInputKeyboard->GetTrigger(DIK_LEFT) == true)
+		//	//左手前
+		//	m_pos.x += sinf(m_rot.y + -D3DX_PI * 0.75f) * MOVE_MODEL;
+		//	m_pos.y += cosf(m_rot.y + -D3DX_PI * 0.75f) * MOVE_MODEL;
+		//}
+		/*else */if (pInputKeyboard->GetTrigger(DIK_LEFT) == true)
 		{
 			//左
 			m_pos.x += sinf(m_rot.y + -D3DX_PI * 0.5f) * MOVE_MODEL;

@@ -56,10 +56,11 @@ CCamera::~CCamera()
 //==============================================================
 HRESULT CCamera::Init(void)
 {
-	float fPosY = -3850.0f;
+	float fPosX = 650.0f;
+	float fPosY = -5550.0f;
 
-	m_posV = D3DXVECTOR3(440.0f, fPosY + 189.0f, -500.0f);	//視点の初期化
-	m_posR = D3DXVECTOR3(440.0f, fPosY + 168.0f, -500.0f);	//注視点の初期化
+	m_posV = D3DXVECTOR3(fPosX, fPosY + 189.0f, -500.0f);	//視点の初期化
+	m_posR = D3DXVECTOR3(fPosX, fPosY + 168.0f, -500.0f);	//注視点の初期化
 	m_vecU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);			//上方向ベクトルの初期化
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//向きの初期化
 	m_posVDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//目的の視点の初期化
