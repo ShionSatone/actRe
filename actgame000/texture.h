@@ -39,7 +39,7 @@ public:
 	HRESULT Load(void);		//テクスチャ読み込み処理
 	void Unload(void);		//テクスチャ破棄処理
 
-	int Regit(const char *pFilename);				//テクスチャの番号指定
+	int Regist(const char *pFilename);				//テクスチャの番号指定
 	LPDIRECT3DTEXTURE9 GetAddress(int nIdx);		//テクスチャの情報取得
 
 private:

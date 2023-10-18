@@ -70,14 +70,14 @@ HRESULT CBg::Init(void)
 	case CScene::MODE_RESULT:
 
 		//テクスチャの読み込み
-		m_nIdxTexture = pTexture->Regit("data\\TEXTURE\\result.jpg");
+		m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\result.jpg");
 
 		break;
 
 	case CScene::MODE_RANKING:
 
 		//テクスチャの読み込み
-		m_nIdxTexture = pTexture->Regit("data\\TEXTURE\\ranking.jpg");
+		m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\ranking.jpg");
 
 		break;
 	}

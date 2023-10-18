@@ -139,7 +139,7 @@ HRESULT CModelHier::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, char *pFileName)
 	CMaterial *pMaterial = CManager::GetInstance()->GetMaterial();
 
 	//ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
-	m_nIdxModel = pMaterial->Regit(pFileName);
+	m_nIdxModel = pMaterial->Regist(pFileName);
 
 	//ˆÊ’u‚Ìİ’è
 	m_pos = pos;

@@ -37,7 +37,7 @@ public:
 	HRESULT Load(void);		//テクスチャ読み込み処理
 	void Unload(void);		//テクスチャ破棄処理
 
-	int Regit(const char *pFilename);							//テクスチャの番号指定
+	int Regist(const char *pFilename);							//テクスチャの番号指定
 	LPDIRECT3DTEXTURE9 GetTexAddress(int nIdx, int nMat);		//テクスチャの情報取得
 	LPD3DXBUFFER GetMatAddress(int nIdx);		//マテリアルの情報取得
 	DWORD GetNumMatAddress(int nIdx);			//マテリアルの数の情報取得

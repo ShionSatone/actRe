@@ -118,7 +118,7 @@ void CMaterial::Unload(void)
 //==============================================================
 //モデル番号指定処理
 //==============================================================
-int CMaterial::Regit(const char *pFilename)
+int CMaterial::Regist(const char *pFilename)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスの取得
 

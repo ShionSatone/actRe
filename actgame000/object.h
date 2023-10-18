@@ -35,6 +35,7 @@ public:
 		TYPE_FIELD,			//床
 		TYPE_WALL,			//壁
 		TYPE_MODEL,			//モデル
+		TYPE_ALPHA_BLOCK,	//透明ブロック
 		TYPE_PAUSE,			//ポーズ
 		TYPE_SCENE,			//シーン
 		TYPE_FADE,			//フェード

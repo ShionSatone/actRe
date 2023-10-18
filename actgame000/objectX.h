@@ -30,8 +30,8 @@ public:
 
 	//void BindXFile(LPD3DXMESH pMesh, LPD3DXBUFFER pBuffMat, DWORD dwNumMat);
 
-	void SetPosition(TYPE type, D3DXVECTOR3 pos) { m_pos = pos; }			//ˆÊ’uİ’è
-	void SetRotation(TYPE type, D3DXVECTOR3 rot) { m_rot = rot; }			//Œü‚«İ’è
+	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }			//ˆÊ’uİ’è
+	void SetRotation(D3DXVECTOR3 rot) { m_rot = rot; }			//Œü‚«İ’è
 	void SetSize(D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax) { m_vtxMin = vtxMin;  m_vtxMax = vtxMax; }		//ƒ‚ƒfƒ‹‚Ì‘å‚«‚³İ’è
 	void SetState(STATE state) { m_state = state; }							//“G‚Ìó‘Ôİ’è
 

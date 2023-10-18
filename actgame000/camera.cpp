@@ -19,7 +19,7 @@
 #define CURVE_RL			(0.5f)		//左右の角度
 #define CURVE_UP			(0.0f)		//上の角度
 #define CURVE_DOWN			(1.0f)		//下の角度
-#define LENGRH				(600.0f)	//視点と注視点の長さ
+#define LENGRH				(1000.0f)	//視点と注視点の長さ
 #define FOLLOW				(0.5f)		//カメラの移動量
 
 //==============================================================
@@ -129,10 +129,12 @@ void CCamera::Update(void)
 	{//ゲーム画面のとき
 
 		//自動追従
-		/*m_posR.x += (m_posRDest.x - m_posR.x) * FOLLOW;
+		m_posR.x += (m_posRDest.x - m_posR.x) * FOLLOW;
 		m_posV.x += (m_posVDest.x - m_posV.x) * FOLLOW;
+		m_posR.y += (m_posRDest.y - m_posR.y) * FOLLOW;
+		m_posV.y += (m_posVDest.y - m_posV.y) * FOLLOW;
 		m_posR.z += (m_posRDest.z - m_posR.z) * FOLLOW;
-		m_posV.z += (m_posVDest.z - m_posV.z) * FOLLOW;*/
+		m_posV.z += (m_posVDest.z - m_posV.z) * FOLLOW;
 	}
 
 	if (m_rot.y > D3DX_PI)
@@ -257,10 +259,12 @@ void CCamera::Control()
 
 	//目的の注視点を設定
 	m_posRDest.x = pPlayer->GetPosition().x + sinf(pPlayer->GetRotation().y + D3DX_PI) * 0.0f;
+	m_posRDest.y = pPlayer->GetPosition().y;
 	m_posRDest.z = pPlayer->GetPosition().z + cosf(pPlayer->GetRotation().y + D3DX_PI) * 0.0f;
 
 	//目的の視点を設定
 	m_posVDest.x = pPlayer->GetPosition().x + sinf(GetRotation().y + D3DX_PI) * LENGRH;
+	m_posVDest.y = pPlayer->GetPosition().y;
 	m_posVDest.z = pPlayer->GetPosition().z + cosf(GetRotation().y + D3DX_PI) * LENGRH;
 
 #if 1

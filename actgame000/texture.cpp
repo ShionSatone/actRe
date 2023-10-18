@@ -89,7 +89,7 @@ void CTexture::Unload(void)
 //==============================================================
 //テクスチャ番号指定処理
 //==============================================================
-int CTexture::Regit(const char *pFilename)
+int CTexture::Regist(const char *pFilename)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスの取得
 

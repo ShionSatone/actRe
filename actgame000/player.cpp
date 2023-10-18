@@ -206,8 +206,7 @@ HRESULT CPlayer::Init(void)
 	for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
 	{
 		//最大値Y
-		if ((nCntPlayer <= PARTS_BODY && nCntPlayer <= PARTS_HEAD) ||
-			(nCntPlayer >= PARTS_RU_LEG && nCntPlayer <= PARTS_R_SHOE))
+		if ((nCntPlayer <= PARTS_HEAD) || (nCntPlayer >= PARTS_WAIST && nCntPlayer <= PARTS_L_SHOE))
 		{
 			m_max.y += m_apModel[nCntPlayer]->GetSizeMax().y;		//最大値加算
 		}
@@ -239,7 +238,7 @@ HRESULT CPlayer::Init(void)
 		}
 	}
 
-	m_max.y += 10.0f;
+	m_max.y += 40.0f;
 
 	CObject::SetType(CObject::TYPE_PLAYER);
 
@@ -306,6 +305,7 @@ void CPlayer::UpdateFront(void)
 {
 	//CLife *pLife = CGame::GetLife();
 	CSound *pSound = CManager::GetInstance()->GetSound();
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 
 	//プレイヤーの操作
 	CPlayer::ControlFrontKeyboard();
@@ -331,9 +331,6 @@ void CPlayer::UpdateFront(void)
 
 	//位置更新
 	m_pos += m_move;
-
-	//移動量を更新
-	m_move.x += (0.0f - m_move.x) * 0.1f;
 
 	//状態更新
 	CPlayer::UpdateState();
@@ -381,11 +378,16 @@ void CPlayer::UpdateFront(void)
 		//パーティクル生成
 		//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), m_particleType, m_nParticleLife, 50.0f);
 	}
-	//else if (CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max) == false)
-	//{
-	//	m_bJump = true;		//ジャンプしてる状態にする
-	//	m_bLand = false;	//着地してない状態にする
-	//}
+	else if (CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max) == false &&
+		pInputKeyboard->GetPress(DIK_SPACE) == false)
+	{//地面についてない && ジャンプボタン押してない
+
+		m_bJump = true;		//ジャンプしてる状態にする
+		m_bLand = false;	//着地してない状態にする
+	}
+
+	//移動量を更新
+	m_move.x += (0.0f - m_move.x) * 0.1f;
 
 	//向きの補正
 	CPlayer::RotCorrection();
@@ -886,24 +888,24 @@ void CPlayer::ControlHumanPad(void)
 //==============================================================
 void CPlayer::Screen(void)
 {
-	if (m_pos.y < 0.0f)
-	{//画面下に出たら
+	//if (m_pos.y < 0.0f)
+	//{//画面下に出たら
 
-		m_move.y = 0.0f;
-		m_pos.y = 0.0f;
+	//	m_move.y = 0.0f;
+	//	m_pos.y = 0.0f;
 
-		CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	//	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 
-		if (pInputKeyboard->GetPress(DIK_SPACE) == false)
-		{
-			m_bLand = true;		//着地した
-			m_bJump = false;	//ジャンプしてない
-		}
+	//	if (pInputKeyboard->GetPress(DIK_SPACE) == false)
+	//	{
+	//		m_bLand = true;		//着地した
+	//		m_bJump = false;	//ジャンプしてない
+	//	}
 
-		m_nDashCounter = 0;		//ダッシュ数リセット
+	//	m_nDashCounter = 0;		//ダッシュ数リセット
 
-		//m_state = STATE_NONE;		//通常状態にする
-	}
+	//	//m_state = STATE_NONE;		//通常状態にする
+	//}
 
 	//if (m_pos.y < -200.0f && 
 	//	m_pos.x > -1000.0f && m_pos.x < 9700.0f)

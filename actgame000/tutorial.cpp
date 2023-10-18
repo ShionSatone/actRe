@@ -168,7 +168,7 @@ void CTutorial::Draw(void)
 //			for (int nCntTex = 0; nCntTex < NUM_TUTORIAL_TEX; nCntTex++)
 //			{
 //				//テクスチャの読み込み
-//				m_nIdxTexture[0] = pTexture->Regit(m_apFileName[m_step]);
+//				m_nIdxTexture[0] = pTexture->Regist(m_apFileName[m_step]);
 //
 //				//テクスチャ割り当て
 //				m_pObject2D[nCntTex]->BindTexture(m_nIdxTexture[nCntTex]);
@@ -191,7 +191,7 @@ void CTutorial::Draw(void)
 //			for (int nCntTex = 0; nCntTex < NUM_TUTORIAL_TEX; nCntTex++)
 //			{
 //				//テクスチャの読み込み
-//				m_nIdxTexture[0] = pTexture->Regit(m_apFileName[m_step]);
+//				m_nIdxTexture[0] = pTexture->Regist(m_apFileName[m_step]);
 //
 //				//テクスチャ割り当て
 //				m_pObject2D[nCntTex]->BindTexture(m_nIdxTexture[nCntTex]);
@@ -214,7 +214,7 @@ void CTutorial::Draw(void)
 //			for (int nCntTex = 0; nCntTex < NUM_TUTORIAL_TEX; nCntTex++)
 //			{
 //				//テクスチャの読み込み
-//				m_nIdxTexture[0] = pTexture->Regit(m_apFileName[m_step]);
+//				m_nIdxTexture[0] = pTexture->Regist(m_apFileName[m_step]);
 //
 //				//テクスチャ割り当て
 //				m_pObject2D[nCntTex]->BindTexture(m_nIdxTexture[nCntTex]);
@@ -235,7 +235,7 @@ void CTutorial::Draw(void)
 //			m_step++;
 //
 //			//テクスチャの読み込み
-//			m_nIdxTexture[0] = pTexture->Regit(m_apFileName[m_step]);
+//			m_nIdxTexture[0] = pTexture->Regist(m_apFileName[m_step]);
 //
 //			//テクスチャ割り当て
 //			m_pObject2D[0]->BindTexture(m_nIdxTexture[0]);
@@ -280,7 +280,7 @@ void CTutorial::Draw(void)
 //			m_step++;
 //
 //			//テクスチャの読み込み
-//			m_nIdxTexture[0] = pTexture->Regit(m_apFileName[m_step]);
+//			m_nIdxTexture[0] = pTexture->Regist(m_apFileName[m_step]);
 //
 //			//テクスチャ割り当て
 //			m_pObject2D[0]->BindTexture(m_nIdxTexture[0]);
@@ -297,7 +297,7 @@ void CTutorial::Draw(void)
 //			m_step++;
 //
 //			//テクスチャの読み込み
-//			m_nIdxTexture[0] = pTexture->Regit(m_apFileName[m_step]);
+//			m_nIdxTexture[0] = pTexture->Regist(m_apFileName[m_step]);
 //
 //			//テクスチャ割り当て
 //			m_pObject2D[0]->BindTexture(m_nIdxTexture[0]);
@@ -335,7 +335,7 @@ void CTutorial::Draw(void)
 //			m_step++;
 //
 //			//テクスチャの読み込み
-//			m_nIdxTexture[0] = pTexture->Regit(m_apFileName[m_step]);
+//			m_nIdxTexture[0] = pTexture->Regist(m_apFileName[m_step]);
 //
 //			//テクスチャ割り当て
 //			m_pObject2D[0]->BindTexture(m_nIdxTexture[0]);

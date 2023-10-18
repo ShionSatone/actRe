@@ -260,7 +260,7 @@ bool CObjectX::Collision(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *p
 			//種類を取得
 			CObject::TYPE type = pObj->GetType();
 
-			if (type == pObj->TYPE_MODEL || type == TYPE_ENEMY || type == TYPE_ITEM)
+			if (type == pObj->TYPE_MODEL/* || type == TYPE_ENEMY*//* || type == TYPE_ITEM*/)
 			{//種類がモデルの場合
 
 				//モデルの位置取得
@@ -268,31 +268,31 @@ bool CObjectX::Collision(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *p
 				D3DXVECTOR3 minModel = pObj->GetSizeMin();
 				D3DXVECTOR3 maxModel = pObj->GetSizeMax();
 
-				if (pCamera->GetMode() == false)
+				//if (pCamera->GetMode() == false)
 				{//透視投影の時
 
 					//モデルの当たり判定
-					if (CObjectX::Collision3DModel(pPos, pPosOld, pMove, Min, Max, posModel, minModel, maxModel, type, pObj) == true)
-					{
-						bLand = true;		//着地した状態にする
-					}
+					//if (CObjectX::Collision3DModel(pPos, pPosOld, pMove, Min, Max, posModel, minModel, maxModel, type, pObj) == true)
+					//{
+					//	bLand = true;		//着地した状態にする
+					//}
 				}
-				else if (pCamera->GetMode() == true)
-				{//平行投影の時
+				//else if (pCamera->GetMode() == true)
+				//{//平行投影の時
 
 					//モデルの当たり判定
 					if (CObjectX::Collision2DModel(pPos, pPosOld, pMove, Min, Max, posModel, minModel, maxModel, type, pObj) == true)
 					{
-						if (type == TYPE_ITEM)
-						{//アイテムに当たった時
+						//if (type == TYPE_ITEM)
+						//{//アイテムに当たった時
 
-							//アイテムのヒット処理
-							pObj->Hit();
-						}
+						//	//アイテムのヒット処理
+						//	pObj->Hit();
+						//}
 
 						bLand = true;		//着地した状態にする
 					}
-				}
+				//}
 			}
 		}
 	}
@@ -471,6 +471,7 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 bool CObjectX::Collision3DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *pMove, D3DXVECTOR3 Min, D3DXVECTOR3 Max, D3DXVECTOR3 posModel, D3DXVECTOR3 minModel, D3DXVECTOR3 maxModel, TYPE type, CObject *pObj)
 {
 	bool bLand = false;		//着地したかどうか
+	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
 
 	if (pPos->y + Max.y > posModel.y + minModel.y
 		&& pPos->y < posModel.y + maxModel.y)
@@ -540,7 +541,6 @@ bool CObjectX::Collision3DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 
 				pPos->x = posModel.x + maxModel.x - Min.z;		//ブロックの右に立たせる
 				pMove->x = 0.0f;		//移動量を０にする
-
 			}
 
 		}

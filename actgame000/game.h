@@ -13,7 +13,7 @@
 class CPlayer;			//プレイヤーの情報
 //class CScore;			//スコアの情報
 //class CModel;			//モデルの情報
-//class CEdit;			//エディットの情報
+class CEdit;			//エディットの情報
 //class CPause;			//ポーズ画面の情報
 class CFade;			//フェード
 
@@ -50,7 +50,7 @@ public:
 
 private:
 	static CPlayer *m_pPlayer;		//プレイヤーの情報
-	//static CEdit *m_pEdit;			//エディットの情報
+	static CEdit *m_pEdit;			//エディットの情報
 	//static CPause *m_pPause;		//ポーズ画面の情報
 
 	static bool m_bReset;				//リセットしたか

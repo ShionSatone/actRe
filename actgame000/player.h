@@ -39,6 +39,7 @@ public:
 	D3DXVECTOR3 GetMove(void) { return m_move; }			//移動量取得
 	bool GetIsJump(void) { return m_bJump; }				//ジャンプの取得
 	bool GetIsMove(void) { return m_bMove; }				//移動の取得
+	bool GetIsDash(void) { return m_bDash; }				//ダッシュの取得
 	bool GetIsLand(void) { return m_bLand; }				//着地の取得
 
 	D3DXVECTOR3 GetSizeMin(void) { return m_min; }			//大きさの最大値取得

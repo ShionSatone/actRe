@@ -39,6 +39,8 @@ public:
 	D3DXVECTOR3 GetSizeMax(void) { return m_max; }			//大きさの最小値取得
 
 private:
+
+	//敵の行動状態
 	enum ENEMYSTATE
 	{
 		ENEMYSTATE_NONE = 0,		//何もしてない状態
@@ -75,6 +77,11 @@ private:
 	void UpdateState(void);			//状態の更新処理
 
 	void MotionManager(void);				//モーション管理
+	void ControlFrontKeyboard(void);		//プレイヤーキーボード操作(手前側)
+	void ControlFrontKeyboardMove(void);	//プレイヤーキーボードの移動操作(手前側)
+	void ControlFrontKeyboardJump(void);	//プレイヤーキーボードのジャンプ操作(手前側)
+	void ControlFrontKeyboardDash(void);	//プレイヤーキーボードのダッシュ操作(手前側)
+
 	void Screen(void);						//画面外判定
 	void LoadFile(void);					//モデルファイル読み込み
 	void RotCorrection(void);				//向きの補正処理
@@ -98,9 +105,19 @@ private:
 
 	bool m_bMoveL;			//左に歩いてるかの判定
 	bool m_bMoveR;			//右に歩いてるかの判定
+	bool m_bMove;			//歩いてるかの判定
 	bool m_bJump;			//ジャンプしたかの判定
 	bool m_bLand;			//着地したか
 	bool m_bDash;			//ダッシュしたか
+
+	bool m_bPreMoveL;		//左に歩く準備判定
+	bool m_bPreMoveR;		//右に歩く準備の判定
+	bool m_bPreMove;		//歩く準備判定
+	bool m_bPreJump;		//ジャンプの準備判定
+	bool m_bPreDash;		//ダッシュ準備判定
+	bool m_bPreStopR;		//止まる準備判定右
+	bool m_bPreStopL;		//止まる準備判定左
+	//bool m_bPreLand;		//着地したか
 
 	float m_fRotDest;		//目標
 	float m_fRotDiff;		//差分
@@ -110,10 +127,15 @@ private:
 
 	int m_nDashCounter;		//ダッシュした回数
 	int m_nStateNoneCounter;	//敵の停止状態変更カウンター
-	int m_nStateMoveCounter;	//敵の移動状態変更カウンター
-	int m_nStateJumpCounter;	//敵の移ジャンプ状態変更カウンター
+	int m_nStateMoveRCounter;	//敵の右移動状態変更カウンター
+	int m_nStateMoveLCounter;	//敵の左移動状態変更カウンター
+
+	int m_nStateJumpCounter;	//敵のジャンプ状態変更カウンター
 	int m_nStateLandCounter;	//敵の着地状態変更カウンター
 	int m_nStateDashCounter;	//敵のダッシュ状態変更カウンター
+	int m_nStateStopRCounter;	//敵の右停止状態変更カウンター
+	int m_nStateStopLCounter;	//敵の左停止状態変更カウンター
+	int m_nJumpLengthCounter;	//ジャンプした時間
 
 	CMotion *m_pMotion;		//モーション情報
 };

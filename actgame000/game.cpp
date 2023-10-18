@@ -8,6 +8,7 @@
 #include "manager.h"
 #include "input.h"
 #include "camera.h"
+#include "edit.h"
 #include "player.h"
 #include "enemy.h"
 #include "wall.h"
@@ -17,7 +18,7 @@
 #include "sound.h"
 
 //静的メンバ変数宣言
-//CEdit *CGame::m_pEdit = NULL;				//エディットの情報
+CEdit *CGame::m_pEdit = NULL;				//エディットの情報
 CPlayer *CGame::m_pPlayer = NULL;		//プレイヤーの情報
 bool CGame::m_bReset = true;					//リセットしたかどうか
 bool CGame::m_bPause = false;					//ポーズ画面か
@@ -58,13 +59,13 @@ HRESULT CGame::Init(void)
 	CWall::Create(D3DXVECTOR3(0.0f, 0.0f, 1000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0);
 
 	//プレイヤーの生成
-	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//敵の生成
-	CEnemy::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	CEnemy::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//エディットの生成
-	//m_pEdit = CEdit::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+	m_pEdit = CEdit::Create();
 
 	//スコアの生成
 	//m_pScore = CScore::Create();
@@ -95,6 +96,13 @@ void CGame::Uninit(void)
 	{
 		m_pPlayer->Uninit();
 		m_pPlayer = NULL;
+	}
+
+	//エディターの破棄
+	if (m_pEdit != NULL)
+	{
+		m_pEdit->Uninit();
+		m_pEdit = NULL;
 	}
 
 	//ポーズの破棄
