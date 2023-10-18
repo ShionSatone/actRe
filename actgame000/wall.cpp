@@ -78,7 +78,7 @@ CWall *CWall::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, int nType)
 //==============================================================
 HRESULT CWall::Init(void)
 {
-	CTexture *pTexture = CManager::GetTexture();
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();
 
 	//テクスチャの読み込み
 	m_nIdxTexture = pTexture->TEX_WALL;

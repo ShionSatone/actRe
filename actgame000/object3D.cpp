@@ -68,7 +68,7 @@ void CObject3D::BindTexture(int nIdxTexture)
 //==============================================================
 HRESULT CObject3D::Init(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスの取得
 
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4,
@@ -142,8 +142,8 @@ void CObject3D::Update(void)
 //==============================================================
 void CObject3D::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスの取得
-	CTexture *pTexture = CManager::GetTexture();		//テクスチャの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスの取得
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();		//テクスチャの取得
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
 
 	//ワールドマトリックスを初期化

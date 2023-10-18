@@ -98,8 +98,6 @@ private:
 	int m_nCntDamage;		//ダメージカウンター
 
 	bool m_bMove;			//歩いてるかの判定
-	bool m_bMoveL;			//左歩いているかの判定
-	bool m_bMoveR;			//右歩いているかの判定
 	bool m_bJump;			//ジャンプしたかの判定
 	bool m_bLand;			//着地したか
 	bool m_bDash;			//ダッシュしたか

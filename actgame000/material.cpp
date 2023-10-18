@@ -41,7 +41,7 @@ CMaterial::~CMaterial()
 //==============================================================
 HRESULT CMaterial::Load(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスの取得
 
 	for (int nCntModel = 0; nCntModel < MAT_MAX; nCntModel++)
 	{
@@ -120,7 +120,7 @@ void CMaterial::Unload(void)
 //==============================================================
 int CMaterial::Regit(const char *pFilename)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスの取得
 
 	for (int nCntModel = 0; nCntModel < MAX_TEX; nCntModel++)
 	{

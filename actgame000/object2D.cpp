@@ -63,7 +63,7 @@ CObject2D *CObject2D::Create(void)
 //==============================================================
 HRESULT CObject2D::Init()
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスの取得
 	VERTEX_2D *pVtx;		//頂点情報へのポインタ
 
 	//頂点バッファの生成
@@ -149,8 +149,8 @@ void CObject2D::Update(void)
 //==============================================================
 void CObject2D::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスの取得
-	CTexture *pTexture = CManager::GetTexture();		//テクスチャの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスの取得
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();		//テクスチャの取得
 
 	//頂点バッファをデータストリームに設定
 	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_2D));
@@ -355,8 +355,8 @@ void CObject2D::SetbgMulti(float fTexU, float fTexV)
 //==============================================================
 void CObject2D::SetDraw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスの取得
-	CTexture *pTexture = CManager::GetTexture();		//テクスチャの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスの取得
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();		//テクスチャの取得
 
 	//頂点バッファをデータストリームに設定
 	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_2D));

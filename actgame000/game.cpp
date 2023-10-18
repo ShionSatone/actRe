@@ -45,8 +45,8 @@ CGame::~CGame()
 //==============================================================
 HRESULT CGame::Init(void)
 {
-	CCamera *pCamera = CManager::GetCamera();		//カメラの情報取得
-	CSound *pSound = CManager::GetSound();
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
+	CSound *pSound = CManager::GetInstance()->GetSound();
 
 	m_bReset = true;		//リセットしてる状態にする
 	m_bPause = false;		//ポーズしてない
@@ -85,7 +85,7 @@ HRESULT CGame::Init(void)
 //==============================================================
 void CGame::Uninit(void)
 {
-	CSound *pSound = CManager::GetSound();
+	CSound *pSound = CManager::GetInstance()->GetSound();
 
 	//BGMの停止
 	pSound->Stop();
@@ -113,9 +113,9 @@ void CGame::Uninit(void)
 //==============================================================
 void CGame::Update(void)
 {
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
-	CInputJoyPad *pInputJoyPad = CManager::GetInputJoyPad();			//パッドの情報取得
-	CFade *pFade = CManager::GetFade();			//フェードの情報取得
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CInputJoyPad *pInputJoyPad = CManager::GetInstance()->GetInputJoyPad();			//パッドの情報取得
+	CFade *pFade = CManager::GetInstance()->GetFade();			//フェードの情報取得
 
 	if (pInputKeyboard->GetTrigger(DIK_P) == true || 
 		pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_START, 0) == true)
@@ -143,10 +143,10 @@ void CGame::Update(void)
 
 		//	//bReset = true;
 		//}
-		/*else
-		{
-		bReset = false;
-		}*/
+		///*else
+		//{
+		//bReset = false;
+		//}*/
 	}
 }
 

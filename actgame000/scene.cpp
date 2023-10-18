@@ -248,7 +248,7 @@ void CScene::Uninit(void)
 //==============================================================
 void CScene::Update(void)
 {
-	CDebugProc *pDebugProc = CManager::GetDebugProc();
+	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
 
 	switch (m_mode)
 	{

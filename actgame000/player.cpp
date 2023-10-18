@@ -279,9 +279,9 @@ void CPlayer::Uninit(void)
 //==============================================================
 void CPlayer::Update(void)
 {
-	CDebugProc *pDebugProc = CManager::GetDebugProc();
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
-	CCamera *pCamera = CManager::GetCamera();		//カメラの情報取得
+	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
 	//CGame *pGame = CScene::GetGame();
 
 	//前回の位置更新
@@ -305,7 +305,7 @@ void CPlayer::Update(void)
 void CPlayer::UpdateFront(void)
 {
 	//CLife *pLife = CGame::GetLife();
-	CSound *pSound = CManager::GetSound();
+	CSound *pSound = CManager::GetInstance()->GetSound();
 
 	//プレイヤーの操作
 	CPlayer::ControlFrontKeyboard();
@@ -467,7 +467,7 @@ void CPlayer::UpdateState(void)
 		m_nCntDamage = APP_CNT;
 
 		//CScore *pScore = CGame::GetScore();		//スコアの情報
-		CFade *pFade = CManager::GetFade();		//フェードの情報取得
+		CFade *pFade = CManager::GetInstance()->GetFade();		//フェードの情報取得
 
 		//スコア設定
 		//CManager::SetNumScore(pScore->Get());
@@ -544,8 +544,8 @@ void CPlayer::RotCorrection(void)
 //==============================================================
 void CPlayer::ControlFrontKeyboard(void)
 {
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
-	CSound *pSound = CManager::GetSound();
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CSound *pSound = CManager::GetInstance()->GetSound();
 
 	//移動処理
 	CPlayer::ControlFrontKeyboardMove();
@@ -566,8 +566,8 @@ void CPlayer::ControlFrontKeyboard(void)
 //==============================================================
 void CPlayer::ControlFrontKeyboardMove(void)
 {
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
-	CCamera *pCamera = CManager::GetCamera();		//カメラの情報取得
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
 
 	//移動
 	if (pInputKeyboard->GetPress(DIK_D) == true)
@@ -599,8 +599,8 @@ void CPlayer::ControlFrontKeyboardMove(void)
 //==============================================================
 void CPlayer::ControlFrontKeyboardJump(void)
 {
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
-	CSound *pSound = CManager::GetSound();
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CSound *pSound = CManager::GetInstance()->GetSound();
 
 	if (pInputKeyboard->GetPress(DIK_SPACE) == true && m_bJump == false && m_move.y <= JUMP_HEIGHT)
 	{
@@ -651,8 +651,8 @@ void CPlayer::ControlFrontKeyboardJump(void)
 //==============================================================
 void CPlayer::ControlFrontKeyboardDash(void)
 {
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
-	CCamera *pCamera = CManager::GetCamera();		//カメラの情報取得
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
 
 	if (pInputKeyboard->GetPress(DIK_D) == true)
 	{//右
@@ -824,10 +824,10 @@ void CPlayer::ControlFrontKeyboardDash(void)
 //==============================================================
 void CPlayer::ControlHumanPad(void)
 {
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
-	CInputJoyPad *pInputJoyPad = CManager::GetInputJoyPad();			//パッドの情報
-	CCamera *pCamera = CManager::GetCamera();		//カメラの情報取得
-	CSound *pSound = CManager::GetSound();
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CInputJoyPad *pInputJoyPad = CManager::GetInstance()->GetInputJoyPad();			//パッドの情報
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
+	CSound *pSound = CManager::GetInstance()->GetSound();
 
 	//移動
 	if (pInputJoyPad->GetPressLX(0).x > 0.0f)
@@ -854,7 +854,7 @@ void CPlayer::ControlHumanPad(void)
 		m_bMove = false;		//歩いてない状態にする
 	}
 
-	if (CManager::GetMode() == CScene::MODE_GAME)
+	if (CManager::GetInstance()->GetMode() == CScene::MODE_GAME)
 	{
 		//ジャンプ
 		if (pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_B, 0) == true && m_bJump == false)
@@ -892,7 +892,7 @@ void CPlayer::Screen(void)
 		m_move.y = 0.0f;
 		m_pos.y = 0.0f;
 
-		CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
+		CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 
 		if (pInputKeyboard->GetPress(DIK_SPACE) == false)
 		{
@@ -934,7 +934,7 @@ void CPlayer::Screen(void)
 //==============================================================
 void CPlayer::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスの取得
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
 
 	//ワールドマトリックスを初期化
@@ -963,7 +963,7 @@ void CPlayer::Draw(void)
 //==============================================================
 void CPlayer::Hit(void)
 {
-	CSound *pSound = CManager::GetSound();
+	CSound *pSound = CManager::GetInstance()->GetSound();
 	int nLife = 0;
 
 	if (m_state != CObject::STATE_DAMAGE && m_state != CObject::STATE_APPEAR && m_nCntDamage <= 0)

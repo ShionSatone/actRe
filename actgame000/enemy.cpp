@@ -279,9 +279,9 @@ void CEnemy::Uninit(void)
 //==============================================================
 void CEnemy::Update(void)
 {
-	CDebugProc *pDebugProc = CManager::GetDebugProc();
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
-	CCamera *pCamera = CManager::GetCamera();		//カメラの情報取得
+	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
 	//CGame *pGame = CScene::GetGame();
 
 	//前回の位置更新
@@ -305,7 +305,7 @@ void CEnemy::Update(void)
 void CEnemy::UpdateFront(void)
 {
 	//CLife *pLife = CGame::GetLife();
-	CSound *pSound = CManager::GetSound();
+	CSound *pSound = CManager::GetInstance()->GetSound();
 
 	//位置更新
 	m_pos += m_move;
@@ -332,7 +332,7 @@ void CEnemy::UpdateFront(void)
 void CEnemy::UpdateState(void)
 {
 	CPlayer *pPlayer = CGame::GetPlayer();
-	CCamera *pCamera = CManager::GetCamera();		//カメラの情報取得
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
 
 	if (pPlayer->GetIsMove() == true)
 	{//プレイヤーが歩いたら
@@ -494,7 +494,7 @@ void CEnemy::Screen(void)
 		m_move.y = 0.0f;
 		m_pos.y = 0.0f;
 
-		CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
+		CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 
 		if (pInputKeyboard->GetPress(DIK_SPACE) == false)
 		{
@@ -513,7 +513,7 @@ void CEnemy::Screen(void)
 //==============================================================
 void CEnemy::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスの取得
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
 
 	//ワールドマトリックスを初期化

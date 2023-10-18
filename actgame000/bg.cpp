@@ -61,8 +61,8 @@ CBg *CBg::Create(void)
 //==============================================================
 HRESULT CBg::Init(void)
 {
-	CTexture *pTexture = CManager::GetTexture();
-	int mode = CManager::GetMode();
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();
+	int mode = CManager::GetInstance()->GetMode();
 
 	switch (mode)
 	{

@@ -156,7 +156,7 @@ void CRenderer::Uninit(void)
 //==============================================================
 void CRenderer::Update(void)
 {
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 
 	if (pInputKeyboard->GetTrigger(DIK_0) == true)
 	{//0キー押したら更新切り替え
@@ -211,7 +211,7 @@ void CRenderer::Draw(void)
 		CObject::DrawAll();
 
 		//デバッグ表示の取得
-		CDebugProc *pDebugProc = CManager::GetDebugProc();
+		CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
 
 		//デバッグ表示の描画処理
 		pDebugProc->Draw();

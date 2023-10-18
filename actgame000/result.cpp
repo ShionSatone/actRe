@@ -36,7 +36,7 @@ CResult::~CResult()
 //==============================================================
 HRESULT CResult::Init(void)
 {
-	//CSound *pSound = CManager::GetSound();
+	//CSound *pSound = CManager::GetInstance()->GetSound();
 
 	////BGM再生
 	//if (CManager::GetResult() == true)
@@ -65,9 +65,9 @@ void CResult::Uninit(void)
 //==============================================================
 void CResult::Update(void)
 {
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
-	CInputJoyPad *pInputJoyPad = CManager::GetInputJoyPad();			//パッドの情報取得
-	CFade *pFade = CManager::GetFade();			//フェードの情報取得
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CInputJoyPad *pInputJoyPad = CManager::GetInstance()->GetInputJoyPad();			//パッドの情報取得
+	CFade *pFade = CManager::GetInstance()->GetFade();			//フェードの情報取得
 
 	if ((pInputKeyboard->GetTrigger(DIK_RETURN) == true || pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_A, 0) == true) && bReset == false)
 	{//ENTERキー押したら

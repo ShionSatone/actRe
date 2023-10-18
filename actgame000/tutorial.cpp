@@ -65,9 +65,9 @@ CTutorial::~CTutorial()
 //==============================================================
 HRESULT CTutorial::Init(void)
 {
-	CTexture *pTexture = CManager::GetTexture();
-	CCamera *pCamera = CManager::GetCamera();		//カメラの情報取得
-	CSound *pSound = CManager::GetSound();
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
+	CSound *pSound = CManager::GetInstance()->GetSound();
 
 	//カメラの初期化処理
 	pCamera->Init();
@@ -83,7 +83,7 @@ HRESULT CTutorial::Init(void)
 //==============================================================
 void CTutorial::Uninit(void)
 {
-	CSound *pSound = CManager::GetSound();
+	CSound *pSound = CManager::GetInstance()->GetSound();
 
 	//BGMの停止
 	pSound->Stop();
@@ -107,9 +107,9 @@ void CTutorial::Uninit(void)
 //==============================================================
 void CTutorial::Update(void)
 {
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
-	CInputJoyPad *pInputJoyPad = CManager::GetInputJoyPad();			//パッドの情報取得
-	CFade *pFade = CManager::GetFade();			//フェードの情報取得
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CInputJoyPad *pInputJoyPad = CManager::GetInstance()->GetInputJoyPad();			//パッドの情報取得
+	CFade *pFade = CManager::GetInstance()->GetFade();			//フェードの情報取得
 
 	//ステップ処理
 	//CTutorial::Step();
@@ -147,10 +147,10 @@ void CTutorial::Draw(void)
 //==============================================================
 //void CTutorial::Step(void)
 //{
-//	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
-//	CInputJoyPad *pInputJoyPad = CManager::GetInputJoyPad();			//パッドの情報取得
-//	CTexture *pTexture = CManager::GetTexture();
-//	CSound *pSound = CManager::GetSound();
+//	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+//	CInputJoyPad *pInputJoyPad = CManager::GetInstance()->GetInputJoyPad();			//パッドの情報取得
+//	CTexture *pTexture = CManager::GetInstance()->GetTexture();
+//	CSound *pSound = CManager::GetInstance()->GetSound();
 //
 //	switch (m_step)
 //	{

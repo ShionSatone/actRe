@@ -24,6 +24,8 @@
 //#include "ranking.h"
 
 //静的メンバ変数宣言
+CManager *CManager::m_pManager = NULL;			//マネージャの情報
+
 CRenderer *CManager::m_pRenderer = NULL;			//レンダラーの情報
 CInputKeyboard *CManager::m_pInputKeyboard = NULL;	//キーボードの情報
 CInputJoyPad *CManager::m_pInputJoyPad = NULL;		//ゲームパッドの情報
@@ -359,6 +361,12 @@ void CManager::Uninit(void)
 		delete m_pRenderer;
 		m_pRenderer = NULL;
 	}
+
+	//マネージャの破棄
+	if (m_pManager != NULL)
+	{
+		m_pManager = NULL;
+	}
 }
 
 //==============================================================
@@ -438,6 +446,24 @@ void CManager::ResetMap(void)
 
 		////オブジェクト3Dの生成
 		//CManager::Create3DAll();
+	}
+}
+
+//==============================================================
+//マネージャの情報取得
+//==============================================================
+CManager *CManager::GetInstance(void)
+{
+	if (m_pManager == NULL)
+	{//生成されてなかったら
+
+		//生成
+		return m_pManager = new CManager;
+	}
+	else
+	{//生成されてたら
+
+		return m_pManager;
 	}
 }
 

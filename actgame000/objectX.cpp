@@ -124,8 +124,8 @@ void CObjectX::Update(void)
 //==============================================================
 void CObjectX::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスの取得
-	CMaterial *pMaterial = CManager::GetMaterial();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスの取得
+	CMaterial *pMaterial = CManager::GetInstance()->GetMaterial();
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
 	D3DMATERIAL9 matDef;			//現在のマテリアル保存用
 	D3DXMATERIAL *pMat;
@@ -185,7 +185,7 @@ void CObjectX::Draw(void)
 //==============================================================
 void CObjectX::SetModel(void)
 {
-	CMaterial *pMaterial = CManager::GetMaterial();
+	CMaterial *pMaterial = CManager::GetInstance()->GetMaterial();
 
 	int nNumVtx;					//頂点数
 	DWORD dwSizeFVF;				//頂点フォーマットのサイズ
@@ -244,8 +244,8 @@ void CObjectX::SetModel(void)
 //==============================================================
 bool CObjectX::Collision(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *pMove, D3DXVECTOR3 Min, D3DXVECTOR3 Max)
 {
-	CDebugProc *pDebugProc = CManager::GetDebugProc();
-	CCamera *pCamera = CManager::GetCamera();
+	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();
 
 	bool bLand = false;		//着地したかどうか
 
@@ -652,7 +652,7 @@ bool CObjectX::Collision3DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 //==============================================================
 int CObjectX::CollisionEdit(D3DXVECTOR3 pos, D3DXVECTOR3 Min, D3DXVECTOR3 Max)
 {
-	CDebugProc *pDebugProc = CManager::GetDebugProc();
+	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
 	int nCnt = 0;
 
 	for (int nCntModel = 0; nCntModel < MAX_OBJECT; nCntModel++)

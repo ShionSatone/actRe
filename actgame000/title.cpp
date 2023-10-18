@@ -47,9 +47,9 @@ CTitle::~CTitle()
 //==============================================================
 HRESULT CTitle::Init(void)
 {
-	CCamera *pCamera = CManager::GetCamera();		//カメラの情報取得
-	CSound *pSound = CManager::GetSound();
-	CTexture *pTexture = CManager::GetTexture();
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
+	CSound *pSound = CManager::GetInstance()->GetSound();
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();
 
 	//カメラの初期化処理
 	pCamera->Init();
@@ -79,8 +79,8 @@ void CTitle::Uninit(void)
 //==============================================================
 void CTitle::Update(void)
 {
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
-	CFade *pFade = CManager::GetFade();		//フェードの情報取得
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CFade *pFade = CManager::GetInstance()->GetFade();		//フェードの情報取得
 
 	if (m_nCntTrans >= TRANS_TIME)
 	{//遷移する時間になったら

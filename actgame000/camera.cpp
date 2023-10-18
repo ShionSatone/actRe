@@ -94,12 +94,12 @@ void CCamera::Uninit(void)
 //==============================================================
 void CCamera::Update(void)
 {
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
-	CDebugProc *pDebugProc = CManager::GetDebugProc();		//デバッグ表示の情報取得
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();		//デバッグ表示の情報取得
 	//CPlayerModel *pPlayer = CGame::GetPlayerModel();			//プレイヤーの情報取得
 	//CGame *pGame = CScene::GetGame();
 
-	if (CManager::GetMode() == CScene::MODE_GAME)
+	if (CManager::GetInstance()->GetMode() == CScene::MODE_GAME)
 	{//ゲーム画面のとき
 
 		//カメラの操作
@@ -125,7 +125,7 @@ void CCamera::Update(void)
 	//向きの補正
 	CCamera::RotCorrection();
 
-	if (CManager::GetMode() == CScene::MODE_GAME)
+	if (CManager::GetInstance()->GetMode() == CScene::MODE_GAME)
 	{//ゲーム画面のとき
 
 		//自動追従
@@ -185,7 +185,7 @@ void CCamera::RotCorrection(void)
 //==============================================================
 void CCamera::Control()
 {
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 	CPlayer *pPlayer = CGame::GetPlayer();			//プレイヤーの情報取得
 
 #if 0
@@ -318,8 +318,8 @@ void CCamera::Control()
 //==============================================================
 void CCamera::SetCamera(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスの取得
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスの取得
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 
 	//プロジェクションマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxProjection);

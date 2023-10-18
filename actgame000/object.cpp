@@ -173,7 +173,7 @@ void CObject::UpdateAll(void)
 	for (int nCntPri = 0; nCntPri < NUM_PRIORITY; nCntPri++)
 	{
 		pObject = m_apTop[nCntPri];		//先頭のオブジェクトを代入
-		//CDebugProc *pDebugProc = CManager::GetDebugProc();		//デバッグ表示の情報取得
+		//CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();		//デバッグ表示の情報取得
 		//CGame *pGame = CGame::GetGame();
 
 		while (pObject != NULL)
@@ -257,7 +257,7 @@ void CObject::UpdateAll(void)
 //==============================================================
 void CObject::DrawAll(void)
 {
-	CCamera *pCamera = CManager::GetCamera();
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();
 	CObject *pObject;
 	//CGame *pGame = CGame::GetGame();
 

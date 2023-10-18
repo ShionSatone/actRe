@@ -39,25 +39,27 @@ public:
 	void Draw(void);		//描画処理
 	void ResetMap(void);	//マップの再生成
 
-	static CRenderer *GetRenderer(void) { return m_pRenderer; }		//レンダラーの取得
-	static CInputKeyboard *GetInputKeyboard(void) { return m_pInputKeyboard; }		//キーボードの取得
-	static CInputJoyPad *GetInputJoyPad(void) { return m_pInputJoyPad; }			//ゲームパッドの取得
-	static CDebugProc *GetDebugProc(void) { return m_pDebugProc; }	//デバッグ表示の取得
-	static CSound *GetSound(void) { return m_pSound; }				//サウンドの取得
-	static CScene *GetScene(void) { return m_pScene; }				//シーンの情報
-	static CTexture *GetTexture(void) { return m_pTexture; }		//テクスチャの取得
-	static CMaterial *GetMaterial(void) { return m_pMaterial; }		//マテリアルの取得
-	static CFade *GetFade(void) { return m_pFade; }					//フェードの取得
+	static CManager *GetInstance(void);		//マネージャの情報
 
-	static CCamera *GetCamera(void) { return m_pCamera; }			//カメラの情報
-	static CLight *GetLight(void) { return m_pLight; }				//ライトの情報
+	CRenderer *GetRenderer(void) { return m_pRenderer; }		//レンダラーの取得
+	CInputKeyboard *GetInputKeyboard(void) { return m_pInputKeyboard; }		//キーボードの取得
+	CInputJoyPad *GetInputJoyPad(void) { return m_pInputJoyPad; }			//ゲームパッドの取得
+	CDebugProc *GetDebugProc(void) { return m_pDebugProc; }	//デバッグ表示の取得
+	CSound *GetSound(void) { return m_pSound; }				//サウンドの取得
+	CScene *GetScene(void) { return m_pScene; }				//シーンの情報
+	CTexture *GetTexture(void) { return m_pTexture; }		//テクスチャの取得
+	CMaterial *GetMaterial(void) { return m_pMaterial; }		//マテリアルの取得
+	CFade *GetFade(void) { return m_pFade; }					//フェードの取得
+
+	CCamera *GetCamera(void) { return m_pCamera; }			//カメラの情報
+	CLight *GetLight(void) { return m_pLight; }				//ライトの情報
 
 //	static CPlayer *GetPlayer(void) { return m_pPlayer; }			//プレイヤーの取得
 //	static CEnemy *GetEnemy(void) { return m_pEnemy; }				//敵の情報
 //
 
-	static void SetMode(CScene::MODE mode);		//ゲームモード設定
-	static CScene::MODE GetMode(void);			//ゲームモード取得
+	void SetMode(CScene::MODE mode);		//ゲームモード設定
+	CScene::MODE GetMode(void);			//ゲームモード取得
 //	static void SetNumScore(int nNum) { m_nScore = nNum; }		//スコアの設定
 //	static int GetNumScore(void) { return m_nScore; }			//スコアの取得
 //	static void SetBgm(bool bBgm) { m_bBgm = bBgm; }		//BGMの設定
@@ -65,9 +67,11 @@ public:
 //	static void SetResult(bool bResult) { m_bResult = bResult; }	//リザルトの判定の設定
 //	static bool GetResult(void) { return m_bResult; }				//リザルトの判定取得
 
-	static void SetFps(int nFps);			//FPSの設定
+	void SetFps(int nFps);			//FPSの設定
 
 private:
+	static CManager *m_pManager;			//マネージャの情報
+
 	static CRenderer *m_pRenderer;		//レンダラーの情報
 	static CDebugProc *m_pDebugProc;	//デバッグ表示の情報
 	static CInputKeyboard *m_pInputKeyboard;	//キーボードの情報

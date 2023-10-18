@@ -173,7 +173,7 @@ void CMotion::Init(void)
 //==============================================================
 void CMotion::Update(void)
 {
-	CDebugProc *pDebugProc = CManager::GetDebugProc();
+	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
 
 	D3DXVECTOR3 posDiff, rotDiff;		//·•ª
 	D3DXVECTOR3 posDest, rotDest;		//–Ú•W

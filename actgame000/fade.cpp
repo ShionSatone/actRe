@@ -58,7 +58,7 @@ CFade *CFade::Create()
 //==============================================================
 HRESULT CFade::Init(void)
 {
-	int mode = CManager::GetMode();		//現在のゲームモード取得
+	int mode = CManager::GetInstance()->GetMode();		//現在のゲームモード取得
 
 	//テクスチャの割り当て
 	CObject2D::BindTexture(NULL);
@@ -98,7 +98,7 @@ void CFade::Uninit(void)
 //==============================================================
 void CFade::Update(void)
 {
-	CScene *pScene = CManager::GetScene();
+	CScene *pScene = CManager::GetInstance()->GetScene();
 
 	if (m_fade != FADE_NONE)
 	{//何もしていない状態じゃないとき
@@ -127,7 +127,7 @@ void CFade::Update(void)
 				m_fade = FADE_IN;		//フェードイン状態に
 
 				//モード設定（次の画面に移行）
-				CManager::SetMode(m_modeNext);
+				CManager::GetInstance()->SetMode(m_modeNext);
 			}
 		}
 
