@@ -199,9 +199,9 @@ HRESULT CPlayer::Init(void)
 	}
 
 	//モーションの初期化・生成
-	/*m_pMotion = m_pMotion->Create(m_pMotion->MOTIONTEXT_PLAYER);
+	m_pMotion = m_pMotion->Create(m_pMotion->MOTIONTEXT_PLAYER);
 	m_pMotion->SetModel(&m_apModel[0], PARTS_MAX);
-	m_pMotion->Init();*/
+	m_pMotion->Init();
 
 	//モデルのファイル読み込み
 	CPlayer::LoadFile();
@@ -294,7 +294,7 @@ void CPlayer::Update(void)
 	CPlayer::UpdateFront();
 
 	//モーションの更新処理
-	//m_pMotion->Update();
+	m_pMotion->Update();
 
 	//デバッグ表示
 	pDebugProc->Print("\nプレイヤーの位置 (%f, %f, %f)\n", m_pos.x, m_pos.y, m_pos.z);
@@ -493,24 +493,24 @@ void CPlayer::UpdateState(void)
 //==============================================================
 void CPlayer::MotionManager(void)
 {
-	//if (m_bMove == true && m_pMotion->GetType() == m_pMotion->MOTIONTYPE_NEUTRAL)
-	//{//歩いてる && 待機状態
+	if (m_bMove == true && m_pMotion->GetType() == m_pMotion->MOTIONTYPE_NEUTRAL)
+	{//歩いてる && 待機状態
 
-	//	//歩かせる
-	//	m_pMotion->Set(m_pMotion->MOTIONTYPE_MOVE);
-	//}
+		//歩かせる
+		m_pMotion->Set(m_pMotion->MOTIONTYPE_MOVE);
+	}
 	//else if (m_pMotion->IsFinish() == true && m_bAction == true)
 	//{//攻撃が終わったら
 
 	//	m_bAction = false;		//攻撃してない状態にする
 	//}
-	//else if ((m_pMotion->GetType() != m_pMotion->MOTIONTYPE_NEUTRAL && m_pMotion->IsFinish() == true) ||
-	//	(m_pMotion->GetType() != m_pMotion->MOTIONTYPE_NEUTRAL && m_bMove == false && m_bJump == false && m_bLand == true && m_bAction == false))
-	//{//モーションが終了したら
+	else if ((m_pMotion->GetType() != m_pMotion->MOTIONTYPE_NEUTRAL && m_pMotion->IsFinish() == true) ||
+		(m_pMotion->GetType() != m_pMotion->MOTIONTYPE_NEUTRAL && m_bMove == false && m_bJump == false && m_bLand == true))
+	{//モーションが終了したら
 
-	//	//待機状態に戻す
-	//	m_pMotion->Set(m_pMotion->MOTIONTYPE_NEUTRAL);
-	//}
+		//待機状態に戻す
+		m_pMotion->Set(m_pMotion->MOTIONTYPE_NEUTRAL);
+	}
 }
 
 //==============================================================

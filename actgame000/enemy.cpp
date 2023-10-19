@@ -212,8 +212,6 @@ CEnemy *CEnemy::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 //==============================================================
 HRESULT CEnemy::Init(void)
 {
-	//CLife *pLife = CGame::GetLife();
-
 	m_fRotDest = m_rot.y;
 
 	//敵の生成（全パーツ分）
@@ -223,9 +221,9 @@ HRESULT CEnemy::Init(void)
 	}
 
 	//モーションの初期化・生成
-	/*m_pMotion = m_pMotion->Create(m_pMotion->MOTIONTEXT_PLAYER);
+	m_pMotion = m_pMotion->Create(m_pMotion->MOTIONTEXT_PLAYER);
 	m_pMotion->SetModel(&m_apModel[0], PARTS_MAX);
-	m_pMotion->Init();*/
+	m_pMotion->Init();
 
 	//モデルのファイル読み込み
 	CEnemy::LoadFile();
@@ -327,7 +325,7 @@ void CEnemy::Update(void)
 	CEnemy::UpdateFront();
 
 	//モーションの更新処理
-	//m_pMotion->Update();
+	m_pMotion->Update();
 
 	//デバッグ表示
 	pDebugProc->Print("\n敵の位置 (%f, %f, %f)\n", m_pos.x, m_pos.y, m_pos.z);
@@ -712,15 +710,12 @@ void CEnemy::ControlFrontKeyboardJump(void)
 	CSound *pSound = CManager::GetInstance()->GetSound();
 	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
 
-	if (pInputKeyboard->GetPress(DIK_SPACE) == true && m_bJump == false && m_move.y <= JUMP_HEIGHT && pPlayer->GetIsJump() == true)
+	if (pInputKeyboard->GetPress(DIK_SPACE) == true && m_bJump == false && m_move.y <= JUMP_HEIGHT)
 	{//SPACEキーを押したら
 
 		m_bPreJump = true;		//ジャンプ準備状態にする
 
 		m_nJumpLengthCounter++;		//ジャンプしたフレーム数取得
-
-		pDebugProc->Print("\n待機中\n");
-
 	}
 
 	if (m_bPreJump == true)
@@ -740,6 +735,16 @@ void CEnemy::ControlFrontKeyboardJump(void)
 				m_nStateJumpCounter = 0;		//ジャンプするまでのカウンターリセット
 				m_bPreJump = false;				//ジャンプの準備終了
 			}
+			else if (m_move.y >= JUMP_HEIGHT)
+			{
+				//ジャンプした状態にする
+				m_bJump = true;
+				m_bLand = false;
+
+				m_nJumpLengthCounter = 0;		//ジャンプした時間リセット
+				m_nStateJumpCounter = 0;		//ジャンプするまでのカウンターリセット
+				m_bPreJump = false;				//ジャンプの準備終了
+			}
 			else
 			{
 				m_nJumpLengthCounter--;		//ジャンプする時間減算
@@ -750,13 +755,6 @@ void CEnemy::ControlFrontKeyboardJump(void)
 				pDebugProc->Print("\nジャンプ中\n");
 
 			}
-
-			//if (m_move.y >= JUMP_HEIGHT)
-			//{
-			//	//ジャンプした状態にする
-			//	m_bJump = true;
-			//	m_bLand = false;
-			//}
 		}
 		else
 		{
@@ -958,24 +956,24 @@ void CEnemy::ControlFrontKeyboardDash(void)
 //==============================================================
 void CEnemy::MotionManager(void)
 {
-	//if (m_bMove == true && m_pMotion->GetType() == m_pMotion->MOTIONTYPE_NEUTRAL)
-	//{//歩いてる && 待機状態
+	if (m_bMove == true && m_pMotion->GetType() == m_pMotion->MOTIONTYPE_NEUTRAL)
+	{//歩いてる && 待機状態
 
-	//	//歩かせる
-	//	m_pMotion->Set(m_pMotion->MOTIONTYPE_MOVE);
-	//}
+		//歩かせる
+		m_pMotion->Set(m_pMotion->MOTIONTYPE_MOVE);
+	}
 	//else if (m_pMotion->IsFinish() == true && m_bAction == true)
 	//{//攻撃が終わったら
 
 	//	m_bAction = false;		//攻撃してない状態にする
 	//}
-	//else if ((m_pMotion->GetType() != m_pMotion->MOTIONTYPE_NEUTRAL && m_pMotion->IsFinish() == true) ||
-	//	(m_pMotion->GetType() != m_pMotion->MOTIONTYPE_NEUTRAL && m_bMove == false && m_bJump == false && m_bLand == true && m_bAction == false))
-	//{//モーションが終了したら
+	else if ((m_pMotion->GetType() != m_pMotion->MOTIONTYPE_NEUTRAL && m_pMotion->IsFinish() == true) ||
+		(m_pMotion->GetType() != m_pMotion->MOTIONTYPE_NEUTRAL && m_bMove == false && m_bJump == false && m_bLand == true))
+	{//モーションが終了したら
 
-	//	//待機状態に戻す
-	//	m_pMotion->Set(m_pMotion->MOTIONTYPE_NEUTRAL);
-	//}
+		//待機状態に戻す
+		m_pMotion->Set(m_pMotion->MOTIONTYPE_NEUTRAL);
+	}
 }
 
 //==============================================================
