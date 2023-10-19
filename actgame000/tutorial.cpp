@@ -14,6 +14,8 @@
 #include "object2D.h"
 #include "texture.h"
 
+#include "bg.h"
+
 //静的メンバ変数宣言
 CPlayerModel *CTutorial::m_pPlayerModel = NULL;	//プレイヤーの情報
 CEdit *CTutorial::m_pEdit = NULL;				//エディットの情報
@@ -72,6 +74,8 @@ HRESULT CTutorial::Init(void)
 	//カメラの初期化処理
 	pCamera->Init();
 
+	CBg::Create();
+
 	//BGM再生
 	pSound->Play(pSound->SOUND_LABEL_BGM001);
 
@@ -89,14 +93,14 @@ void CTutorial::Uninit(void)
 	pSound->Stop();
 
 	//オブジェクト2Dの破棄
-	for (int nCntTex = 0; nCntTex < NUM_TUTORIAL_TEX; nCntTex++)
+	/*for (int nCntTex = 0; nCntTex < NUM_TUTORIAL_TEX; nCntTex++)
 	{
 		if (m_pObject2D[nCntTex] != NULL)
 		{
 			m_pObject2D[nCntTex]->Uninit();
 			m_pObject2D[nCntTex] = NULL;
 		}
-	}
+	}*/
 
 	//オブジェクト（自分自身の破棄）
 	CObject::Release();
@@ -114,19 +118,19 @@ void CTutorial::Update(void)
 	//ステップ処理
 	//CTutorial::Step();
 
-	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true || 
-		pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_A, 0) == true)
+	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true/* || 
+		pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_A, 0) == true*/)
 	{//ENTERキー押したら
 
 		//ゲーム画面
 		pFade->SetFade(CScene::MODE_GAME);
 
-		bReset = true;
+		//bReset = true;
 	}
-	else
+	/*else
 	{
 		bReset = false;
-	}
+	}*/
 
 }
 
@@ -136,10 +140,10 @@ void CTutorial::Update(void)
 void CTutorial::Draw(void)
 {
 	//オブジェクト2Dの描画処理
-	for (int nCntTex = 0; nCntTex < NUM_TUTORIAL_TEX; nCntTex++)
+	/*for (int nCntTex = 0; nCntTex < NUM_TUTORIAL_TEX; nCntTex++)
 	{
 		m_pObject2D[nCntTex]->Draw();
-	}
+	}*/
 }
 
 //==============================================================

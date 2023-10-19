@@ -66,6 +66,19 @@ HRESULT CBg::Init(void)
 
 	switch (mode)
 	{
+	case CScene::MODE_TITLE:
+
+		//テクスチャの読み込み
+		m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\title.jpg");
+
+		break;
+
+	case CScene::MODE_TUTORIAL:
+
+		//テクスチャの読み込み
+		m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\tutorial.jpg");
+
+		break;
 
 	case CScene::MODE_RESULT:
 

@@ -87,7 +87,7 @@ HRESULT CFade::Init(void)
 void CFade::Uninit(void)
 {
 	//2Dオブジェクトの終了処理
-	CObject2D::Uninit();
+	//CObject2D::Uninit();
 
 	//オブジェクト（自分自身の破棄）
 	CObject::Release();

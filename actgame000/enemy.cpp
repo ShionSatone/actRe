@@ -66,7 +66,7 @@ char *CEnemy::m_apFileName[PARTS_MAX] =
 //==============================================================
 //コンストラクタ
 //==============================================================
-CEnemy::CEnemy() : CObject(PRIORITY)
+CEnemy::CEnemy()
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//前回の位置
@@ -126,7 +126,7 @@ CEnemy::CEnemy() : CObject(PRIORITY)
 //==============================================================
 //コンストラクタ(オーバーロード)
 //==============================================================
-CEnemy::CEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot) : CObject(PRIORITY)
+CEnemy::CEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	m_pos = pos;									//位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//前回の位置
@@ -598,6 +598,7 @@ void CEnemy::ControlFrontKeyboardMove(void)
 		m_bPreMoveL = true;	//左に歩く準備をする
 	}
 
+	//キーボード離したとき
 	if (pInputKeyboard->GetRelease(DIK_D) == true)
 	{//右
 
@@ -707,13 +708,19 @@ void CEnemy::ControlFrontKeyboardMove(void)
 void CEnemy::ControlFrontKeyboardJump(void)
 {
 	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CPlayer *pPlayer = CGame::GetPlayer();		//プレイヤーの情報取得
 	CSound *pSound = CManager::GetInstance()->GetSound();
+	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
 
-	if (pInputKeyboard->GetPress(DIK_SPACE) == true && m_bJump == false && m_move.y <= JUMP_HEIGHT && m_nJumpLengthCounter <= 2)
-	{
+	if (pInputKeyboard->GetPress(DIK_SPACE) == true && m_bJump == false && m_move.y <= JUMP_HEIGHT && pPlayer->GetIsJump() == true)
+	{//SPACEキーを押したら
+
 		m_bPreJump = true;		//ジャンプ準備状態にする
 
-		m_nJumpLengthCounter++;		//ジャンプの長さを計測
+		m_nJumpLengthCounter++;		//ジャンプしたフレーム数取得
+
+		pDebugProc->Print("\n待機中\n");
+
 	}
 
 	if (m_bPreJump == true)
@@ -729,6 +736,7 @@ void CEnemy::ControlFrontKeyboardJump(void)
 				m_bJump = true;
 				m_bLand = false;
 
+				m_nJumpLengthCounter = 0;		//ジャンプした時間リセット
 				m_nStateJumpCounter = 0;		//ジャンプするまでのカウンターリセット
 				m_bPreJump = false;				//ジャンプの準備終了
 			}
@@ -738,6 +746,9 @@ void CEnemy::ControlFrontKeyboardJump(void)
 
 				//ジャンプする
 				m_move.y += ADD_MOVE_Y;
+
+				pDebugProc->Print("\nジャンプ中\n");
+
 			}
 
 			//if (m_move.y >= JUMP_HEIGHT)
@@ -754,7 +765,9 @@ void CEnemy::ControlFrontKeyboardJump(void)
 		}
 	}
 
-	if (m_bJump == true || m_move.y >= JUMP_HEIGHT || m_bDash == true)
+	if (m_move.y >= JUMP_HEIGHT ||
+		(m_bJump == true && (m_move.x <= 7.0f && m_move.x >= -7.0f)) ||
+		(m_bDash == true && (m_move.x <= 7.0f && m_move.x >= -7.0f)))
 	{
 		//移動量加算
 		m_move.y -= MOVE_Y;

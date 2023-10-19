@@ -64,7 +64,7 @@ char *CPlayer::m_apFileName[PARTS_MAX] =
 //==============================================================
 //コンストラクタ
 //==============================================================
-CPlayer::CPlayer() : CObject(PRIORITY)
+CPlayer::CPlayer()
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//前回の位置
@@ -83,6 +83,8 @@ CPlayer::CPlayer() : CObject(PRIORITY)
 
 	m_nNumModel = 0;		//プレイヤー(パーツ)の総数
 	m_pMotion = NULL;
+
+	m_nPressCounter = 0;	//キーを押したフレーム数
 
 	m_bJump = false;		//ジャンプしたか
 	m_bMove = false;		//歩いてるか
@@ -108,7 +110,7 @@ CPlayer::CPlayer() : CObject(PRIORITY)
 //==============================================================
 //コンストラクタ(オーバーロード)
 //==============================================================
-CPlayer::CPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot) : CObject(PRIORITY)
+CPlayer::CPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	m_pos = pos;									//位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//前回の位置
@@ -127,6 +129,8 @@ CPlayer::CPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot) : CObject(PRIORITY)
 
 	m_pMotion = NULL;		//モーションの情報
 	m_nNumModel = 0;		//プレイヤー(パーツ)の総数
+
+	m_nPressCounter = 0;	//キーを押したフレーム数
 
 	m_bJump = false;		//ジャンプしたか
 	m_bMove = false;		//歩いてるか
@@ -609,6 +613,8 @@ void CPlayer::ControlFrontKeyboardJump(void)
 		//ジャンプする
 		m_move.y += ADD_MOVE_Y;
 
+		m_nPressCounter++;		//フレーム数加算
+
 		if (m_move.y >= JUMP_HEIGHT)
 		{
 			//ジャンプした状態にする
@@ -635,7 +641,9 @@ void CPlayer::ControlFrontKeyboardJump(void)
 		//m_pMotion->Set(m_pMotion->MOTIONTYPE_JUMP);
 	}
 
-	if (m_bJump == true || m_move.y >= JUMP_HEIGHT || m_bDash == true)
+	if (m_move.y >= JUMP_HEIGHT || 
+		(m_bJump == true && (m_move.x <= 7.0f && m_move.x >= -7.0f)) ||
+		(m_bDash == true && (m_move.x <= 7.0f && m_move.x >= -7.0f)))
 	{
 		//移動量加算
 		m_move.y -= MOVE_Y;
@@ -888,6 +896,15 @@ void CPlayer::ControlHumanPad(void)
 //==============================================================
 void CPlayer::Screen(void)
 {
+	if (m_pos.y <= -6000.0f)
+	{//一番下まで行ったら
+
+		CFade *pFade = CManager::GetInstance()->GetFade();			//フェードの情報取得
+
+		//ゲーム画面
+		pFade->SetFade(CScene::MODE_RESULT);
+	}
+
 	//if (m_pos.y < 0.0f)
 	//{//画面下に出たら
 

@@ -71,25 +71,25 @@ CRanking::~CRanking()
 HRESULT CRanking::Init(void)
 {
 	D3DXVECTOR3 posScore = D3DXVECTOR3(SCREEN_WIDTH * 0.5f - (SCORE_WIDTH * 2.0f * 4), 200.0f, 0.0f);	//位置
-	m_nNum = CManager::GetNumScore();		//スコア代入
+	m_nNum = CManager::GetInstance()->GetNumScore();		//スコア代入
 
 	int nDigit;		//桁数
 
 	CBg::Create();
 
-	CTexture *pTexture = CManager::GetTexture();
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();
 
 	//地上テクスチャの読み込み
-	m_nIdxTexture = pTexture->Regit("data\\TEXTURE\\score00.png");
+	m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\score00.png");
 
 	//リセット処理
 	CRanking::Reset();
 
 	//設定処理
-	if (CManager::GetBgm() == false)
+	/*if (CManager::GetBgm() == false)
 	{
 		CRanking::Set(m_nNum);
-	}
+	}*/
 
 	//初期化処理
 	for (int nCntRank = 0; nCntRank < MAX_RANK; nCntRank++)
@@ -114,7 +114,7 @@ HRESULT CRanking::Init(void)
 					m_aTexU[nCntScore] = (int)(m_ranking[nCntRank].nRanking % nDigit / (nDigit * 0.1f));
 
 					//スコアのテクスチャ設定
-					m_apNumber[nCnt]->SetTex(CObject::TYPE_SCORE, m_aTexU[nCntScore], 1.0f / NUM_TEX);
+					m_apNumber[nCnt]->SetAnim(m_aTexU[nCntScore], 1.0f / NUM_TEX);
 
 					//大きさ設定
 					m_apNumber[nCnt]->SetSize(SCORE_WIDTH, SCORE_HEIGHT);
@@ -138,13 +138,13 @@ HRESULT CRanking::Init(void)
 //==============================================================
 void CRanking::Uninit(void)
 {
-	CSound *pSound = CManager::GetSound();
+	CSound *pSound = CManager::GetInstance()->GetSound();
 
-	if (CManager::GetBgm() == false)
-	{
-		//BGMの停止
-		pSound->Stop();
-	}
+	//if (CManager::GetInstance()->GetBgm() == false)
+	//{
+	//	//BGMの停止
+	//	pSound->Stop();
+	//}
 	
 	for (int nCntScore = 0; nCntScore < NUM_DIGIT * MAX_RANK; nCntScore++)
 	{
@@ -167,9 +167,9 @@ void CRanking::Uninit(void)
 //==============================================================
 void CRanking::Update(void)
 {
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();		//キーボードの情報取得
-	CInputJoyPad *pInputJoyPad = CManager::GetInputJoyPad();			//パッドの情報取得
-	CFade *pFade = CManager::GetFade();			//フェードの情報取得
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CInputJoyPad *pInputJoyPad = CManager::GetInstance()->GetInputJoyPad();			//パッドの情報取得
+	CFade *pFade = CManager::GetInstance()->GetFade();			//フェードの情報取得
 
 	m_nCntColor++;
 
@@ -186,39 +186,39 @@ void CRanking::Update(void)
 		bReset = false;
 	}
 
-	if (CManager::GetBgm() == false)
-	{
-		if ((m_nCntColor % 40) == 0 && m_nRankUpdate >= 0)
-		{//一定時間たったら
+	//if (CManager::GetInstance()->GetBgm() == false)
+	//{
+	//	if ((m_nCntColor % 40) == 0 && m_nRankUpdate >= 0)
+	//	{//一定時間たったら
 
-			m_bCol = m_bCol ? false : true;
+	//		m_bCol = m_bCol ? false : true;
 
-			if (m_bCol == true)
-			{
-				//現在のスコアの色戻す
-				for (int nCntScore = 0; nCntScore < NUM_DIGIT; nCntScore++)
-				{
-					int nCnt = nCntScore + (m_nRankUpdate * NUM_DIGIT);
+	//		if (m_bCol == true)
+	//		{
+	//			//現在のスコアの色戻す
+	//			for (int nCntScore = 0; nCntScore < NUM_DIGIT; nCntScore++)
+	//			{
+	//				int nCnt = nCntScore + (m_nRankUpdate * NUM_DIGIT);
 
-					m_apNumber[nCnt]->SetColor(CObject::TYPE_NONE, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	//				m_apNumber[nCnt]->SetColor(CObject::TYPE_NONE, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
-				}
-			}
-			else
-			{
-				//現在のスコアの色変更
-				for (int nCntScore = 0; nCntScore < NUM_DIGIT; nCntScore++)
-				{
-					int nCnt = nCntScore + (m_nRankUpdate * NUM_DIGIT);
+	//			}
+	//		}
+	//		else
+	//		{
+	//			//現在のスコアの色変更
+	//			for (int nCntScore = 0; nCntScore < NUM_DIGIT; nCntScore++)
+	//			{
+	//				int nCnt = nCntScore + (m_nRankUpdate * NUM_DIGIT);
 
-					m_apNumber[nCnt]->SetColor(CObject::TYPE_NONE, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+	//				m_apNumber[nCnt]->SetColor(CObject::TYPE_NONE, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
 
-				}
-			}
+	//			}
+	//		}
 
-			m_nCntColor = 0;
-		}
-	}
+	//		m_nCntColor = 0;
+	//	}
+	//}
 
 	m_nCntTrans++;		//遷移するまでの時間
 }

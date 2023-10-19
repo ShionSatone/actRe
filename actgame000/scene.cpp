@@ -7,21 +7,25 @@
 #include "scene.h"
 #include "manager.h"
 #include "debugproc.h"
+#include "title.h"
+#include "tutorial.h"
 #include "game.h"
+#include "result.h"
+#include "ranking.h"
 
 //マクロ定義
 #define PRIORITY		(3)		//優先順位
 
 //静的メンバ変数宣言
-//CTitle *CScene::m_pTitle = NULL;			//タイトル画面の情報
-//CTutorial *CScene::m_pTutorial = NULL;		//チュートリアル画面
+CTitle *CScene::m_pTitle = NULL;			//タイトル画面の情報
+CTutorial *CScene::m_pTutorial = NULL;		//チュートリアル画面
 CGame *CScene::m_pGame = NULL;				//ゲーム画面の情報
-//CResult *CScene::m_pResult = NULL;			//リザルト画面の情報
-//CRanking *CScene::m_pRanking = NULL;		//ランキング画面の情報
+CResult *CScene::m_pResult = NULL;			//リザルト画面の情報
+CRanking *CScene::m_pRanking = NULL;		//ランキング画面の情報
 //==============================================================
 //シーンのコンストラクタ
 //==============================================================
-CScene::CScene() : CObject(PRIORITY)
+CScene::CScene()
 {
 	m_mode = MODE_TITLE;		//ゲームモード
 }
@@ -29,7 +33,7 @@ CScene::CScene() : CObject(PRIORITY)
 //==============================================================
 //シーンのコンストラクタ(オーバーロード)
 //==============================================================
-CScene::CScene(MODE mode) : CObject(PRIORITY)
+CScene::CScene(MODE mode)
 {
 	m_mode = mode;		//ゲームモード
 }
@@ -66,45 +70,45 @@ HRESULT CScene::Init(void)
 {
 	switch (m_mode)
 	{
-	//case MODE_TITLE:		//タイトル画面
+	case MODE_TITLE:		//タイトル画面
 
-	//	//タイトル画面の生成
-	//	if (m_pTitle == NULL)
-	//	{
-	//		m_pTitle = new CTitle;
+		//タイトル画面の生成
+		if (m_pTitle == NULL)
+		{
+			m_pTitle = new CTitle;
 
-	//		if (m_pTitle != NULL)
-	//		{
-	//			//ゲーム画面の初期化
-	//			if (FAILED(m_pTitle->Init(pos, rot)))
-	//			{//初期化処理が失敗した場合
+			if (m_pTitle != NULL)
+			{
+				//ゲーム画面の初期化
+				if (FAILED(m_pTitle->Init()))
+				{//初期化処理が失敗した場合
 
-	//				return E_FAIL;
-	//			}
-	//		}
-	//	}
+					return E_FAIL;
+				}
+			}
+		}
 
-	//	break;
+		break;
 
-	//case MODE_TUTORIAL:		//チュートリアル画面
+	case MODE_TUTORIAL:		//チュートリアル画面
 
-	//	//チュートリアル画面の生成
-	//	if (m_pTutorial == NULL)
-	//	{
-	//		m_pTutorial = new CTutorial;
+		//チュートリアル画面の生成
+		if (m_pTutorial == NULL)
+		{
+			m_pTutorial = new CTutorial;
 
-	//		if (m_pTutorial != NULL)
-	//		{
-	//			//ゲーム画面の初期化
-	//			if (FAILED(m_pTutorial->Init(pos, rot)))
-	//			{//初期化処理が失敗した場合
+			if (m_pTutorial != NULL)
+			{
+				//ゲーム画面の初期化
+				if (FAILED(m_pTutorial->Init()))
+				{//初期化処理が失敗した場合
 
-	//				return E_FAIL;
-	//			}
-	//		}
-	//	}
+					return E_FAIL;
+				}
+			}
+		}
 
-	//	break;
+		break;
 
 	case MODE_GAME:			//ゲーム画面
 
@@ -126,45 +130,45 @@ HRESULT CScene::Init(void)
 
 		break;
 
-	//case MODE_RESULT:		//リザルト画面
+	case MODE_RESULT:		//リザルト画面
 
-	//	//リザルト画面の生成
-	//	if (m_pResult == NULL)
-	//	{
-	//		m_pResult = new CResult;
+		//リザルト画面の生成
+		if (m_pResult == NULL)
+		{
+			m_pResult = new CResult;
 
-	//		if (m_pResult != NULL)
-	//		{
-	//			//ゲーム画面の初期化
-	//			if (FAILED(m_pResult->Init(pos, rot)))
-	//			{//初期化処理が失敗した場合
+			if (m_pResult != NULL)
+			{
+				//リザルト画面の初期化
+				if (FAILED(m_pResult->Init()))
+				{//初期化処理が失敗した場合
 
-	//				return E_FAIL;
-	//			}
-	//		}
-	//	}
+					return E_FAIL;
+				}
+			}
+		}
 
-	//	break;
+		break;
 
-	//case MODE_RANKING:		//ランキング画面
+	case MODE_RANKING:		//ランキング画面
 
-	//	//ランキング画面の生成
-	//	if (m_pRanking == NULL)
-	//	{
-	//		m_pRanking = new CRanking;
+		//ランキング画面の生成
+		if (m_pRanking == NULL)
+		{
+			m_pRanking = new CRanking;
 
-	//		if (m_pRanking != NULL)
-	//		{
-	//			//ゲーム画面の初期化
-	//			if (FAILED(m_pRanking->Init(pos, rot)))
-	//			{//初期化処理が失敗した場合
+			if (m_pRanking != NULL)
+			{
+				//ランキング画面の初期化
+				if (FAILED(m_pRanking->Init()))
+				{//初期化処理が失敗した場合
 
-	//				return E_FAIL;
-	//			}
-	//		}
-	//	}
+					return E_FAIL;
+				}
+			}
+		}
 
-	//	break;
+		break;
 	}
 
 
@@ -178,29 +182,29 @@ void CScene::Uninit(void)
 {
 	switch (m_mode)
 	{
-	//case MODE_TITLE:		//タイトル画面
+	case MODE_TITLE:		//タイトル画面
 
-	//	//タイトル画面の破棄
-	//	if (m_pTitle != NULL)
-	//	{
-	//		//終了処理
-	//		m_pTitle->Uninit();
-	//		m_pTitle = NULL;
-	//	}
+		//タイトル画面の破棄
+		if (m_pTitle != NULL)
+		{
+			//終了処理
+			m_pTitle->Uninit();
+			m_pTitle = NULL;
+		}
 
-	//	break;
+		break;
 
-	//case MODE_TUTORIAL:		//チュートリアル画面
+	case MODE_TUTORIAL:		//チュートリアル画面
 
-	//	//チュートリアル画面の破棄
-	//	if (m_pTutorial != NULL)
-	//	{
-	//		//終了処理
-	//		m_pTutorial->Uninit();
-	//		m_pTutorial = NULL;
-	//	}
+		//チュートリアル画面の破棄
+		if (m_pTutorial != NULL)
+		{
+			//終了処理
+			m_pTutorial->Uninit();
+			m_pTutorial = NULL;
+		}
 
-	//	break;
+		break;
 
 	case MODE_GAME:			//ゲーム画面
 
@@ -214,29 +218,29 @@ void CScene::Uninit(void)
 
 		break;
 
-	//case MODE_RESULT:		//リザルト画面
+	case MODE_RESULT:		//リザルト画面
 
-	//	//リザルト画面の破棄
-	//	if (m_pResult != NULL)
-	//	{
-	//		//終了処理
-	//		m_pResult->Uninit();
-	//		m_pResult = NULL;
-	//	}
+		//リザルト画面の破棄
+		if (m_pResult != NULL)
+		{
+			//終了処理
+			m_pResult->Uninit();
+			m_pResult = NULL;
+		}
 
-	//	break;
+		break;
 
-	//case MODE_RANKING:		//ランキング画面
+	case MODE_RANKING:		//ランキング画面
 
-	//	//ランキング画面の破棄
-	//	if (m_pRanking != NULL)
-	//	{
-	//		//終了処理
-	//		m_pRanking->Uninit();
-	//		m_pRanking = NULL;
-	//	}
+		//ランキング画面の破棄
+		if (m_pRanking != NULL)
+		{
+			//終了処理
+			m_pRanking->Uninit();
+			m_pRanking = NULL;
+		}
 
-	//	break;
+		break;
 	}
 
 	//オブジェクト（自分自身の破棄）

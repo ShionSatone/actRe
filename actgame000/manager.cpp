@@ -17,11 +17,6 @@
 #include "camera.h"
 #include "light.h"
 //#include "model.h"
-//#include "title.h"
-//#include "tutorial.h"
-//#include "game.h"
-//#include "result.h"
-//#include "ranking.h"
 
 //静的メンバ変数宣言
 CManager *CManager::m_pManager = NULL;			//マネージャの情報
@@ -227,7 +222,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 #else
 
-		m_pScene = CScene::Create(CScene::MODE_GAME);
+		m_pScene = CScene::Create(CScene::MODE_TITLE);
 
 #endif
 	}
@@ -281,10 +276,10 @@ void CManager::Uninit(void)
 	}
 
 	//フェードの破棄
-	if (m_pFade != NULL)
+	/*if (m_pFade != NULL)
 	{
 		m_pFade = NULL;
-	}
+	}*/
 
 	//シーンの破棄
 	if (m_pScene != NULL)

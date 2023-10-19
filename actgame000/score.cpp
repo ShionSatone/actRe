@@ -9,13 +9,14 @@
 #include "renderer.h"
 #include "number.h"
 #include "texture.h"
-#include "playerModel.h"
+//#include "playerModel.h"
 #include "game.h"
 
 //マクロ定義
+#define PRIORITY		(7)					//優先順位
 #define SCORE_POS_X		(880.0f)			//スコアのXの位置
 #define SCORE_POS_Y		(50.0f)				//スコアのYの位置
-#define RESULT_SCORE_POS_X		(700.0f)			//スコアのXの位置
+#define RESULT_SCORE_POS_X		(700.0f)							//スコアのXの位置
 #define RESULT_SCORE_POS_Y		(SCREEN_HEIGHT * 0.5f)				//スコアのYの位置
 #define SCORE_WIDTH		(50.0f * 0.5f)		//スコアの横幅
 #define SCORE_HEIGHT	(80.0f * 0.5f)		//スコアの縦幅
@@ -34,8 +35,7 @@ int CScore::m_aTexU[NUM_DIGIT] = {};
 CScore::CScore()
 {
 	//変数初期化
-	m_nGroundIdxTex = -1;		//地上テクスチャの番号
-	m_nUnderIdxTex = -1;		//水中テクスチャの番号
+	m_nIdxTex = -1;		//テクスチャの番号
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
 	m_nNum = 0;		//スコアの値
 
@@ -58,7 +58,7 @@ CScore::~CScore()
 //==============================================================
 HRESULT CScore::Load(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスの取得
 
 	if (m_pTexture == NULL)
 	{//テクスチャ設定されてないとき
@@ -102,18 +102,14 @@ CScore *CScore::Create(void)
 	if (pScore != NULL)
 	{//メモリ確保できてたら
 
-		if (CManager::GetMode() == CScene::MODE_RESULT)
+		//初期化処理
+		pScore->Init();
+
+		if (CManager::GetInstance()->GetMode() == CScene::MODE_RESULT)
 		{//リザルトだったら
+			
+			m_nNum = CManager::GetInstance()->GetNumScore();
 
-			//初期化処理
-			pScore->Init(D3DXVECTOR3(RESULT_SCORE_POS_X, RESULT_SCORE_POS_Y, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-			m_nNum = CManager::GetNumScore();
-
-		}
-		else
-		{
-			//初期化処理
-			pScore->Init(D3DXVECTOR3(SCORE_POS_X, SCORE_POS_Y, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		}
 
 		//スコアの設定
@@ -129,15 +125,12 @@ CScore *CScore::Create(void)
 //==============================================================
 //スコアの初期化処理
 //==============================================================
-HRESULT CScore::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
+HRESULT CScore::Init(void)
 {
-	CTexture *pTexture = CManager::GetTexture();
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();
 
-	//地上テクスチャの読み込み
-	m_nGroundIdxTex = pTexture->Regit("data\\TEXTURE\\score00.png");
-
-	//水中テクスチャの読み込み
-	m_nUnderIdxTex = pTexture->Regit("data\\TEXTURE\\score01.png");
+	//テクスチャの読み込み
+	m_nIdxTex = pTexture->Regist("data\\TEXTURE\\score01.png");
 
 	//初期化処理
 	for (int nCntScore = 0; nCntScore < NUM_DIGIT; nCntScore++)
@@ -155,11 +148,21 @@ HRESULT CScore::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 				m_apNumber[nCntScore]->SetSize(SCORE_WIDTH, SCORE_HEIGHT);
 
 				//地上テクスチャ割り当て
-				m_apNumber[nCntScore]->BindTexture(m_nGroundIdxTex);
+				m_apNumber[nCntScore]->BindTexture(m_nIdxTex);
 
-				//スコアの位置設定
-				m_apNumber[nCntScore]->SetPosition(CObject::TYPE_SCORE, 
-					D3DXVECTOR3(pos.x + (nCntScore * SCORE_INTER), pos.y, pos.z), SCORE_WIDTH, SCORE_HEIGHT);
+				if (CManager::GetInstance()->GetMode() == CScene::MODE_RESULT)
+				{//リザルトだったら
+
+					//スコアの位置設定
+					m_apNumber[nCntScore]->SetPosition(CObject::TYPE_SCORE,
+						D3DXVECTOR3(RESULT_SCORE_POS_X + (nCntScore * SCORE_INTER), RESULT_SCORE_POS_Y, 0.0f), SCORE_WIDTH, SCORE_HEIGHT);
+				}
+				else
+				{
+					//スコアの位置設定
+					m_apNumber[nCntScore]->SetPosition(CObject::TYPE_SCORE,
+						D3DXVECTOR3(SCORE_POS_X + (nCntScore * SCORE_INTER), SCORE_POS_Y, 0.0f), SCORE_WIDTH, SCORE_HEIGHT);
+				}
 			}
 		}
 	}
@@ -220,7 +223,7 @@ void CScore::Set(int nNum)
 		m_aTexU[nCntScore] = (int)(m_nNum % nDigit / (nDigit * 0.1f));
 
 		//スコアのテクスチャ設定
-		m_apNumber[nCntScore]->SetTex(CObject::TYPE_SCORE, m_aTexU[nCntScore], 1.0f / NUM_TEX);
+		m_apNumber[nCntScore]->SetAnim(m_aTexU[nCntScore], 1.0f / NUM_TEX);
 	}
 }
 
@@ -240,7 +243,7 @@ void CScore::Add(int nValue)
 		m_aTexU[nCntScore] = (int)(m_nNum % nDigit / (nDigit * 0.1f));
 
 		//スコアのテクスチャ設定
-		m_apNumber[nCntScore]->SetTex(CObject::TYPE_SCORE, m_aTexU[nCntScore], 1.0f / NUM_TEX);
+		m_apNumber[nCntScore]->SetAnim(m_aTexU[nCntScore], 1.0f / NUM_TEX);
 	}
 }
 

@@ -14,6 +14,8 @@
 #include "texture.h"
 #include "ranking.h"
 
+#include "bg.h"
+
 //マクロ定義
 #define TRANS_TIME		(60 * 10)			//遷移するまでの時間
 
@@ -54,6 +56,7 @@ HRESULT CTitle::Init(void)
 	//カメラの初期化処理
 	pCamera->Init();
 
+	CBg::Create();
 	
 	//if (CManager::GetBgm() == false)
 	//{
@@ -82,17 +85,26 @@ void CTitle::Update(void)
 	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 	CFade *pFade = CManager::GetInstance()->GetFade();		//フェードの情報取得
 
-	if (m_nCntTrans >= TRANS_TIME)
-	{//遷移する時間になったら
+	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	{//ENTERキー押したら
 
-		//CManager::SetBgm(true);
-		pFade->SetFade(CScene::MODE_RANKING);
+		//ゲーム画面
+		pFade->SetFade(CScene::MODE_TUTORIAL);
 
-		//CRanking *pRanking = CScene::GetRanking();		//ランキングの情報取得
-		//pRanking->SetSound(true);
+		//bReset = true;
 	}
 
-	m_nCntTrans++;
+	//if (m_nCntTrans >= TRANS_TIME)
+	//{//遷移する時間になったら
+
+	//	//CManager::SetBgm(true);
+	//	pFade->SetFade(CScene::MODE_RANKING);
+
+	//	//CRanking *pRanking = CScene::GetRanking();		//ランキングの情報取得
+	//	//pRanking->SetSound(true);
+	//}
+
+	//m_nCntTrans++;
 }
 
 //==============================================================

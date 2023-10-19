@@ -12,6 +12,8 @@
 #include "fade.h"
 #include "sound.h"
 
+#include "bg.h"
+
 //静的メンバ変数宣言
 bool CResult::bReset = true;					//リセットしたかどうか
 
@@ -47,6 +49,8 @@ HRESULT CResult::Init(void)
 	//{
 	//	pSound->Play(pSound->SOUND_LABEL_BGM004);
 	//}
+
+	CBg::Create();
 
 	return S_OK;
 }

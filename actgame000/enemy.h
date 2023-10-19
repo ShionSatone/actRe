@@ -31,6 +31,7 @@ public:
 	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }		//位置設定
 	void SetRotation(D3DXVECTOR3 rot) { m_rot = rot; }		//向き設定
 	void SetState(STATE state) { m_state = state; }			//状態設定
+	//int SetPressFrame(int nPress) { m_nJumpLengthCounter = nPress; }		//キーを押したフレーム数設定
 
 	D3DXVECTOR3 GetPosition(void) { return m_pos; }			//位置取得
 	D3DXVECTOR3 GetRotation(void) { return m_rot; }			//向き取得

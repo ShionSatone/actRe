@@ -20,7 +20,7 @@
 //==============================================================
 //コンストラクタ
 //==============================================================
-CObjectX::CObjectX() : CObject(PRIORITY)
+CObjectX::CObjectX()
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//移動量
@@ -252,7 +252,7 @@ bool CObjectX::Collision(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *p
 	for (int nCntModel = 0; nCntModel < MAX_OBJECT; nCntModel++)
 	{
 		//オブジェクトを取得
-		CObject *pObj = GetObject(PRIORITY, nCntModel);
+		CObject *pObj = GetObject(/*PRIORITY, */nCntModel);
 
 		if (pObj != NULL)
 		{//メモリが使用されているとき
@@ -658,7 +658,7 @@ int CObjectX::CollisionEdit(D3DXVECTOR3 pos, D3DXVECTOR3 Min, D3DXVECTOR3 Max)
 	for (int nCntModel = 0; nCntModel < MAX_OBJECT; nCntModel++)
 	{
 		//オブジェクトを取得
-		CObject *pObj = GetObject(PRIORITY, nCntModel);
+		CObject *pObj = GetObject(/*PRIORITY, */nCntModel);
 
 		if (pObj != NULL)
 		{//メモリが使用されているとき

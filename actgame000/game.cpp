@@ -142,15 +142,15 @@ void CGame::Update(void)
 	}
 	else
 	{
-		//if (pInputKeyboard->GetTrigger(DIK_RETURN) == true ||
-		//	pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_A, 0) == true)
-		//{//ENTERキー押したら
+		if (pInputKeyboard->GetTrigger(DIK_RETURN) == true ||
+			pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_A, 0) == true)
+		{//ENTERキー押したら
 
-		//	//ゲーム画面
-		//	pFade->SetFade(CScene::MODE_GAME);
+			//ゲーム画面
+			pFade->SetFade(CScene::MODE_RESULT);
 
-		//	//bReset = true;
-		//}
+			//bReset = true;
+		}
 		///*else
 		//{
 		//bReset = false;

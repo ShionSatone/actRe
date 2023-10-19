@@ -177,7 +177,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Pictures\\Camera Roll\\ゲーム素材\\3D横スクアクションリメイク\\brick_blue.jpg";
+    "data\\TEXTURE\\brick_blue.jpg";
    }
   }
  }

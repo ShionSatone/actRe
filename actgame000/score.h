@@ -25,7 +25,7 @@ public:
 	static void Unload(void);		//テクスチャの破棄
 	static CScore *Create(void);	//生成処理
 
-	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot);		//初期化処理
+	HRESULT Init(void);		//初期化処理
 	void Uninit(void);		//終了処理
 	void Update(void);		//更新処理
 	void Draw(void);		//描画処理
@@ -38,8 +38,7 @@ public:
 
 private:
 	static LPDIRECT3DTEXTURE9 m_pTexture;		//テクスチャへのポインタ
-	int m_nGroundIdxTex;		//地上テクスチャの番号
-	int m_nUnderIdxTex;			//水中テクスチャの番号
+	int m_nIdxTex;		//テクスチャの番号
 
 	D3DXVECTOR3 m_pos;			//スコアの位置
 	static int m_nNum;			//スコアの値

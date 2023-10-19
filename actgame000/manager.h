@@ -56,12 +56,12 @@ public:
 
 //	static CPlayer *GetPlayer(void) { return m_pPlayer; }			//プレイヤーの取得
 //	static CEnemy *GetEnemy(void) { return m_pEnemy; }				//敵の情報
-//
+
 
 	void SetMode(CScene::MODE mode);		//ゲームモード設定
 	CScene::MODE GetMode(void);			//ゲームモード取得
-//	static void SetNumScore(int nNum) { m_nScore = nNum; }		//スコアの設定
-//	static int GetNumScore(void) { return m_nScore; }			//スコアの取得
+	void SetNumScore(int nNum) { m_nScore = nNum; }		//スコアの設定
+	int GetNumScore(void) { return m_nScore; }			//スコアの取得
 //	static void SetBgm(bool bBgm) { m_bBgm = bBgm; }		//BGMの設定
 //	static bool GetBgm(void) { return m_bBgm; }				//BGMの取得
 //	static void SetResult(bool bResult) { m_bResult = bResult; }	//リザルトの判定の設定

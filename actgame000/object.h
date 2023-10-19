@@ -10,9 +10,7 @@
 #include "main.h"
 
 //マクロ定義
-#define MAX_OBJECT			(1280)		//オブジェクトの数
-#define DEFAULT_PRIORITY	(3)			//優先順位のデフォルト値
-#define NUM_PRIORITY		(8)			//優先順位の総数
+#define MAX_OBJECT		(1280)		//オブジェクトの数
 
 //オブジェクトクラス
 class CObject
@@ -20,7 +18,7 @@ class CObject
 public:
 
 	//オブジェクトの種類
-	enum TYPE
+	typedef enum
 	{
 		TYPE_NONE = 0,		//何もなし
 		TYPE_PLAYER,		//プレイヤー
@@ -32,15 +30,21 @@ public:
 		TYPE_SCORE,			//スコア
 		TYPE_BLOCK,			//ブロック
 		TYPE_ITEM,			//アイテム
+		TYPE_SWITCH,		//投影切り替えスイッチ
+
 		TYPE_FIELD,			//床
 		TYPE_WALL,			//壁
 		TYPE_MODEL,			//モデル
-		TYPE_ALPHA_BLOCK,	//透明ブロック
+		TYPE_ALPHA_BLOCK,	//透明な通り抜けブロック
+		TYPE_DOWN_6BLOCK,	//下に下がる6ブロック
+		TYPE_DOWN_9BLOCK,	//下に下がる9ブロック
+
 		TYPE_PAUSE,			//ポーズ
 		TYPE_SCENE,			//シーン
 		TYPE_FADE,			//フェード
+
 		TYPE_MAX			//種類の最大数
-	};
+	} TYPE;
 
 	//パーティクルの種類
 	//typedef enum
@@ -60,7 +64,7 @@ public:
 	//} PARTICLETYPE;
 
 	//オブジェクトの状態
-	enum STATE
+	typedef enum
 	{
 		STATE_NONE = 0,		//通常状態
 		STATE_ATTACK,		//攻撃状態
@@ -69,11 +73,10 @@ public:
 		STATE_APPEAR,		//点滅状態
 		STATE_WAIT,			//待ち状態
 		STATE_MAX
-	};
+	} STATE;
 
 	CObject();				//コンストラクタ
-	//CObject(TYPE type);		//コンストラクタのオーバーロード
-	CObject(int nPriority = DEFAULT_PRIORITY);		//コンストラクタのオーバーロード
+	CObject(TYPE type);		//コンストラクタのオーバーロード
 	virtual ~CObject();		//デストラクタ
 
 	static void ReleaseAll(void);		//全てのリリース処理
@@ -82,21 +85,21 @@ public:
 	static void ResetMapAll(void);		//マップリセット処理
 	static void DeathAll(void);			//全てに死亡フラグを立てる処理
 
-	virtual HRESULT Init() = 0;			//初期化処理
+	virtual HRESULT Init(void) = 0;		//初期化処理
 	virtual void Uninit(void) = 0;		//終了処理
 	virtual void Update(void) = 0;		//更新処理
 	virtual void Draw(void) = 0;		//描画処理
 
-	virtual void Hit(void) {};			//ヒット処理
+	virtual void Hit(void) {};		//ヒット処理
 
-	virtual void SetPotision(D3DXVECTOR3 pos, float fWidth, float fHeight) {}				//位置の設定処理
-	virtual void SetRotation(D3DXVECTOR3 rot, float fWidth, float fHeight) {}				//向きの設定処理(2D)
-	virtual void SetRotation(D3DXVECTOR3 rot) {}											//向きの設定処理(3D)
-
+	virtual void SetPotision(TYPE type, D3DXVECTOR3 pos, float fWidth, float fHeight) {}	//位置の設定処理
 	virtual D3DXVECTOR3 GetPosition(void) { return D3DXVECTOR3(0.0f, 0.0f, 0.0f); }			//位置の取得
+	virtual void SetRotation(TYPE type, D3DXVECTOR3 rot, float fWidth, float fHeight) {}	//向きの設定処理(2D)
+	virtual void SetRotation(D3DXVECTOR3 rot) {}											//向きの設定処理(3D)
 	virtual D3DXVECTOR3 GetRotation(void) { return D3DXVECTOR3(0.0f, 0.0f, 0.0f); }			//向きの取得
-	virtual D3DXVECTOR3 GetSizeMin(void) { return D3DXVECTOR3(0.0f, 0.0f, 0.0f);}			//大きさの最小値取得
-	virtual D3DXVECTOR3 GetSizeMax(void) { return D3DXVECTOR3(0.0f, 0.0f, 0.0f); }			//大きさの最大値取得
+
+	virtual D3DXVECTOR3 GetSizeMin(void) { return D3DXVECTOR3(0.0f, 0.0f, 0.0f);}
+	virtual D3DXVECTOR3 GetSizeMax(void) { return D3DXVECTOR3(0.0f, 0.0f, 0.0f); }
 
 	virtual void SetState(STATE state){}					//オブジェクトの状態設定
 	virtual STATE GetState(void) { return STATE_NONE; }		//オブジェクトの状態取得
@@ -104,23 +107,20 @@ public:
 
 	void SetType(TYPE type) { m_type = type; }	//オブジェクトの種類の設定
 	TYPE GetType(void) { return m_type; }		//オブジェクトの種類の取得
-
-	static CObject *GetObject(int nPriority, int nIdx) /*{ return m_apObject[nIdx]; }*/;	//オブジェクトの情報取得
-	static CObject *GetTop(int nPriority);		//先頭オブジェクトのポインタ取得
+	static CObject *GetObject(int nIdx) /*{ return m_apObject[nIdx]; }*/;	//オブジェクトの情報取得
 
 protected:
 	void Release(void);		//リリース処理
 
 private:
-	//static CObject *m_apObject[NUM_PRIORITY][MAX_OBJECT];
+	static CObject *m_apObject[MAX_OBJECT];
 	static int m_nNumAll;	//オブジェクト総数
 	int m_nID;				//自分自身のID
-	int m_nPriority;		//優先順位の位置
 	TYPE m_type;			//オブジェクトの種類
 	STATE m_state;			//オブジェクトの状態
 
-	static CObject *m_apTop[NUM_PRIORITY];		//先頭のオブジェクトへのポインタ
-	static CObject *m_apCur[NUM_PRIORITY];		//最後尾のオブジェクトへのポインタ
+	static CObject *m_pTop;		//先頭のオブジェクトへのポインタ
+	static CObject *m_pCur;		//最後尾のオブジェクトへのポインタ
 	CObject *m_pPrev;			//前のオブジェクトへのポインタ
 	CObject *m_pNext;			//次のオブジェクトへのポインタ
 	bool m_bDeath;				//死亡フラグ

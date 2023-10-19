@@ -37,6 +37,9 @@ public:
 	D3DXVECTOR3 GetPosition(void) { return m_pos; }			//位置取得
 	D3DXVECTOR3 GetRotation(void) { return m_rot; }			//向き取得
 	D3DXVECTOR3 GetMove(void) { return m_move; }			//移動量取得
+
+	int GetPressFrame(void) { return m_nPressCounter; }		//キーを押したフレーム数
+
 	bool GetIsJump(void) { return m_bJump; }				//ジャンプの取得
 	bool GetIsMove(void) { return m_bMove; }				//移動の取得
 	bool GetIsDash(void) { return m_bDash; }				//ダッシュの取得
@@ -97,6 +100,8 @@ private:
 	CModelHier *m_apModel[PARTS_MAX];		//モデル(パーツ)へのポインタ
 	int m_nNumModel;		//モデル(パーツ)の総数
 	int m_nCntDamage;		//ダメージカウンター
+
+	int m_nPressCounter;	//キーを押したフレーム数
 
 	bool m_bMove;			//歩いてるかの判定
 	bool m_bJump;			//ジャンプしたかの判定
