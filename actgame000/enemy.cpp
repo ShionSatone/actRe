@@ -98,7 +98,8 @@ CEnemy::CEnemy()
 	m_bPreMoveR = false;	//右に歩く準備の判定
 	m_bPreMove = false;		//歩く準備判定
 	m_bPreJump = false;		//ジャンプの準備判定
-	m_bPreDash = false;		//ダッシュ準備判定
+	m_bPreDashFirst = false;	//最初のダッシュ準備判定
+	m_bPreDashSecond = false;	//２回目のダッシュ準備判定
 	m_bPreStopR = false;		//止まる準備判定
 	m_bPreStopL = false;		//止まる準備判定
 
@@ -116,11 +117,13 @@ CEnemy::CEnemy()
 	m_nStateMoveLCounter = 0;	//敵の移動状態変更カウンター
 	m_nStateJumpCounter = 0;	//敵の移ジャンプ状態変更カウンター
 	m_nStateLandCounter = 0;	//敵の着地状態変更カウンター
-	m_nStateDashCounter = 0;	//敵のダッシュ状態変更カウンター
+	m_nStateDashFirstCounter = 0;	//敵のダッシュ状態変更カウンター
+	m_nStateDashSecondCounter = 0;	//敵のダッシュ状態変更カウンター
 	m_nJumpLengthCounter = 0;	//ジャンプした時間
 	m_nStateStopRCounter = 0;	//敵の停止状態変更カウンター
 	m_nStateStopLCounter = 0;	//敵の停止状態変更カウンター
 
+	m_fAngleDash = 0.0f;		//角度保存用
 }
 
 //==============================================================
@@ -154,7 +157,8 @@ CEnemy::CEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_bPreMoveR = false;	//右に歩く準備の判定
 	m_bPreMove = false;		//歩く準備判定
 	m_bPreJump = false;		//ジャンプの準備判定
-	m_bPreDash = false;		//ダッシュ準備判定
+	m_bPreDashFirst = false;	//最初のダッシュ準備判定
+	m_bPreDashSecond = false;	//２回目のダッシュ準備判定
 	m_bPreStopR = false;		//止まる準備判定
 	m_bPreStopL = false;		//止まる準備判定
 
@@ -172,11 +176,13 @@ CEnemy::CEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 
 	m_nStateJumpCounter = 0;	//敵の移ジャンプ状態変更カウンター
 	m_nStateLandCounter = 0;	//敵の着地状態変更カウンター
-	m_nStateDashCounter = 0;	//敵のダッシュ状態変更カウンター
+	m_nStateDashFirstCounter = 0;	//敵のダッシュ状態変更カウンター
+	m_nStateDashSecondCounter = 0;	//敵のダッシュ状態変更カウンター
 	m_nJumpLengthCounter = 0;	//ジャンプした時間
 	m_nStateStopRCounter = 0;	//敵の停止状態変更カウンター
 	m_nStateStopLCounter = 0;	//敵の停止状態変更カウンター
 
+	m_fAngleDash = 0.0f;		//角度保存用
 }
 
 //==============================================================
@@ -791,15 +797,29 @@ void CEnemy::ControlFrontKeyboardDash(void)
 
 		if (pInputKeyboard->GetPress(DIK_W) == true)
 		{//上
-			if (pInputKeyboard->GetTrigger(DIK_J) == true)
-			{
-				m_move.x = 0.0f;		//移動量リセット
-				m_move.y = 0.0f;		//移動量リセット
-				m_bDash = true;			//ダッシュした状態にする
-				m_bJump = true;			//ジャンプした状態にする
 
-				m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
-				m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
+			if (pInputKeyboard->GetTrigger(DIK_J) == true)
+			{//ダッシュ
+
+				//ダッシュの準備する
+				if (m_bPreDashFirst == false)
+				{
+					m_bPreDashFirst = true;			//1回目
+				}
+				else if (m_bPreDashSecond == false)
+				{
+					m_bPreDashSecond = true;		//2回目
+				}
+
+				m_fAngleDash = 0.25f;	//ダッシュする角度
+
+				//m_move.x = 0.0f;		//移動量リセット
+				//m_move.y = 0.0f;		//移動量リセット
+				//m_bDash = true;			//ダッシュした状態にする
+				//m_bJump = true;			//ジャンプした状態にする
+
+				/*m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
+				m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;*/
 
 				m_nDashCounter++;		//ダッシュ回数加算
 
@@ -809,13 +829,25 @@ void CEnemy::ControlFrontKeyboardDash(void)
 		{//下
 			if (pInputKeyboard->GetTrigger(DIK_J) == true)
 			{
-				m_move.x = 0.0f;		//移動量リセット
-				m_move.y = 0.0f;		//移動量リセット
-				m_bDash = true;			//ダッシュした状態にする
-				m_bJump = true;			//ジャンプした状態にする
+				//ダッシュの準備する
+				if (m_bPreDashFirst == false)
+				{
+					m_bPreDashFirst = true;			//1回目
+				}
+				else if (m_bPreDashSecond == false)
+				{
+					m_bPreDashSecond = true;		//2回目
+				}
 
-				m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
-				m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
+				m_fAngleDash = 0.75f;	//ダッシュする角度
+
+				//m_move.x = 0.0f;		//移動量リセット
+				//m_move.y = 0.0f;		//移動量リセット
+				//m_bDash = true;			//ダッシュした状態にする
+				//m_bJump = true;			//ジャンプした状態にする
+
+				//m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
+				//m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
 
 				m_nDashCounter++;		//ダッシュ回数加算
 
@@ -823,14 +855,26 @@ void CEnemy::ControlFrontKeyboardDash(void)
 		}
 		else if (pInputKeyboard->GetTrigger(DIK_J) == true)
 		{
-			m_move.x = 0.0f;		//移動量リセット
-			m_move.z = 0.0f;		//移動量リセット
-			m_bDash = true;			//ダッシュした状態にする
-			m_bJump = true;			//ジャンプした状態にする
+			//ダッシュの準備する
+			if (m_bPreDashFirst == false)
+			{
+				m_bPreDashFirst = true;			//1回目
+			}
+			else if (m_bPreDashSecond == false)
+			{
+				m_bPreDashSecond = true;		//2回目
+			}
 
-			m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
+			m_fAngleDash = CURVE_RL;	//ダッシュする角度
+
+			//m_move.x = 0.0f;		//移動量リセット
+			//m_move.z = 0.0f;		//移動量リセット
+			//m_bDash = true;			//ダッシュした状態にする
+			//m_bJump = true;			//ジャンプした状態にする
+
+			//m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+			//m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+			//m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
 
 			m_nDashCounter++;		//ダッシュ回数加算
 
@@ -842,13 +886,25 @@ void CEnemy::ControlFrontKeyboardDash(void)
 		{//上
 			if (pInputKeyboard->GetTrigger(DIK_J) == true)
 			{
-				m_move.x = 0.0f;		//移動量リセット
-				m_move.y = 0.0f;		//移動量リセット
-				m_bDash = true;			//ダッシュした状態にする
-				m_bJump = true;			//ジャンプした状態にする
+				//ダッシュの準備する
+				if (m_bPreDashFirst == false)
+				{
+					m_bPreDashFirst = true;			//1回目
+				}
+				else if (m_bPreDashSecond == false)
+				{
+					m_bPreDashSecond = true;		//2回目
+				}
 
-				m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
-				m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
+				m_fAngleDash = -0.25f;	//ダッシュする角度
+
+				//m_move.x = 0.0f;		//移動量リセット
+				//m_move.y = 0.0f;		//移動量リセット
+				//m_bDash = true;			//ダッシュした状態にする
+				//m_bJump = true;			//ジャンプした状態にする
+
+				//m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
+				//m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
 
 				m_nDashCounter++;		//ダッシュ回数加算
 
@@ -858,13 +914,25 @@ void CEnemy::ControlFrontKeyboardDash(void)
 		{//下
 			if (pInputKeyboard->GetTrigger(DIK_J) == true)
 			{
-				m_move.x = 0.0f;		//移動量リセット
-				m_move.y = 0.0f;		//移動量リセット
-				m_bDash = true;			//ダッシュした状態にする
-				m_bJump = true;			//ジャンプした状態にする
+				//ダッシュの準備する
+				if (m_bPreDashFirst == false)
+				{
+					m_bPreDashFirst = true;			//1回目
+				}
+				else if (m_bPreDashSecond == false)
+				{
+					m_bPreDashSecond = true;		//2回目
+				}
 
-				m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
-				m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
+				m_fAngleDash = -0.75f;	//ダッシュする角度
+
+				//m_move.x = 0.0f;		//移動量リセット
+				//m_move.y = 0.0f;		//移動量リセット
+				//m_bDash = true;			//ダッシュした状態にする
+				//m_bJump = true;			//ジャンプした状態にする
+
+				//m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
+				//m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
 
 				m_nDashCounter++;		//ダッシュ回数加算
 
@@ -872,14 +940,27 @@ void CEnemy::ControlFrontKeyboardDash(void)
 		}
 		else if (pInputKeyboard->GetTrigger(DIK_J) == true)
 		{
-			m_move.x = 0.0f;		//移動量リセット
-			m_move.z = 0.0f;		//移動量リセット
-			m_bDash = true;			//ダッシュした状態にする
-			m_bJump = true;			//ジャンプした状態にする
+			//ダッシュの準備する
+			if (m_bPreDashFirst == false)
+			{
+				m_bPreDashFirst = true;			//1回目
+			}
+			else if (m_bPreDashSecond == false)
+			{
+				m_bPreDashSecond = true;		//2回目
+			}
 
-			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
+			m_fAngleDash = -CURVE_RL;	//ダッシュする角度
+
+
+			//m_move.x = 0.0f;		//移動量リセット
+			//m_move.z = 0.0f;		//移動量リセット
+			//m_bDash = true;			//ダッシュした状態にする
+			//m_bJump = true;			//ジャンプした状態にする
+
+			//m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+			//m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+			//m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
 
 			m_nDashCounter++;		//ダッシュ回数加算
 
@@ -889,13 +970,25 @@ void CEnemy::ControlFrontKeyboardDash(void)
 	{//上
 		if (pInputKeyboard->GetTrigger(DIK_J) == true)
 		{
-			m_move.x = 0.0f;		//移動量リセット
-			m_move.y = 0.0f;		//移動量リセット
-			m_bDash = true;			//ダッシュした状態にする
-			m_bJump = true;			//ジャンプした状態にする
+			//ダッシュの準備する
+			if (m_bPreDashFirst == false)
+			{
+				m_bPreDashFirst = true;			//1回目
+			}
+			else if (m_bPreDashSecond == false)
+			{
+				m_bPreDashSecond = true;		//2回目
+			}
 
-			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_DASH_MOVE;
-			m_move.y += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_DASH_MOVE;
+			m_fAngleDash = -CURVE_UP;	//ダッシュする角度
+
+			//m_move.x = 0.0f;		//移動量リセット
+			//m_move.y = 0.0f;		//移動量リセット
+			//m_bDash = true;			//ダッシュした状態にする
+			//m_bJump = true;			//ジャンプした状態にする
+
+			//m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_DASH_MOVE;
+			//m_move.y += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_DASH_MOVE;
 
 			m_nDashCounter++;		//ダッシュ回数加算
 
@@ -905,13 +998,25 @@ void CEnemy::ControlFrontKeyboardDash(void)
 	{//下
 		if (pInputKeyboard->GetTrigger(DIK_J) == true)
 		{
-			m_move.x = 0.0f;		//移動量リセット
-			m_move.y = 0.0f;		//移動量リセット
-			m_bDash = true;			//ダッシュした状態にする
-			m_bJump = true;			//ジャンプした状態にする
+			//ダッシュの準備する
+			if (m_bPreDashFirst == false)
+			{
+				m_bPreDashFirst = true;			//1回目
+			}
+			else if (m_bPreDashSecond == false)
+			{
+				m_bPreDashSecond = true;		//2回目
+			}
 
-			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_DASH_MOVE;
-			m_move.y += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_DASH_MOVE;
+			m_fAngleDash = CURVE_DOWN;	//ダッシュする角度
+
+			//m_move.x = 0.0f;		//移動量リセット
+			//m_move.y = 0.0f;		//移動量リセット
+			//m_bDash = true;			//ダッシュした状態にする
+			//m_bJump = true;			//ジャンプした状態にする
+
+			//m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_DASH_MOVE;
+			//m_move.y += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_DASH_MOVE;
 
 			m_nDashCounter++;		//ダッシュ回数加算
 
@@ -920,34 +1025,101 @@ void CEnemy::ControlFrontKeyboardDash(void)
 	else if (pInputKeyboard->GetTrigger(DIK_J) == true)
 	{//Jキーだけを押したとき
 
+		//ダッシュの準備する
+		if (m_bPreDashFirst == false)
+		{
+			m_bPreDashFirst = true;			//1回目
+		}
+		else if (m_bPreDashSecond == false)
+		{
+			m_bPreDashSecond = true;		//2回目
+		}
+
 		if (m_rot.y > 0)
 		{//プレイヤーの向きが左だったら
 
-			m_move.x = 0.0f;		//移動量リセット
-			m_move.z = 0.0f;		//移動量リセット
+			m_fAngleDash = -CURVE_RL;	//ダッシュする角度
 
-			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
+			//m_move.x = 0.0f;		//移動量リセット
+			//m_move.z = 0.0f;		//移動量リセット
+
+			//m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+			//m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+			//m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
 
 			m_nDashCounter++;		//ダッシュ回数加算
 
 		}
 		else if (m_rot.y <= 0)
 		{
-			m_move.x = 0.0f;		//移動量リセット
-			m_move.z = 0.0f;		//移動量リセット
+			m_fAngleDash = CURVE_RL;	//ダッシュする角度
 
-			m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
+			//m_move.x = 0.0f;		//移動量リセット
+			//m_move.z = 0.0f;		//移動量リセット
+
+			//m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+			//m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+			//m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
 
 			m_nDashCounter++;		//ダッシュ回数加算
 
 		}
 
-		m_bDash = true;		//ダッシュした状態にする
-		m_bJump = true;		//ジャンプした状態にする
+		//m_bDash = true;		//ダッシュした状態にする
+		//m_bJump = true;		//ジャンプした状態にする
+	}
+
+	if (m_bPreDashFirst == true)
+	{//最初にダッシュする準備するとき
+
+		if (m_nStateDashFirstCounter >= DELEY_CNT)
+		{//一定時間経過したら
+
+			m_move.x = 0.0f;		//移動量リセット
+			m_move.y = 0.0f;		//移動量リセット
+			m_bDash = true;			//ダッシュした状態にする
+			m_bJump = true;			//ジャンプした状態にする
+
+			m_bPreDashFirst = false;		//1回目
+			m_bDash = true;					//ダッシュさせる
+
+			m_nStateDashFirstCounter = 0;
+		}
+		else
+		{
+			m_nStateDashFirstCounter++;			//ダッシュするまでのカウンター加算
+		}
+	}
+
+	if (m_bPreDashSecond == true)
+	{//最初にダッシュする準備するとき
+
+		if (m_nStateDashSecondCounter >= DELEY_CNT)
+		{//一定時間経過したら
+
+			m_move.x = 0.0f;		//移動量リセット
+			m_move.y = 0.0f;		//移動量リセット
+			m_bDash = true;			//ダッシュした状態にする
+			m_bJump = true;			//ジャンプした状態にする
+
+			m_bPreDashSecond = false;		//1回目
+			m_bDash = true;					//ダッシュさせる
+
+			m_nStateDashSecondCounter = 0;
+		}
+		else
+		{
+			m_nStateDashSecondCounter++;			//ダッシュするまでのカウンター加算
+		}
+	}
+
+	if (m_bDash == true)
+	{//ダッシュする状態になったら
+
+		m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * m_fAngleDash) * FRONT_DASH_MOVE;
+		m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * m_fAngleDash) * FRONT_DASH_MOVE;
+
+		m_bDash = false;
 	}
 }
 

@@ -58,11 +58,11 @@ HRESULT CGame::Init(void)
 	//壁の生成
 	CWall::Create(D3DXVECTOR3(0.0f, 0.0f, 1000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0);
 
-	//プレイヤーの生成
-	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-
 	//敵の生成
-	CEnemy::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	CEnemy::Create(D3DXVECTOR3(1080.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+	//プレイヤーの生成
+	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(1080.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//エディットの生成
 	m_pEdit = CEdit::Create();

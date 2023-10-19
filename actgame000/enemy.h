@@ -115,7 +115,8 @@ private:
 	bool m_bPreMoveR;		//右に歩く準備の判定
 	bool m_bPreMove;		//歩く準備判定
 	bool m_bPreJump;		//ジャンプの準備判定
-	bool m_bPreDash;		//ダッシュ準備判定
+	bool m_bPreDashFirst;	//最初のダッシュ準備判定
+	bool m_bPreDashSecond;	//２回目のダッシュ準備判定
 	bool m_bPreStopR;		//止まる準備判定右
 	bool m_bPreStopL;		//止まる準備判定左
 	//bool m_bPreLand;		//着地したか
@@ -133,10 +134,13 @@ private:
 
 	int m_nStateJumpCounter;	//敵のジャンプ状態変更カウンター
 	int m_nStateLandCounter;	//敵の着地状態変更カウンター
-	int m_nStateDashCounter;	//敵のダッシュ状態変更カウンター
+	int m_nStateDashFirstCounter;	//敵のダッシュ状態変更カウンター
+	int m_nStateDashSecondCounter;	//敵のダッシュ状態変更カウンター
 	int m_nStateStopRCounter;	//敵の右停止状態変更カウンター
 	int m_nStateStopLCounter;	//敵の左停止状態変更カウンター
 	int m_nJumpLengthCounter;	//ジャンプした時間
+
+	float m_fAngleDash;			//角度保存用
 
 	CMotion *m_pMotion;		//モーション情報
 };

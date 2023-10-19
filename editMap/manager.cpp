@@ -201,7 +201,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	CManager::Load3DAll();
 
 	float posX = 650.0f;
-	float posY = -5550.0f;
+	float posY = 0.0f;
 
 	//ÉvÉåÉCÉÑÅ[ÇÃê∂ê¨
 	m_pPlayerModel = CPlayerModel::Create(D3DXVECTOR3(posX, posY, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
