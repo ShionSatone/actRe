@@ -186,7 +186,13 @@ void CEdit::Uninit(void)
 //==============================================================
 void CEdit::Update(void)
 {
-	
+	//for (int nCntEdit = 0; nCntEdit < m_nMaxModel; nCntEdit++)
+	//{
+	//	if (m_aSetEdit[nCntEdit].nIndex == CObject::TYPE_ALPHA_BLOCK)
+	//	{//“§–¾ƒuƒƒbƒN‚ÌŽž
+
+	//	}
+	//}
 }
 
 //==============================================================

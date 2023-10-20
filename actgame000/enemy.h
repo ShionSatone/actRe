@@ -9,6 +9,10 @@
 
 #include "object.h"
 
+//マクロ定義
+#define MAX_POS		(50)		//保存する最大フレーム数
+
+//前方宣言
 class CModelHier;	//モデルの階層構造
 class CMotion;		//モーションの階層構造
 
@@ -31,7 +35,6 @@ public:
 	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }		//位置設定
 	void SetRotation(D3DXVECTOR3 rot) { m_rot = rot; }		//向き設定
 	void SetState(STATE state) { m_state = state; }			//状態設定
-	//int SetPressFrame(int nPress) { m_nJumpLengthCounter = nPress; }		//キーを押したフレーム数設定
 
 	D3DXVECTOR3 GetPosition(void) { return m_pos; }			//位置取得
 	D3DXVECTOR3 GetRotation(void) { return m_rot; }			//向き取得
@@ -74,14 +77,22 @@ private:
 		PARTS_MAX
 	};
 
+	//プレイヤーの行動保存保存用
+	struct SaveAction
+	{
+		D3DXVECTOR3 pos;		//位置
+		D3DXVECTOR3 rot;		//向き
+
+		bool bMove;			//歩いてるかの判定
+		bool bJump;			//ジャンプしたかの判定
+		bool bLand;			//着地したか
+		bool bDash;			//ダッシュしたか
+	};
+
 	void UpdateFront(void);			//手前側の更新処理
 	void UpdateState(void);			//状態の更新処理
 
 	void MotionManager(void);				//モーション管理
-	void ControlFrontKeyboard(void);		//プレイヤーキーボード操作(手前側)
-	void ControlFrontKeyboardMove(void);	//プレイヤーキーボードの移動操作(手前側)
-	void ControlFrontKeyboardJump(void);	//プレイヤーキーボードのジャンプ操作(手前側)
-	void ControlFrontKeyboardDash(void);	//プレイヤーキーボードのダッシュ操作(手前側)
 
 	void Screen(void);						//画面外判定
 	void LoadFile(void);					//モデルファイル読み込み
@@ -100,9 +111,10 @@ private:
 	int m_nNumModel;		//モデル(パーツ)の総数
 	int m_nCntDamage;		//ダメージカウンター
 
-	D3DXVECTOR3 m_posSave;	//位置保存用
 	D3DXVECTOR3 m_rotSave;	//向き保存用
 	D3DXVECTOR3 m_moveSave;	//移動量保存用
+
+	bool m_bChaseStart;		//追いかけるか
 
 	bool m_bMoveL;			//左に歩いてるかの判定
 	bool m_bMoveR;			//右に歩いてるかの判定
@@ -111,37 +123,15 @@ private:
 	bool m_bLand;			//着地したか
 	bool m_bDash;			//ダッシュしたか
 
-	bool m_bPreMoveL;		//左に歩く準備判定
-	bool m_bPreMoveR;		//右に歩く準備の判定
-	bool m_bPreMove;		//歩く準備判定
-	bool m_bPreJump;		//ジャンプの準備判定
-	bool m_bPreDashFirst;	//最初のダッシュ準備判定
-	bool m_bPreDashSecond;	//２回目のダッシュ準備判定
-	bool m_bPreStopR;		//止まる準備判定右
-	bool m_bPreStopL;		//止まる準備判定左
-	//bool m_bPreLand;		//着地したか
-
 	float m_fRotDest;		//目標
 	float m_fRotDiff;		//差分
 
 	STATE m_state;			//敵の状態
 	ENEMYSTATE m_enemyState;		//敵の動きの状態
 
-	int m_nDashCounter;		//ダッシュした回数
-	int m_nStateNoneCounter;	//敵の停止状態変更カウンター
-	int m_nStateMoveRCounter;	//敵の右移動状態変更カウンター
-	int m_nStateMoveLCounter;	//敵の左移動状態変更カウンター
+	int m_nFrameCounter;	//フレーム数カウンター
 
-	int m_nStateJumpCounter;	//敵のジャンプ状態変更カウンター
-	int m_nStateLandCounter;	//敵の着地状態変更カウンター
-	int m_nStateDashFirstCounter;	//敵のダッシュ状態変更カウンター
-	int m_nStateDashSecondCounter;	//敵のダッシュ状態変更カウンター
-	int m_nStateStopRCounter;	//敵の右停止状態変更カウンター
-	int m_nStateStopLCounter;	//敵の左停止状態変更カウンター
-	int m_nJumpLengthCounter;	//ジャンプした時間
-
-	float m_fAngleDash;			//角度保存用
-
+	SaveAction m_aSaveAction[MAX_POS];		//行動保存用
 	CMotion *m_pMotion;		//モーション情報
 };
 

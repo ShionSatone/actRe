@@ -267,7 +267,7 @@ void CCamera::Control()
 	m_posVDest.y = pPlayer->GetPosition().y;
 	m_posVDest.z = pPlayer->GetPosition().z + cosf(GetRotation().y + D3DX_PI) * LENGRH;
 
-#if 1
+#if _DEBUG
 	//Ž‹“_
 	if (pInputKeyboard->GetPress(DIK_C) == true)
 	{//Ž‹“_‰E

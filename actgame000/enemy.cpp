@@ -83,9 +83,24 @@ CEnemy::CEnemy()
 	m_nNumModel = 0;		//敵(パーツ)の総数
 	m_pMotion = NULL;
 
-	m_posSave = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//位置保存用
+	//保存用構造体の初期化
+	for (int nCntSave = 0; nCntSave < MAX_POS; nCntSave++)
+	{
+
+		m_aSaveAction[nCntSave].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//位置
+		m_aSaveAction[nCntSave].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//向き
+
+		//判定
+		m_aSaveAction[nCntSave].bMove = false;			//移動
+		m_aSaveAction[nCntSave].bDash = false;			//ダッシュ
+		m_aSaveAction[nCntSave].bJump = true;			//ジャンプ
+		m_aSaveAction[nCntSave].bLand = false;			//着地
+	}
+
 	m_rotSave = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//向き保存用
 	m_moveSave = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//移動量保存用
+
+	m_bChaseStart = false;		//追いかけるか
 
 	m_bJump = false;		//ジャンプしたか
 	m_bMoveL = false;		//左に歩いてるかの判定
@@ -94,36 +109,14 @@ CEnemy::CEnemy()
 	m_bLand = true;			//着地した
 	m_bDash = false;		//ダッシュしたか
 
-	m_bPreMoveL = false;	//左に歩く準備判定
-	m_bPreMoveR = false;	//右に歩く準備の判定
-	m_bPreMove = false;		//歩く準備判定
-	m_bPreJump = false;		//ジャンプの準備判定
-	m_bPreDashFirst = false;	//最初のダッシュ準備判定
-	m_bPreDashSecond = false;	//２回目のダッシュ準備判定
-	m_bPreStopR = false;		//止まる準備判定
-	m_bPreStopL = false;		//止まる準備判定
-
 	m_fRotDest = 0.0f;		//目標
 	m_fRotDiff = 0.0f;		//差分
 
-	m_nDashCounter = 0;		//ダッシュした回数
+	m_nFrameCounter = 0;	//フレーム数カウンター
 
 	m_state = STATE_NONE;			//状態
 	m_enemyState = ENEMYSTATE_NONE;	//止まってる状態
 	m_nCntDamage = 0;				//ダメージカウンター
-
-	m_nStateNoneCounter = 0;	//敵の停止状態変更カウンター
-	m_nStateMoveRCounter = 0;	//敵の移動状態変更カウンター
-	m_nStateMoveLCounter = 0;	//敵の移動状態変更カウンター
-	m_nStateJumpCounter = 0;	//敵の移ジャンプ状態変更カウンター
-	m_nStateLandCounter = 0;	//敵の着地状態変更カウンター
-	m_nStateDashFirstCounter = 0;	//敵のダッシュ状態変更カウンター
-	m_nStateDashSecondCounter = 0;	//敵のダッシュ状態変更カウンター
-	m_nJumpLengthCounter = 0;	//ジャンプした時間
-	m_nStateStopRCounter = 0;	//敵の停止状態変更カウンター
-	m_nStateStopLCounter = 0;	//敵の停止状態変更カウンター
-
-	m_fAngleDash = 0.0f;		//角度保存用
 }
 
 //==============================================================
@@ -146,6 +139,21 @@ CEnemy::CEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_pMotion = NULL;		//モーションの情報
 	m_nNumModel = 0;		//敵(パーツ)の総数
 
+	//保存用構造体の初期化
+	for (int nCntSave = 0; nCntSave < MAX_POS; nCntSave++)
+	{
+		m_aSaveAction[nCntSave].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//位置
+		m_aSaveAction[nCntSave].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//向き
+
+		//判定
+		m_aSaveAction[nCntSave].bMove = false;			//移動
+		m_aSaveAction[nCntSave].bDash = false;			//ダッシュ
+		m_aSaveAction[nCntSave].bJump = true;				//ジャンプ
+		m_aSaveAction[nCntSave].bLand = false;			//着地
+	}
+
+	m_bChaseStart = false;		//追いかけるか
+
 	m_bJump = false;		//ジャンプしたか
 	m_bMoveL = false;		//左に歩いてるかの判定
 	m_bMoveR = false;		//右に歩いてるかの判定
@@ -153,36 +161,14 @@ CEnemy::CEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_bLand = true;			//着地した
 	m_bDash = false;		//ダッシュしたか
 
-	m_bPreMoveL = false;	//左に歩く準備判定
-	m_bPreMoveR = false;	//右に歩く準備の判定
-	m_bPreMove = false;		//歩く準備判定
-	m_bPreJump = false;		//ジャンプの準備判定
-	m_bPreDashFirst = false;	//最初のダッシュ準備判定
-	m_bPreDashSecond = false;	//２回目のダッシュ準備判定
-	m_bPreStopR = false;		//止まる準備判定
-	m_bPreStopL = false;		//止まる準備判定
-
 	m_fRotDest = 0.0f;	//目標
 	m_fRotDiff = 0.0f;	//差分
 
-	m_nDashCounter = 0;		//ダッシュした回数
+	m_nFrameCounter = 0;	//フレーム数カウンター
+
 	m_state = STATE_NONE;		//状態
 	m_enemyState = ENEMYSTATE_NONE;	//止まってる状態
 	m_nCntDamage = 0;			//ダメージカウンター
-
-	m_nStateNoneCounter = 0;	//敵の停止状態変更カウンター
-	m_nStateMoveRCounter = 0;	//敵の移動状態変更カウンター
-	m_nStateMoveLCounter = 0;	//敵の移動状態変更カウンター
-
-	m_nStateJumpCounter = 0;	//敵の移ジャンプ状態変更カウンター
-	m_nStateLandCounter = 0;	//敵の着地状態変更カウンター
-	m_nStateDashFirstCounter = 0;	//敵のダッシュ状態変更カウンター
-	m_nStateDashSecondCounter = 0;	//敵のダッシュ状態変更カウンター
-	m_nJumpLengthCounter = 0;	//ジャンプした時間
-	m_nStateStopRCounter = 0;	//敵の停止状態変更カウンター
-	m_nStateStopLCounter = 0;	//敵の停止状態変更カウンター
-
-	m_fAngleDash = 0.0f;		//角度保存用
 }
 
 //==============================================================
@@ -313,25 +299,54 @@ void CEnemy::Update(void)
 	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
 	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
-	//CGame *pGame = CScene::GetGame();
+	CPlayer *pPlayer = CGame::GetPlayer();
 
 	//前回の位置更新
 	m_posOld = m_pos;
 
-	//敵の操作
-	CEnemy::ControlFrontKeyboard();
+	if (m_bChaseStart == true)
+	{//追いかけ開始したら
 
-	//位置更新
-	m_pos += m_move;
+		//敵の情報更新
+		m_pos = m_aSaveAction[m_nFrameCounter].pos;			//位置
+		m_rot = m_aSaveAction[m_nFrameCounter].rot;			//向き
+
+		m_bMove = m_aSaveAction[m_nFrameCounter].bMove;		//移動判定
+		m_bDash = m_aSaveAction[m_nFrameCounter].bDash;		//ダッシュ判定
+		m_bJump = m_aSaveAction[m_nFrameCounter].bJump;		//ジャンプ判定
+		m_bLand = m_aSaveAction[m_nFrameCounter].bLand;		//着地判定
+	}
+
+	//プレイヤーの情報代入
+	m_aSaveAction[m_nFrameCounter].pos = pPlayer->GetPosition();		//位置
+	m_aSaveAction[m_nFrameCounter].rot = pPlayer->GetRotation();		//向き
+	m_aSaveAction[m_nFrameCounter].bMove = pPlayer->GetIsMove();		//移動判定
+	m_aSaveAction[m_nFrameCounter].bDash = pPlayer->GetIsDash();		//ダッシュ判定
+	m_aSaveAction[m_nFrameCounter].bJump = pPlayer->GetIsJump();		//ジャンプ判定
+	m_aSaveAction[m_nFrameCounter].bLand = pPlayer->GetIsLand();		//着地判定
 
 	//移動量を更新
-	m_move.x += (0.0f - m_move.x) * 0.1f;
+	//m_move.x += (0.0f - m_move.x) * 0.1f;
 
 	//手前側の更新処理
 	CEnemy::UpdateFront();
 
 	//モーションの更新処理
 	m_pMotion->Update();
+
+	m_nFrameCounter++;		//フレーム数加算
+
+	if (m_nFrameCounter >= MAX_POS)
+	{//一定のフレーム数になったら
+
+		m_nFrameCounter = 0;		//フレーム数初期化
+
+		if (m_bChaseStart == false)
+		{//追いかけてなかったら
+
+			m_bChaseStart = true;		//追いかけ開始
+		}
+	}
 
 	//デバッグ表示
 	pDebugProc->Print("\n敵の位置 (%f, %f, %f)\n", m_pos.x, m_pos.y, m_pos.z);
@@ -352,16 +367,16 @@ void CEnemy::UpdateFront(void)
 	if (CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max) == true)
 	{//着地したら
 
-		m_nDashCounter = 0;		//ダッシュ数リセット
+		//m_nDashCounter = 0;		//ダッシュ数リセット
 
-		if (m_bLand == false)
-		{
-			//パーティクルの生成
-			//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y, m_pos.z), D3DXCOLOR(0.8f, 0.7f, 0.6f, 0.8f), PARTICLETYPE_MOVE, 20, 10.0f);
-		}
+		//if (m_bLand == false)
+		//{
+		//	//パーティクルの生成
+		//	//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y, m_pos.z), D3DXCOLOR(0.8f, 0.7f, 0.6f, 0.8f), PARTICLETYPE_MOVE, 20, 10.0f);
+		//}
 
-		m_bJump = false;	//ジャンプしてない状態にする
-		m_bLand = true;		//着地した状態にする
+		//m_bJump = false;	//ジャンプしてない状態にする
+		//m_bLand = true;		//着地した状態にする
 
 		//if ((m_pMotion->GetType() != m_pMotion->MOTIONTYPE_MOVE && m_bMove == true && m_bJump == false && m_bLand == true))
 		//{//地面についたら(そのあと移動)
@@ -385,8 +400,8 @@ void CEnemy::UpdateFront(void)
 		pInputKeyboard->GetPress(DIK_SPACE) == false)
 	{//地面についてない && ジャンプボタン押してない
 
-		m_bJump = true;		//ジャンプしてる状態にする
-		m_bLand = false;	//着地してない状態にする
+		//m_bJump = true;		//ジャンプしてる状態にする
+		//m_bLand = false;	//着地してない状態にする
 	}
 
 	//状態更新
@@ -396,10 +411,14 @@ void CEnemy::UpdateFront(void)
 	CEnemy::RotCorrection();
 
 	//画面外処理
-	CEnemy::Screen();
+	//CEnemy::Screen();
 
-	//モーション管理
-	CEnemy::MotionManager();
+	if (m_bChaseStart == true)
+	{//追いかけ開始したら
+
+		//モーション管理
+		CEnemy::MotionManager();
+	}
 }
 
 //==============================================================
@@ -561,569 +580,6 @@ void CEnemy::UpdateState(void)
 //}
 
 //==============================================================
-//敵のキーボード操作処理(手前側)
-//==============================================================
-void CEnemy::ControlFrontKeyboard(void)
-{
-	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
-	CSound *pSound = CManager::GetInstance()->GetSound();
-
-	//移動処理
-	CEnemy::ControlFrontKeyboardMove();
-
-	//ジャンプ処理
-	CEnemy::ControlFrontKeyboardJump();
-
-	//ダッシュ処理
-	if (m_nDashCounter < MAX_DASH)
-	{//最大ジャンプ数未満の場合
-
-		CEnemy::ControlFrontKeyboardDash();
-	}
-}
-
-//==============================================================
-//敵のキーボードの移動操作処理(手前側)
-//==============================================================
-void CEnemy::ControlFrontKeyboardMove(void)
-{
-	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
-	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
-
-	//移動
-	if (pInputKeyboard->GetPress(DIK_D) == true)
-	{//右
-		
-		m_bPreMoveR = true;	//右に歩く準備をする
-	}
-	else if (pInputKeyboard->GetPress(DIK_A) == true)
-	{//左
-
-		m_bPreMoveL = true;	//左に歩く準備をする
-	}
-
-	//キーボード離したとき
-	if (pInputKeyboard->GetRelease(DIK_D) == true)
-	{//右
-
-		m_bPreStopR = true;		//止まる準備する
-	}
-
-	if (pInputKeyboard->GetRelease(DIK_A) == true)
-	{//左
-
-		m_bPreStopL = true;		//止まる準備する
-	}
-
-	if (m_bPreMoveR == true)
-	{//右に歩く準備するとき
-
-		if (m_nStateMoveRCounter >= DELEY_CNT)
-		{//一定時間経過したら
-
-			m_bPreMoveR = false;
-			m_bMove = true;		//歩かせる
-			m_bMoveR = true;	//右に歩いてる状態にする
-
-			m_nStateMoveRCounter = 0;
-		}
-		else
-		{
-			m_nStateMoveRCounter++;
-		}
-	}
-
-	if (m_bPreMoveL == true)
-	{//左に歩く準備するとき
-
-		if (m_nStateMoveLCounter >= DELEY_CNT)
-		{//一定時間経過したら
-
-			m_bPreMoveL = false;
-			m_bMove = true;		//歩かせる
-			m_bMoveL = true;	//右に歩いてる状態にする
-
-			m_nStateMoveLCounter = 0;
-		}
-		else
-		{
-			m_nStateMoveLCounter++;
-		}
-	}
-
-	if (m_bMoveR == true)
-	{//右に歩いてるとき
-
-		m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_MOVE;
-		m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_MOVE;
-		m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
-	}
-	else if (m_bMoveL == true)
-	{//左に歩いてるとき
-
-		m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_MOVE;
-		m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_MOVE;
-		m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
-	}
-
-	if (m_bPreStopR == true)
-	{//止まる準備するとき
-
-		if (m_nStateStopRCounter >= DELEY_CNT)
-		{
-			m_bMove = false;
-			m_bMoveR = false;	//右に歩いてる状態にする
-			m_bPreStopR = false;
-
-			m_nStateStopRCounter = 0;		//止まるまでの時間初期化
-		}
-		else
-		{
-			m_nStateStopRCounter++;			//止まるまでの時間加算
-		}
-	}
-	else if (m_bPreStopL == true)
-	{//止まる準備するとき
-
-		if (m_nStateStopLCounter >= DELEY_CNT)
-		{
-			m_bMove = false;
-			m_bMoveL = false;	//右に歩いてる状態にする
-			m_bPreStopL = false;
-
-			m_nStateStopLCounter = 0;		//止まるまでの時間初期化
-		}
-		else
-		{
-			m_nStateStopLCounter++;			//止まるまでの時間加算
-		}
-	}
-
-	if ((m_move.x <= STOP_MOVE && m_move.x >= -STOP_MOVE) && (m_move.z <= STOP_MOVE && m_move.z >= -STOP_MOVE))
-	{//歩いてないとき
-
-		m_bMove = false;		//歩いてない状態にする
-	}
-}
-
-//==============================================================
-//敵のキーボードのジャンプ操作処理(手前側)
-//==============================================================
-void CEnemy::ControlFrontKeyboardJump(void)
-{
-	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
-	CPlayer *pPlayer = CGame::GetPlayer();		//プレイヤーの情報取得
-	CSound *pSound = CManager::GetInstance()->GetSound();
-	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
-
-	if (pInputKeyboard->GetPress(DIK_SPACE) == true && m_bJump == false && m_move.y <= JUMP_HEIGHT)
-	{//SPACEキーを押したら
-
-		m_bPreJump = true;		//ジャンプ準備状態にする
-
-		m_nJumpLengthCounter++;		//ジャンプしたフレーム数取得
-	}
-
-	if (m_bPreJump == true)
-	{//ジャンプ準備状態のとき
-
-		if (m_nStateJumpCounter >= DELEY_CNT)
-		{//一定時間経過したら
-
-			if (m_nJumpLengthCounter <= 0)
-			{//ジャンプしたい長さまで飛んだら
-
-				//ジャンプした状態にする
-				m_bJump = true;
-				m_bLand = false;
-
-				m_nJumpLengthCounter = 0;		//ジャンプした時間リセット
-				m_nStateJumpCounter = 0;		//ジャンプするまでのカウンターリセット
-				m_bPreJump = false;				//ジャンプの準備終了
-			}
-			else if (m_move.y >= JUMP_HEIGHT)
-			{
-				//ジャンプした状態にする
-				m_bJump = true;
-				m_bLand = false;
-
-				m_nJumpLengthCounter = 0;		//ジャンプした時間リセット
-				m_nStateJumpCounter = 0;		//ジャンプするまでのカウンターリセット
-				m_bPreJump = false;				//ジャンプの準備終了
-			}
-			else
-			{
-				m_nJumpLengthCounter--;		//ジャンプする時間減算
-
-				//ジャンプする
-				m_move.y += ADD_MOVE_Y;
-
-				pDebugProc->Print("\nジャンプ中\n");
-
-			}
-		}
-		else
-		{
-			m_nStateJumpCounter++;		//ジャンプするまでのカウンター加算
-
-		}
-	}
-
-	if (m_move.y >= JUMP_HEIGHT ||
-		(m_bJump == true && (m_move.x <= 7.0f && m_move.x >= -7.0f)) ||
-		(m_bDash == true && (m_move.x <= 7.0f && m_move.x >= -7.0f)))
-	{
-		//移動量加算
-		m_move.y -= MOVE_Y;
-
-		if (m_move.y <= 0.0f)
-		{//着地したら
-
-			m_bDash = false;
-		}
-	}
-}
-
-//==============================================================
-//敵のキーボードのダッシュ操作処理(手前側)
-//==============================================================
-void CEnemy::ControlFrontKeyboardDash(void)
-{
-	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
-	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
-
-	if (pInputKeyboard->GetPress(DIK_D) == true)
-	{//右
-
-		if (pInputKeyboard->GetPress(DIK_W) == true)
-		{//上
-
-			if (pInputKeyboard->GetTrigger(DIK_J) == true)
-			{//ダッシュ
-
-				//ダッシュの準備する
-				if (m_bPreDashFirst == false)
-				{
-					m_bPreDashFirst = true;			//1回目
-				}
-				else if (m_bPreDashSecond == false)
-				{
-					m_bPreDashSecond = true;		//2回目
-				}
-
-				m_fAngleDash = 0.25f;	//ダッシュする角度
-
-				//m_move.x = 0.0f;		//移動量リセット
-				//m_move.y = 0.0f;		//移動量リセット
-				//m_bDash = true;			//ダッシュした状態にする
-				//m_bJump = true;			//ジャンプした状態にする
-
-				/*m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
-				m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;*/
-
-				m_nDashCounter++;		//ダッシュ回数加算
-
-			}
-		}
-		else if (pInputKeyboard->GetPress(DIK_S) == true)
-		{//下
-			if (pInputKeyboard->GetTrigger(DIK_J) == true)
-			{
-				//ダッシュの準備する
-				if (m_bPreDashFirst == false)
-				{
-					m_bPreDashFirst = true;			//1回目
-				}
-				else if (m_bPreDashSecond == false)
-				{
-					m_bPreDashSecond = true;		//2回目
-				}
-
-				m_fAngleDash = 0.75f;	//ダッシュする角度
-
-				//m_move.x = 0.0f;		//移動量リセット
-				//m_move.y = 0.0f;		//移動量リセット
-				//m_bDash = true;			//ダッシュした状態にする
-				//m_bJump = true;			//ジャンプした状態にする
-
-				//m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
-				//m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
-
-				m_nDashCounter++;		//ダッシュ回数加算
-
-			}
-		}
-		else if (pInputKeyboard->GetTrigger(DIK_J) == true)
-		{
-			//ダッシュの準備する
-			if (m_bPreDashFirst == false)
-			{
-				m_bPreDashFirst = true;			//1回目
-			}
-			else if (m_bPreDashSecond == false)
-			{
-				m_bPreDashSecond = true;		//2回目
-			}
-
-			m_fAngleDash = CURVE_RL;	//ダッシュする角度
-
-			//m_move.x = 0.0f;		//移動量リセット
-			//m_move.z = 0.0f;		//移動量リセット
-			//m_bDash = true;			//ダッシュした状態にする
-			//m_bJump = true;			//ジャンプした状態にする
-
-			//m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			//m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			//m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
-
-			m_nDashCounter++;		//ダッシュ回数加算
-
-		}
-	}
-	else if (pInputKeyboard->GetPress(DIK_A) == true)
-	{//左
-		if (pInputKeyboard->GetPress(DIK_W) == true)
-		{//上
-			if (pInputKeyboard->GetTrigger(DIK_J) == true)
-			{
-				//ダッシュの準備する
-				if (m_bPreDashFirst == false)
-				{
-					m_bPreDashFirst = true;			//1回目
-				}
-				else if (m_bPreDashSecond == false)
-				{
-					m_bPreDashSecond = true;		//2回目
-				}
-
-				m_fAngleDash = -0.25f;	//ダッシュする角度
-
-				//m_move.x = 0.0f;		//移動量リセット
-				//m_move.y = 0.0f;		//移動量リセット
-				//m_bDash = true;			//ダッシュした状態にする
-				//m_bJump = true;			//ジャンプした状態にする
-
-				//m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
-				//m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
-
-				m_nDashCounter++;		//ダッシュ回数加算
-
-			}
-		}
-		else if (pInputKeyboard->GetPress(DIK_S) == true)
-		{//下
-			if (pInputKeyboard->GetTrigger(DIK_J) == true)
-			{
-				//ダッシュの準備する
-				if (m_bPreDashFirst == false)
-				{
-					m_bPreDashFirst = true;			//1回目
-				}
-				else if (m_bPreDashSecond == false)
-				{
-					m_bPreDashSecond = true;		//2回目
-				}
-
-				m_fAngleDash = -0.75f;	//ダッシュする角度
-
-				//m_move.x = 0.0f;		//移動量リセット
-				//m_move.y = 0.0f;		//移動量リセット
-				//m_bDash = true;			//ダッシュした状態にする
-				//m_bJump = true;			//ジャンプした状態にする
-
-				//m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
-				//m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
-
-				m_nDashCounter++;		//ダッシュ回数加算
-
-			}
-		}
-		else if (pInputKeyboard->GetTrigger(DIK_J) == true)
-		{
-			//ダッシュの準備する
-			if (m_bPreDashFirst == false)
-			{
-				m_bPreDashFirst = true;			//1回目
-			}
-			else if (m_bPreDashSecond == false)
-			{
-				m_bPreDashSecond = true;		//2回目
-			}
-
-			m_fAngleDash = -CURVE_RL;	//ダッシュする角度
-
-
-			//m_move.x = 0.0f;		//移動量リセット
-			//m_move.z = 0.0f;		//移動量リセット
-			//m_bDash = true;			//ダッシュした状態にする
-			//m_bJump = true;			//ジャンプした状態にする
-
-			//m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			//m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			//m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
-
-			m_nDashCounter++;		//ダッシュ回数加算
-
-		}
-	}
-	else if (pInputKeyboard->GetPress(DIK_W) == true)
-	{//上
-		if (pInputKeyboard->GetTrigger(DIK_J) == true)
-		{
-			//ダッシュの準備する
-			if (m_bPreDashFirst == false)
-			{
-				m_bPreDashFirst = true;			//1回目
-			}
-			else if (m_bPreDashSecond == false)
-			{
-				m_bPreDashSecond = true;		//2回目
-			}
-
-			m_fAngleDash = -CURVE_UP;	//ダッシュする角度
-
-			//m_move.x = 0.0f;		//移動量リセット
-			//m_move.y = 0.0f;		//移動量リセット
-			//m_bDash = true;			//ダッシュした状態にする
-			//m_bJump = true;			//ジャンプした状態にする
-
-			//m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_DASH_MOVE;
-			//m_move.y += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_DASH_MOVE;
-
-			m_nDashCounter++;		//ダッシュ回数加算
-
-		}
-	}
-	else if (pInputKeyboard->GetPress(DIK_S) == true)
-	{//下
-		if (pInputKeyboard->GetTrigger(DIK_J) == true)
-		{
-			//ダッシュの準備する
-			if (m_bPreDashFirst == false)
-			{
-				m_bPreDashFirst = true;			//1回目
-			}
-			else if (m_bPreDashSecond == false)
-			{
-				m_bPreDashSecond = true;		//2回目
-			}
-
-			m_fAngleDash = CURVE_DOWN;	//ダッシュする角度
-
-			//m_move.x = 0.0f;		//移動量リセット
-			//m_move.y = 0.0f;		//移動量リセット
-			//m_bDash = true;			//ダッシュした状態にする
-			//m_bJump = true;			//ジャンプした状態にする
-
-			//m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_DASH_MOVE;
-			//m_move.y += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_DASH_MOVE;
-
-			m_nDashCounter++;		//ダッシュ回数加算
-
-		}
-	}
-	else if (pInputKeyboard->GetTrigger(DIK_J) == true)
-	{//Jキーだけを押したとき
-
-		//ダッシュの準備する
-		if (m_bPreDashFirst == false)
-		{
-			m_bPreDashFirst = true;			//1回目
-		}
-		else if (m_bPreDashSecond == false)
-		{
-			m_bPreDashSecond = true;		//2回目
-		}
-
-		if (m_rot.y > 0)
-		{//プレイヤーの向きが左だったら
-
-			m_fAngleDash = -CURVE_RL;	//ダッシュする角度
-
-			//m_move.x = 0.0f;		//移動量リセット
-			//m_move.z = 0.0f;		//移動量リセット
-
-			//m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			//m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			//m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
-
-			m_nDashCounter++;		//ダッシュ回数加算
-
-		}
-		else if (m_rot.y <= 0)
-		{
-			m_fAngleDash = CURVE_RL;	//ダッシュする角度
-
-			//m_move.x = 0.0f;		//移動量リセット
-			//m_move.z = 0.0f;		//移動量リセット
-
-			//m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			//m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			//m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
-
-			m_nDashCounter++;		//ダッシュ回数加算
-
-		}
-
-		//m_bDash = true;		//ダッシュした状態にする
-		//m_bJump = true;		//ジャンプした状態にする
-	}
-
-	if (m_bPreDashFirst == true)
-	{//最初にダッシュする準備するとき
-
-		if (m_nStateDashFirstCounter >= DELEY_CNT)
-		{//一定時間経過したら
-
-			m_move.x = 0.0f;		//移動量リセット
-			m_move.y = 0.0f;		//移動量リセット
-			m_bDash = true;			//ダッシュした状態にする
-			m_bJump = true;			//ジャンプした状態にする
-
-			m_bPreDashFirst = false;		//1回目
-			m_bDash = true;					//ダッシュさせる
-
-			m_nStateDashFirstCounter = 0;
-		}
-		else
-		{
-			m_nStateDashFirstCounter++;			//ダッシュするまでのカウンター加算
-		}
-	}
-
-	if (m_bPreDashSecond == true)
-	{//最初にダッシュする準備するとき
-
-		if (m_nStateDashSecondCounter >= DELEY_CNT)
-		{//一定時間経過したら
-
-			m_move.x = 0.0f;		//移動量リセット
-			m_move.y = 0.0f;		//移動量リセット
-			m_bDash = true;			//ダッシュした状態にする
-			m_bJump = true;			//ジャンプした状態にする
-
-			m_bPreDashSecond = false;		//1回目
-			m_bDash = true;					//ダッシュさせる
-
-			m_nStateDashSecondCounter = 0;
-		}
-		else
-		{
-			m_nStateDashSecondCounter++;			//ダッシュするまでのカウンター加算
-		}
-	}
-
-	if (m_bDash == true)
-	{//ダッシュする状態になったら
-
-		m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * m_fAngleDash) * FRONT_DASH_MOVE;
-		m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * m_fAngleDash) * FRONT_DASH_MOVE;
-
-		m_bDash = false;
-	}
-}
-
-//==============================================================
 //モーション管理処理
 //==============================================================
 void CEnemy::MotionManager(void)
@@ -1140,7 +596,8 @@ void CEnemy::MotionManager(void)
 	//	m_bAction = false;		//攻撃してない状態にする
 	//}
 	else if ((m_pMotion->GetType() != m_pMotion->MOTIONTYPE_NEUTRAL && m_pMotion->IsFinish() == true) ||
-		(m_pMotion->GetType() != m_pMotion->MOTIONTYPE_NEUTRAL && m_bMove == false && m_bJump == false && m_bLand == true))
+		(m_pMotion->GetType() != m_pMotion->MOTIONTYPE_NEUTRAL && 
+			m_bMove == false && m_bJump == false && m_bLand == true))
 	{//モーションが終了したら
 
 		//待機状態に戻す
