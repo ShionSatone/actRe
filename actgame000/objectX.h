@@ -33,7 +33,8 @@ public:
 	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }			//位置設定
 	void SetRotation(D3DXVECTOR3 rot) { m_rot = rot; }			//向き設定
 	void SetSize(D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax) { m_vtxMin = vtxMin;  m_vtxMax = vtxMax; }		//モデルの大きさ設定
-	void SetState(STATE state) { m_state = state; }							//敵の状態設定
+	void SetState(STATE state) { m_state = state; }				//敵の状態設定
+	void SetColor(D3DXCOLOR col);								//色設定
 
 	D3DXVECTOR3 GetPosition(void) { return m_pos; }			//位置取得
 	D3DXVECTOR3 GetRotation(void) { return m_rot; }			//向きの取得
@@ -43,10 +44,11 @@ public:
 
 	void SetModel(void);		//モデルの設定処理
 	static bool Collision(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *pMove, D3DXVECTOR3 Min, D3DXVECTOR3 Max);		//モデルの当たり判定
-	static bool Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *pMove, D3DXVECTOR3 Min, D3DXVECTOR3 Max, D3DXVECTOR3 posModel, D3DXVECTOR3 minModel, D3DXVECTOR3 maxModel, TYPE type, CObject *pObj);		//モデルの2Dの当たり判定
-	static bool Collision3DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *pMove, D3DXVECTOR3 Min, D3DXVECTOR3 Max, D3DXVECTOR3 posModel, D3DXVECTOR3 minModel, D3DXVECTOR3 maxModel, TYPE type, CObject *pObj);		//モデルの3Dの当たり判定
 	static int CollisionEdit(D3DXVECTOR3 pos, D3DXVECTOR3 Min, D3DXVECTOR3 Max);		//エディットのモデルとの当たり判定
 private:
+
+	static bool Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *pMove, D3DXVECTOR3 Min, D3DXVECTOR3 Max, D3DXVECTOR3 posModel, D3DXVECTOR3 minModel, D3DXVECTOR3 maxModel, TYPE type, CObject *pObj);		//モデルの2Dの当たり判定
+	static bool Collision3DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *pMove, D3DXVECTOR3 Min, D3DXVECTOR3 Max, D3DXVECTOR3 posModel, D3DXVECTOR3 minModel, D3DXVECTOR3 maxModel, TYPE type, CObject *pObj);		//モデルの3Dの当たり判定
 
 	LPD3DXMESH m_pMesh;							//メッシュ（頂点情報）へのポインタ
 	LPD3DXBUFFER m_pBuffMat;					//マテリアルへのポインタ

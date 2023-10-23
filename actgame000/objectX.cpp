@@ -152,22 +152,22 @@ void CObjectX::Draw(void)
 
 	for (int nCntMat = 0; nCntMat < (int)pMaterial->GetNumMatAddress(m_nIdxModel); nCntMat++)
 	{
-		//switch (m_state)
-		//{
-		//case STATE_DAMAGE:		//ダメージ状態
+		switch (m_state)
+		{
+		case STATE_DAMAGE:		//ダメージ状態
 
-		//	//マテリアルの設定
-		//	pDevice->SetMaterial(&m_matColor.MatD3D);
+			//マテリアルの設定
+			pDevice->SetMaterial(&m_matColor.MatD3D);
 
-		//	break;
+			break;
 
-		//default:
+		default:
 
 			//マテリアルの設定
 			pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
 
-			/*break;
-		}*/
+			break;
+		}
 
 		//テクスチャの設定
 		pDevice->SetTexture(0, pMaterial->GetTexAddress(m_nIdxModel, nCntMat));
@@ -680,4 +680,16 @@ int CObjectX::CollisionEdit(D3DXVECTOR3 pos, D3DXVECTOR3 Min, D3DXVECTOR3 Max)
 	}
 
 	return NULL;
+}
+
+//==============================================================
+//モデルの色設定処理
+//==============================================================
+void CObjectX::SetColor(D3DXCOLOR col)
+{
+	m_matColor.MatD3D.Diffuse = D3DXCOLOR(col.r, col.g, col.b, col.a);		//マテリアルデータへのポインタ
+	m_matColor.MatD3D.Ambient = D3DXCOLOR(col.r, col.g, col.b, col.a);		//マテリアルデータへのポインタ
+	m_matColor.MatD3D.Emissive = D3DXCOLOR(col.r, col.g, col.b, col.a);		//マテリアルデータへのポインタ
+	m_matColor.MatD3D.Power = 5.0f;
+	m_matColor.MatD3D.Specular = D3DXCOLOR(0.0f, col.g, col.b, col.a);
 }

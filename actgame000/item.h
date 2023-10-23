@@ -50,8 +50,11 @@ private:
 	D3DXVECTOR3 m_rot;			//向き
 	int m_nMaxModel;			//モデルの設置数
 	int m_nIdx;					//モデルの番号
+	int m_nRespawnCounter;		//リスポーンカウンター
 
 	int m_type;			//アイテムの種類
+
+	bool m_bRespawn;	//リスポーンするか
 };
 
 #endif

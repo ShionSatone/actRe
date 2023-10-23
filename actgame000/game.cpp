@@ -80,7 +80,14 @@ HRESULT CGame::Init(void)
 	CItem::Create(D3DXVECTOR3(300.0f, -3200.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_RHOMBUS);
 
 	//星アイテム
-	//CItem::Create(D3DXVECTOR3(600.0f, -1400.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
+	CItem::Create(D3DXVECTOR3(150.0f, -350.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
+	CItem::Create(D3DXVECTOR3(1200.0f, -1400.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
+	CItem::Create(D3DXVECTOR3(150.0f, -4050.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
+	CItem::Create(D3DXVECTOR3(1250.0f, -4150.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
+	CItem::Create(D3DXVECTOR3(150.0f, -4750.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
+	CItem::Create(D3DXVECTOR3(1250.0f, -5100.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
+	CItem::Create(D3DXVECTOR3(150.0f, -5050.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
+	CItem::Create(D3DXVECTOR3(200.0f, -5550.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
 
 	//スコアの生成
 	m_pScore = CScore::Create();

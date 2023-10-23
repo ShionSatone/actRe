@@ -12,11 +12,14 @@
 #include "sound.h"
 #include "score.h"
 
+//マクロ定義
+#define RESPAWN_TIME	(60 * 2)		//アイテムがリスポーンする時間
+
 //静的メンバ変数宣言
 LPD3DXMESH CItem::m_pMesh = NULL;						//メッシュ（頂点情報）へのポインタ
 LPD3DXBUFFER CItem::m_pBuffMat = NULL;					//マテリアルへのポインタ
 DWORD CItem::m_dwNumMat = NULL;
-const char *CItem::m_pFilename[TYPE_MAX] = 			//ファイルの名前
+const char *CItem::m_pFilename[TYPE_MAX] = 				//ファイルの名前
 {
 	NULL,
 	"data\\MODEL\\item_rhombus.x",		//ひし形
@@ -32,6 +35,9 @@ CItem::CItem()
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//向き
 	m_type = TYPEITEM_NONE;	//種類
 	m_nIdx = -1;				//モデルの番号
+	m_nRespawnCounter = 0;		//リスポーンカウンター
+
+	m_bRespawn = false;	//リスポーンするか
 }
 
 //==============================================================
@@ -43,6 +49,9 @@ CItem::CItem(D3DXVECTOR3 pos, D3DXVECTOR3 rot, TYPEITEM type)
 	m_rot = rot;		//向き
 	m_type = type;		//種類
 	m_nIdx = -1;		//モデルの番号
+	m_nRespawnCounter = 0;		//リスポーンカウンター
+
+	m_bRespawn = false;	//リスポーンするか
 }
 
 //==============================================================
@@ -112,6 +121,26 @@ void CItem::Uninit(void)
 //==============================================================
 void CItem::Update(void)
 {
+	if (m_bRespawn == true)
+	{//リスポーンするとき
+
+		if (m_nRespawnCounter < RESPAWN_TIME)
+		{//時間が経ってないとき
+
+			m_nRespawnCounter++;
+		}
+		else if (m_nRespawnCounter >= RESPAWN_TIME)
+		{//一定時間経過したとき
+
+			CObjectX::SetState(CObjectX::STATE_NONE);			//モデルの状態設定
+
+			m_bRespawn = false;		//リスポーンしない状態にする
+
+			m_nRespawnCounter = 0;
+		}
+
+	}
+
 	//オブジェクトXの更新処理
 	CObjectX::Update();
 }
@@ -134,13 +163,19 @@ void CItem::Hit(void)
 	CSound *pSound = CManager::GetInstance()->GetSound();
 	CScore *pScore = CGame::GetScore();
 
-	if (m_type == TYPEITEM_RHOMBUS)
+	if (m_type == TYPEITEM_RHOMBUS && m_bRespawn == false)
 	{//ひし形アイテムのとき
 
 		pPlayer->SetDash(0);		//ダッシュ回数リセット
 
-		//	//SE再生
-		//	pSound->Play(pSound->SOUND_LABEL_SE_ITEM000);
+		CObjectX::SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));		//モデルの色設定
+		CObjectX::SetState(CObjectX::STATE_DAMAGE);					//モデルの状態設定
+
+		//リスポーンする状態にする
+		m_bRespawn = true;
+
+		//SE再生
+		//pSound->Play(pSound->SOUND_LABEL_SE_ITEM000);
 	}
 	else if (m_type == TYPEITEM_STAR)
 	{//星アイテムのとき
@@ -151,9 +186,7 @@ void CItem::Hit(void)
 		//スコア加算
 		//pScore->Add(1050);
 
+		//終了処理
+		CItem::Uninit();
 	}
-
-	
-	//終了処理
-	CItem::Uninit();
 }
