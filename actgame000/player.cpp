@@ -69,8 +69,6 @@ CPlayer::CPlayer()
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//前回の位置
 	m_posSave = D3DXVECTOR3(1080.0f, 0.0f, 0.0f);		//復活用の位置
-	m_posKeepHuman = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//人間の位置保存用
-	m_posKeepFish = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//金魚の位置保存用
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//移動量
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//向き
 	m_max = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//モデルの最大値
@@ -115,8 +113,6 @@ CPlayer::CPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_pos = pos;									//位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//前回の位置
 	m_posSave = D3DXVECTOR3(1080.0f, 0.0f, 0.0f);		//復活用の位置
-	m_posKeepHuman = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//人間の位置保存用
-	m_posKeepFish = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//金魚の位置保存用
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//移動量
 	m_max = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//モデルの最大値
 	m_min = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//モデルの最小値
@@ -189,8 +185,6 @@ HRESULT CPlayer::Init(void)
 	//CLife *pLife = CGame::GetLife();
 
 	m_fRotDest = m_rot.y;
-
-	m_posKeepFish = D3DXVECTOR3(0.0f, -5000.0f, 0.0f);		//金魚の初期位置設定
 
 	//プレイヤーの生成（全パーツ分）
 	for (int nCntModel = 0; nCntModel < PARTS_MAX; nCntModel++)
@@ -285,7 +279,6 @@ void CPlayer::Update(void)
 	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
 	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
-	//CGame *pGame = CScene::GetGame();
 
 	//前回の位置更新
 	m_posOld = m_pos;

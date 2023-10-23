@@ -260,7 +260,7 @@ bool CObjectX::Collision(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *p
 			//種類を取得
 			CObject::TYPE type = pObj->GetType();
 
-			if (type == pObj->TYPE_MODEL/* || type == TYPE_ALPHA_BLOCK*/ || type == TYPE_ENEMY/* || type == TYPE_ITEM*/ || type == TYPE_PLAYER)
+			if (type == pObj->TYPE_MODEL/* || type == TYPE_ALPHA_BLOCK*/ || type == TYPE_ENEMY || type == TYPE_ITEM || type == TYPE_PLAYER)
 			{//種類がモデルの場合
 
 				//モデルの位置取得
@@ -283,12 +283,12 @@ bool CObjectX::Collision(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *p
 					//モデルの当たり判定
 					if (CObjectX::Collision2DModel(pPos, pPosOld, pMove, Min, Max, posModel, minModel, maxModel, type, pObj) == true)
 					{
-						//if (type == TYPE_ITEM)
-						//{//アイテムに当たった時
+						if (type == TYPE_ITEM)
+						{//アイテムに当たった時
 
-						//	//アイテムのヒット処理
-						//	pObj->Hit();
-						//}
+							//アイテムのヒット処理
+							pObj->Hit();
+						}
 
 						bLand = true;		//着地した状態にする
 					}

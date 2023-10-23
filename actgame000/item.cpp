@@ -89,6 +89,9 @@ HRESULT CItem::Init(void)
 	//オブジェクトXの初期化処理
 	CObjectX::Init();
 
+	//位置の設定
+	CObjectX::SetPosition(m_pos);
+
 	//種類の設定
 	CObject::SetType(CObject::TYPE_ITEM);
 
@@ -128,38 +131,20 @@ void CItem::Draw(void)
 void CItem::Hit(void)
 {
 	CPlayer *pPlayer = CGame::GetPlayer();
-	//CLife *pLife = CGame::GetLife();
-	//CBulletRemain *pBR = CGame::GetBulletRemain();
 	CSound *pSound = CManager::GetInstance()->GetSound();
 	//CScore *pScore = CGame::GetScore();
 
-	//if (m_type != TYPEITEM_LIFE/* && m_type != TYPEITEM_KEY*/)
-	//{//武器の種類のアイテムの時
+	if (m_type == TYPEITEM_RHOMBUS)
+	{//ひし形アイテムのとき
+
+		pPlayer->SetDash(0);		//ダッシュ回数リセット
+	}
 
 	//	//SE再生
 	//	pSound->Play(pSound->SOUND_LABEL_SE_ITEM000);
 
-	//	////武器の種類変更する
-	//	//pPlayer->SetWeaponType(m_type);
-
-	//	////弾回復
-	//	//pBR->SetNumBullet(-100);
-
 	//	////スコア加算
 	//	//pScore->Add(1050);
-	//}
-	//else if (m_type == TYPEITEM_LIFE)
-	//{//回復アイテムの時
-
-	//	//SE再生
-	//	pSound->Play(pSound->SOUND_LABEL_SE_ITEM100);
-
-	//	////体力増やす
-	//	//pLife->SetNum(60);
-
-	//	////スコア加算
-	//	//pScore->Add(700);
-	//}
 
 	//終了処理
 	CItem::Uninit();

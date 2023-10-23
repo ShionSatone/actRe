@@ -34,6 +34,8 @@ public:
 	void SetRotation(D3DXVECTOR3 rot) { m_rot = rot; }		//向き設定
 	void SetState(STATE state) { m_state = state; }			//状態設定
 
+	void SetDash(int nCntDash) { m_nDashCounter = nCntDash; }	//ダッシュ回数設定
+
 	D3DXVECTOR3 GetPosition(void) { return m_pos; }			//位置取得
 	D3DXVECTOR3 GetRotation(void) { return m_rot; }			//向き取得
 	D3DXVECTOR3 GetMove(void) { return m_move; }			//移動量取得
@@ -89,9 +91,7 @@ private:
 
 	D3DXVECTOR3 m_pos;		//位置
 	D3DXVECTOR3 m_posOld;	//前回の位置
-	D3DXVECTOR3 m_posSave;		//復活用の位置
-	D3DXVECTOR3 m_posKeepHuman;	//人間の位置保存用
-	D3DXVECTOR3 m_posKeepFish;	//金魚の位置保存用
+	D3DXVECTOR3 m_posSave;	//復活用の位置
 	D3DXVECTOR3 m_move;		//移動量
 	D3DXVECTOR3 m_rot;		//向き
 	D3DXVECTOR3 m_max;		//人間の最大値

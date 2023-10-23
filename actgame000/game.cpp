@@ -12,6 +12,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "wall.h"
+#include "item.h"
 //#include "ranking.h"
 //#include "pause.h"
 #include "fade.h"
@@ -62,17 +63,20 @@ HRESULT CGame::Init(void)
 	//カメラの初期化処理
 	pCamera->Init();
 
-	//壁の生成
-	CWall::Create(D3DXVECTOR3(0.0f, 0.0f, 1000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0);
-
 	//敵の生成
-	CEnemy::Create(D3DXVECTOR3(1080.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	//CEnemy::Create(D3DXVECTOR3(1080.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//プレイヤーの生成
 	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(1080.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//エディットの生成
 	m_pEdit = CEdit::Create();
+
+	CItem::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_RHOMBUS);
+
+	CItem::Create(D3DXVECTOR3(600.0f, -1400.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_RHOMBUS);
+	CItem::Create(D3DXVECTOR3(750.0f, -3050.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_RHOMBUS);
+	CItem::Create(D3DXVECTOR3(300.0f, -3200.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_RHOMBUS);
 
 	//スコアの生成
 	//m_pScore = CScore::Create();
