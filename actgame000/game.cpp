@@ -17,13 +17,18 @@
 #include "fade.h"
 #include "sound.h"
 
+//マクロ定義
+#define ENEMYSPAWN_TIME		(20)			//敵出現時間
+
+
 //静的メンバ変数宣言
 CEdit *CGame::m_pEdit = NULL;				//エディットの情報
-CPlayer *CGame::m_pPlayer = NULL;		//プレイヤーの情報
-bool CGame::m_bReset = true;					//リセットしたかどうか
-bool CGame::m_bPause = false;					//ポーズ画面か
-//CPause *CGame::m_pPause = NULL;				//ポーズ画面の情報
-CGame::GAMEMODE CGame::m_gameMode = GAMEMODE_GAME;	//ゲームモード
+CPlayer *CGame::m_pPlayer = NULL;			//プレイヤーの情報
+bool CGame::m_bReset = true;				//リセットしたかどうか
+bool CGame::m_bPause = false;				//ポーズ画面か
+//CPause *CGame::m_pPause = NULL;			//ポーズ画面の情報
+bool CGame::m_bEnemyStart = false;			//スタートしたか
+CGame::GAMEMODE CGame::m_gameMode = GAMEMODE_START;	//ゲームモード
 
 //==============================================================
 //コンストラクタ
@@ -31,6 +36,8 @@ CGame::GAMEMODE CGame::m_gameMode = GAMEMODE_GAME;	//ゲームモード
 CGame::CGame()
 {
 	m_nCntEnemy = 0;				//敵出現カウント
+
+	m_bEnemyStart = false;			//敵出現したか
 }
 
 //==============================================================
@@ -142,6 +149,29 @@ void CGame::Update(void)
 	}
 	else
 	{
+		//if (m_gameMode == GAMEMODE_START && m_nCntEnemy >= ENEMYSPAWN_TIME)
+		//{//ゲーム開始 && 一定時間経過
+
+		//	m_gameMode = GAMEMODE_GAME;		//ゲーム中
+
+		//	m_bEnemyStart = true;			//敵の出現開始
+		//	m_nCntEnemy = 0;				//敵出現時間リセット
+		//}
+		//else if (m_gameMode == GAMEMODE_START && m_nCntEnemy < ENEMYSPAWN_TIME)
+		//{//ゲーム開始 && 時間経ってなかったら
+
+		//	m_nCntEnemy++;
+		//}
+
+		//if (m_gameMode == GAMEMODE_GAME && m_bEnemyStart == true)
+		//{//ゲーム中 && 敵出現してないとき
+
+		//	//敵の生成
+		//	CEnemy::Create(D3DXVECTOR3(1080.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+		//	m_bEnemyStart = false;		//敵出現開始しない状態にする
+		//}
+
 		if (pInputKeyboard->GetTrigger(DIK_RETURN) == true ||
 			pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_A, 0) == true)
 		{//ENTERキー押したら

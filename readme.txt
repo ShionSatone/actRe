@@ -13,3 +13,7 @@ GitHubURL https://github.com/ShionSatone/actRe.git
 ・マップ追加
 ・敵の動き調整（横移動）
 ・敵のジャンプ実装中
+
+10/20
+・敵の動き完成
+・ダッシュ調整中

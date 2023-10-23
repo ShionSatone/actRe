@@ -29,7 +29,7 @@
 #define JUMP_HEIGHT			(10.0f)		//ジャンプの高さ
 #define MAX_STR				(128)		//文字の最大数
 #define FRONT_MOVE			(0.6f)		//手前の時の移動量
-#define FRONT_DASH_MOVE		(15.0f)		//手前のダッシュ時の移動量
+#define FRONT_DASH_MOVE		(18.0f)		//手前のダッシュ時の移動量
 #define MAX_DASH			(2)			//ダッシュの最大数
 #define STOP_MOVE			(0.8f)		//止まる判定の移動量
 #define FILE_HUMAN			"data\\TEXT\\motion_player.txt"		//プレイヤーモデルのテキスト
@@ -68,7 +68,7 @@ CPlayer::CPlayer()
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//前回の位置
-	m_posSave = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//復活用の位置
+	m_posSave = D3DXVECTOR3(1080.0f, 0.0f, 0.0f);		//復活用の位置
 	m_posKeepHuman = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//人間の位置保存用
 	m_posKeepFish = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//金魚の位置保存用
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//移動量
@@ -114,7 +114,7 @@ CPlayer::CPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	m_pos = pos;									//位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//前回の位置
-	m_posSave = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//復活用の位置
+	m_posSave = D3DXVECTOR3(1080.0f, 0.0f, 0.0f);		//復活用の位置
 	m_posKeepHuman = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//人間の位置保存用
 	m_posKeepFish = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//金魚の位置保存用
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//移動量
@@ -345,16 +345,6 @@ void CPlayer::UpdateFront(void)
 
 		m_nDashCounter = 0;		//ダッシュ数リセット
 
-		//最後に着地した位置
-		if (m_pos.x >= 7715.0f && m_pos.x <= 8460.0f)
-		{
-			m_posSave = D3DXVECTOR3(7715.0f, 130.0f, m_pos.z);
-		}
-		else
-		{
-			m_posSave = m_pos;
-		}
-
 		if (m_bLand == false)
 		{
 			//パーティクルの生成
@@ -470,10 +460,14 @@ void CPlayer::UpdateState(void)
 
 	case STATE_DEATH:		//死亡状態
 
-		m_nCntDamage = APP_CNT;
+		m_pos = m_posSave;		//セーブした場所に戻る
+
+		m_state = CObject::STATE_NONE;		//点滅状態にする
+
+		//m_nCntDamage = APP_CNT;
 
 		//CScore *pScore = CGame::GetScore();		//スコアの情報
-		CFade *pFade = CManager::GetInstance()->GetFade();		//フェードの情報取得
+		//CFade *pFade = CManager::GetInstance()->GetFade();		//フェードの情報取得
 
 		//スコア設定
 		//CManager::SetNumScore(pScore->Get());
@@ -482,7 +476,7 @@ void CPlayer::UpdateState(void)
 		//CManager::SetResult(false);
 
 		//リザルト
-		pFade->SetFade(CScene::MODE_RESULT);
+		//pFade->SetFade(CScene::MODE_RESULT);
 
 		break;
 	}
@@ -990,40 +984,29 @@ void CPlayer::Hit(void)
 		//BGM再生
 		pSound->Play(pSound->SOUND_LABEL_SE_DAMAGE001);
 
-		//体力減らす
-		//pLife->SetNum(-40);
+		m_state = CObject::STATE_APPEAR;
 
-		//寿命取得
-		//nLife = pLife->GetMax();
+		m_nCntDamage = HIT_CNT;				//ダメージ状態を保つ時間設定
+		m_nCntHit = HIT_CNT;				//攻撃あたるまでのカウンター
 
-		if (nLife > 0)
-		{//まだ寿命が残ってたら
+		m_pos = m_posSave;		//セーブした場所に戻る
 
-			m_state = CObject::STATE_APPEAR;
-
-			m_nCntDamage = HIT_CNT;			//ダメージ状態を保つ時間設定
-			m_nCntHit = HIT_CNT;				//攻撃あたるまでのカウンター
-
-			for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
-			{
-				//プレイヤーの色設定
-				m_apModel[nCntPlayer]->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
-			}
-		}
-		else if (nLife <= 0)
-		{//寿命がなかったら
-
-			m_state = CObject::STATE_DEATH;
-
-			//パーティクル生成
-			//CParticle::Create(m_pos, D3DXCOLOR(0.1f, 0.4f, 0.5f, 1.0f), PARTICLETYPE_ENEMY, 30, 40);
-		}
-
-		//状態設定
 		for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
 		{
-			m_apModel[nCntPlayer]->SetState(m_state);		//ダメージ状態にする
+			//プレイヤーの色設定
+			m_apModel[nCntPlayer]->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
 		}
+
+		//m_state = CObject::STATE_DEATH;
+
+		//パーティクル生成
+		//CParticle::Create(m_pos, D3DXCOLOR(0.1f, 0.4f, 0.5f, 1.0f), PARTICLETYPE_ENEMY, 30, 40);
+
+		//状態設定
+		//for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
+		//{
+		//	m_apModel[nCntPlayer]->SetState(m_state);		//ダメージ状態にする
+		//}
 	}
 }
 

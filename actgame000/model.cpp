@@ -134,20 +134,23 @@ HRESULT CModel::Init(void)
 	//éÌóﬁÇÃê›íË
 	if (strcmp(m_pFilename, "data/MODEL/map/wall_alpha.x") == 0)
 	{
-		CObject::SetType(CObject::TYPE_ALPHA_BLOCK);
+		m_type = CObject::TYPE_ALPHA_BLOCK;
 	}
 	/*else if (strcmp(m_pFilename, "data/MODEL/map/move_6block.x") == 0)
 	{
-		CObject::SetType(CObject::TYPE_DOWN_6BLOCK);
+		m_type = CObject::TYPE_DOWN_6BLOCK;
+
 	}*/
 	else if (strcmp(m_pFilename, "data/MODEL/map/move_9block.x") == 0)
 	{
-		CObject::SetType(CObject::TYPE_DOWN_9BLOCK);
+		m_type = CObject::TYPE_DOWN_9BLOCK;
 	}
 	else
 	{
-		CObject::SetType(CObject::TYPE_MODEL);
+		m_type = CObject::TYPE_MODEL;
 	}
+
+	CObject::SetType(m_type);
 
 	return S_OK;
 }

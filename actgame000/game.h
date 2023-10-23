@@ -53,8 +53,9 @@ private:
 	static CEdit *m_pEdit;			//エディットの情報
 	//static CPause *m_pPause;		//ポーズ画面の情報
 
-	static bool m_bReset;				//リセットしたか
-	static bool m_bPause;				//ポーズ画面か
+	static bool m_bReset;			//リセットしたか
+	static bool m_bPause;			//ポーズ画面か
+	static bool m_bEnemyStart;			//スタートしたか
 
 	static GAMEMODE m_gameMode;		//ゲームモード
 	int m_nCntEnemy;				//敵出現カウント

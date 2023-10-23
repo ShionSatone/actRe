@@ -2,8 +2,6 @@ c:\users\student\desktop\act\actre\actgame000\debug\actgame000.pch
 c:\users\student\desktop\act\actre\actgame000\debug\vc140.pdb
 c:\users\student\desktop\act\actre\actgame000\debug\vc140.idb
 c:\users\student\desktop\act\actre\actgame000\debug\precompile.obj
-c:\users\student\desktop\act\actre\actgame000\debug\main.obj
-c:\users\student\desktop\act\actre\actgame000\debug\manager.obj
 c:\users\student\desktop\act\actre\actgame000\debug\material.obj
 c:\users\student\desktop\act\actre\actgame000\debug\model.obj
 c:\users\student\desktop\act\actre\actgame000\debug\modelhierarchy.obj
@@ -14,9 +12,11 @@ c:\users\student\desktop\act\actre\actgame000\debug\object2d.obj
 c:\users\student\desktop\act\actre\actgame000\debug\object3d.obj
 c:\users\student\desktop\act\actre\actgame000\debug\objectx.obj
 c:\users\student\desktop\act\actre\actgame000\debug\player.obj
+c:\users\student\desktop\act\actre\actgame000\debug\ranking.obj
 c:\users\student\desktop\act\actre\actgame000\debug\renderer.obj
 c:\users\student\desktop\act\actre\actgame000\debug\result.obj
 c:\users\student\desktop\act\actre\actgame000\debug\scene.obj
+c:\users\student\desktop\act\actre\actgame000\debug\score.obj
 c:\users\student\desktop\act\actre\actgame000\debug\sound.obj
 c:\users\student\desktop\act\actre\actgame000\debug\texture.obj
 c:\users\student\desktop\act\actre\actgame000\debug\title.obj
@@ -32,8 +32,8 @@ c:\users\student\desktop\act\actre\actgame000\debug\fade.obj
 c:\users\student\desktop\act\actre\actgame000\debug\game.obj
 c:\users\student\desktop\act\actre\actgame000\debug\input.obj
 c:\users\student\desktop\act\actre\actgame000\debug\light.obj
-c:\users\student\desktop\act\actre\actgame000\debug\ranking.obj
-c:\users\student\desktop\act\actre\actgame000\debug\score.obj
+c:\users\student\desktop\act\actre\actgame000\debug\main.obj
+c:\users\student\desktop\act\actre\actgame000\debug\manager.obj
 c:\users\student\desktop\act\actre\actgame000\debug\actgame000.ilk
 c:\users\student\desktop\act\actre\actgame000\debug\actgame000.exe
 c:\users\student\desktop\act\actre\actgame000\debug\actgame000.pdb

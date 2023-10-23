@@ -12,7 +12,7 @@
 #include "material.h"
 
 //マクロ定義
-#define NUM_MODEL		(2)			//モデルの種類
+#define NUM_MODEL			(2)			//モデルの種類
 #define POS					(10.0f)		//pos初期値
 #define COL_R				(1.0f)		//赤色の数値
 #define COL_G				(1.0f)		//緑色の数値

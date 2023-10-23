@@ -150,6 +150,9 @@
     <ClCompile Include="ranking.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>ソース ファイル\objectX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="manager.h">
@@ -250,6 +253,9 @@
     </ClInclude>
     <ClInclude Include="ranking.h">
       <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>ヘッダー ファイル\objectX</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

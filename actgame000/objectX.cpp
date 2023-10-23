@@ -260,7 +260,7 @@ bool CObjectX::Collision(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *p
 			//種類を取得
 			CObject::TYPE type = pObj->GetType();
 
-			if (type == pObj->TYPE_MODEL/* || type == TYPE_ENEMY*//* || type == TYPE_ITEM*/)
+			if (type == pObj->TYPE_MODEL/* || type == TYPE_ALPHA_BLOCK*/ || type == TYPE_ENEMY/* || type == TYPE_ITEM*/ || type == TYPE_PLAYER)
 			{//種類がモデルの場合
 
 				//モデルの位置取得
@@ -305,7 +305,7 @@ bool CObjectX::Collision(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *p
 //==============================================================
 bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *pMove, D3DXVECTOR3 Min, D3DXVECTOR3 Max, D3DXVECTOR3 posModel, D3DXVECTOR3 minModel, D3DXVECTOR3 maxModel, TYPE type, CObject *pObj)
 {
-	//CPlayerModel *pPlayer = CGame::GetPlayerModel();
+	CPlayer *pPlayer = CGame::GetPlayer();
 	bool bLand = false;		//着地したかどうか
 
 	if (pPos->y + Max.y > posModel.y + minModel.y
@@ -340,11 +340,11 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				//アイテムのヒット処理
 				pObj->Hit();
 			}
-			else if (type == TYPE_ENEMY)
+			else if (type == TYPE_ENEMY || type == TYPE_PLAYER)
 			{//敵に当たった時
 
 				//プレイヤーのヒット処理
-				//pPlayer->Hit();
+				pPlayer->Hit();
 			}
 		}
 
@@ -379,11 +379,11 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				//アイテムのヒット処理
 				pObj->Hit();
 			}
-			else if (type == TYPE_ENEMY)
+			else if (type == TYPE_ENEMY || type == TYPE_PLAYER)
 			{//敵に当たった時
 
-			 //プレイヤーのヒット処理
-				//pPlayer->Hit();
+				//プレイヤーのヒット処理
+				pPlayer->Hit();
 			}
 		}
 
@@ -415,11 +415,11 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				//アイテムのヒット処理
 				pObj->Hit();
 			}
-			else if (type == TYPE_ENEMY)
+			else if (type == TYPE_ENEMY || type == TYPE_PLAYER)
 			{//敵に当たった時
 
-			 //プレイヤーのヒット処理
-				//pPlayer->Hit();
+				//プレイヤーのヒット処理
+				pPlayer->Hit();
 			}
 		}
 
@@ -453,11 +453,11 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				//アイテムのヒット処理
 				pObj->Hit();
 			}
-			else if (type == TYPE_ENEMY)
+			else if (type == TYPE_ENEMY || type == TYPE_PLAYER)
 			{//敵に当たった時
 
 				//プレイヤーのヒット処理
-				//pPlayer->Hit();
+				pPlayer->Hit();
 			}
 		}
 	}
