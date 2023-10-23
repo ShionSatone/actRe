@@ -152,22 +152,22 @@ void CObjectX::Draw(void)
 
 	for (int nCntMat = 0; nCntMat < (int)pMaterial->GetNumMatAddress(m_nIdxModel); nCntMat++)
 	{
-		switch (m_state)
-		{
-		case STATE_DAMAGE:		//ダメージ状態
+		//switch (m_state)
+		//{
+		//case STATE_DAMAGE:		//ダメージ状態
 
-			//マテリアルの設定
-			pDevice->SetMaterial(&m_matColor.MatD3D);
+		//	//マテリアルの設定
+		//	pDevice->SetMaterial(&m_matColor.MatD3D);
 
-			break;
+		//	break;
 
-		default:
+		//default:
 
 			//マテリアルの設定
 			pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
 
-			break;
-		}
+			/*break;
+		}*/
 
 		//テクスチャの設定
 		pDevice->SetTexture(0, pMaterial->GetTexAddress(m_nIdxModel, nCntMat));
@@ -260,7 +260,8 @@ bool CObjectX::Collision(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *p
 			//種類を取得
 			CObject::TYPE type = pObj->GetType();
 
-			if (type == pObj->TYPE_MODEL/* || type == TYPE_ALPHA_BLOCK*/ || type == TYPE_ENEMY || type == TYPE_ITEM || type == TYPE_PLAYER)
+			if (type == pObj->TYPE_MODEL || type == TYPE_ENEMY || type == TYPE_ITEM || type == TYPE_PLAYER
+				|| type == TYPE_NEEDLE/* || type == TYPE_ALPHA_BLOCK*/ )
 			{//種類がモデルの場合
 
 				//モデルの位置取得
@@ -268,31 +269,18 @@ bool CObjectX::Collision(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *p
 				D3DXVECTOR3 minModel = pObj->GetSizeMin();
 				D3DXVECTOR3 maxModel = pObj->GetSizeMax();
 
-				//if (pCamera->GetMode() == false)
-				{//透視投影の時
+				//モデルの当たり判定
+				if (CObjectX::Collision2DModel(pPos, pPosOld, pMove, Min, Max, posModel, minModel, maxModel, type, pObj) == true)
+				{
+					if (type == TYPE_ITEM)
+					{//アイテムに当たった時
 
-					//モデルの当たり判定
-					//if (CObjectX::Collision3DModel(pPos, pPosOld, pMove, Min, Max, posModel, minModel, maxModel, type, pObj) == true)
-					//{
-					//	bLand = true;		//着地した状態にする
-					//}
-				}
-				//else if (pCamera->GetMode() == true)
-				//{//平行投影の時
-
-					//モデルの当たり判定
-					if (CObjectX::Collision2DModel(pPos, pPosOld, pMove, Min, Max, posModel, minModel, maxModel, type, pObj) == true)
-					{
-						if (type == TYPE_ITEM)
-						{//アイテムに当たった時
-
-							//アイテムのヒット処理
-							pObj->Hit();
-						}
-
-						bLand = true;		//着地した状態にする
+						//アイテムのヒット処理
+						pObj->Hit();
 					}
-				//}
+
+					bLand = true;		//着地した状態にする
+				}
 			}
 		}
 	}
@@ -340,7 +328,7 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				//アイテムのヒット処理
 				pObj->Hit();
 			}
-			else if (type == TYPE_ENEMY || type == TYPE_PLAYER)
+			else if (type == TYPE_ENEMY || type == TYPE_PLAYER || type == TYPE_NEEDLE)
 			{//敵に当たった時
 
 				//プレイヤーのヒット処理
@@ -379,7 +367,7 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				//アイテムのヒット処理
 				pObj->Hit();
 			}
-			else if (type == TYPE_ENEMY || type == TYPE_PLAYER)
+			else if (type == TYPE_ENEMY || type == TYPE_PLAYER || type == TYPE_NEEDLE)
 			{//敵に当たった時
 
 				//プレイヤーのヒット処理
@@ -415,7 +403,7 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				//アイテムのヒット処理
 				pObj->Hit();
 			}
-			else if (type == TYPE_ENEMY || type == TYPE_PLAYER)
+			else if (type == TYPE_ENEMY || type == TYPE_PLAYER || type == TYPE_NEEDLE)
 			{//敵に当たった時
 
 				//プレイヤーのヒット処理
@@ -453,7 +441,7 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				//アイテムのヒット処理
 				pObj->Hit();
 			}
-			else if (type == TYPE_ENEMY || type == TYPE_PLAYER)
+			else if (type == TYPE_ENEMY || type == TYPE_PLAYER || type == TYPE_NEEDLE)
 			{//敵に当たった時
 
 				//プレイヤーのヒット処理

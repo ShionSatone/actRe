@@ -20,7 +20,7 @@ const char *CItem::m_pFilename[TYPE_MAX] = 			//ファイルの名前
 {
 	NULL,
 	"data\\MODEL\\item_rhombus.x",		//ひし形
-	//"data\\MODEL\\item_ice.x",			//氷
+	"data\\MODEL\\item_star.x",			//星
 };
 
 //==============================================================
@@ -132,20 +132,28 @@ void CItem::Hit(void)
 {
 	CPlayer *pPlayer = CGame::GetPlayer();
 	CSound *pSound = CManager::GetInstance()->GetSound();
-	//CScore *pScore = CGame::GetScore();
+	CScore *pScore = CGame::GetScore();
 
 	if (m_type == TYPEITEM_RHOMBUS)
 	{//ひし形アイテムのとき
 
 		pPlayer->SetDash(0);		//ダッシュ回数リセット
+
+		//	//SE再生
+		//	pSound->Play(pSound->SOUND_LABEL_SE_ITEM000);
+	}
+	else if (m_type == TYPEITEM_STAR)
+	{//星アイテムのとき
+
+		//SE再生
+		//pSound->Play(pSound->SOUND_LABEL_SE_ITEM000);
+
+		//スコア加算
+		//pScore->Add(1050);
+
 	}
 
-	//	//SE再生
-	//	pSound->Play(pSound->SOUND_LABEL_SE_ITEM000);
-
-	//	////スコア加算
-	//	//pScore->Add(1050);
-
+	
 	//終了処理
 	CItem::Uninit();
 }

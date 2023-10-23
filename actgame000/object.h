@@ -38,6 +38,7 @@ public:
 		TYPE_ALPHA_BLOCK,	//透明な通り抜けブロック
 		TYPE_DOWN_6BLOCK,	//下に下がる6ブロック
 		TYPE_DOWN_9BLOCK,	//下に下がる9ブロック
+		TYPE_NEEDLE,		//針ブロック
 
 		TYPE_PAUSE,			//ポーズ
 		TYPE_SCENE,			//シーン

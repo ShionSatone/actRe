@@ -168,14 +168,7 @@ HRESULT CEdit::Init(void)
 //==============================================================
 void CEdit::Uninit(void)
 {
-	//CEdit::Unload();		//マテリアル・メッシュの破棄
-
-	////終了処理
-	//for (int nCntEdit = 0; nCntEdit < m_nNumAll; nCntEdit++)
-	//{
-	//	delete m_aEdit[nCntEdit].pTexture;
-	//	m_aEdit[nCntEdit].pTexture = NULL;
-	//}
+	
 
 	//オブジェクト（自分自身の破棄）
 	CObject::Release();
@@ -186,13 +179,7 @@ void CEdit::Uninit(void)
 //==============================================================
 void CEdit::Update(void)
 {
-	//for (int nCntEdit = 0; nCntEdit < m_nMaxModel; nCntEdit++)
-	//{
-	//	if (m_aSetEdit[nCntEdit].nIndex == CObject::TYPE_ALPHA_BLOCK)
-	//	{//透明ブロックの時
-
-	//	}
-	//}
+	
 }
 
 //==============================================================

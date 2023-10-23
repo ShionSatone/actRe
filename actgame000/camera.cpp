@@ -19,7 +19,7 @@
 #define CURVE_RL			(0.5f)		//左右の角度
 #define CURVE_UP			(0.0f)		//上の角度
 #define CURVE_DOWN			(1.0f)		//下の角度
-#define LENGRH				(1000.0f)	//視点と注視点の長さ
+#define LENGRH				(1300.0f)	//視点と注視点の長さ
 #define FOLLOW				(0.5f)		//カメラの移動量
 
 //==============================================================

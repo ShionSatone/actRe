@@ -16,7 +16,7 @@ public:
 	CNumber();	//コンストラクタ
 	~CNumber();	//デストラクタ
 
-	static CNumber *Create(void);		//生成処理
+	static CNumber *Create(void);	//生成処理
 
 	virtual HRESULT Init(void);		//初期化処理
 	virtual void Uninit(void);		//終了処理

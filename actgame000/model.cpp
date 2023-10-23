@@ -145,6 +145,13 @@ HRESULT CModel::Init(void)
 	{
 		m_type = CObject::TYPE_DOWN_9BLOCK;
 	}
+	else if (strcmp(m_pFilename, "data/MODEL/map/needleD.x") == 0 ||
+		strcmp(m_pFilename, "data/MODEL/map/needleL.x") == 0 || 
+		strcmp(m_pFilename, "data/MODEL/map/needleR.x") == 0 || 
+		strcmp(m_pFilename, "data/MODEL/map/needleU.x") == 0)
+	{
+		m_type = CObject::TYPE_NEEDLE;
+	}
 	else
 	{
 		m_type = CObject::TYPE_MODEL;
@@ -191,4 +198,12 @@ void CModel::SetType(TYPE type)
 
 	//éÌóﬁÇÃê›íË
 	CObject::SetType(m_type);
+}
+
+//==============================================================
+//ÉÇÉfÉãÇÃÉqÉbÉgèàóù
+//==============================================================
+void CModel::Hit(void)
+{
+
 }

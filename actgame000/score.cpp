@@ -112,11 +112,11 @@ CScore *CScore::Create(void)
 
 		}
 
-		//スコアの設定
-		pScore->Set(m_nNum);
-
 		//種類設定
 		pScore->SetType(TYPE_SCORE);
+
+		//スコアの設定
+		pScore->Set(m_nNum);
 	}
 
 	return pScore;

@@ -29,6 +29,7 @@ public:
 	void Update(void);
 	void Draw(void);
 	void SetType(TYPE type);		//オブジェクトの種類設定
+	void Hit(void);					//ヒット処理
 
 private:
 	static LPD3DXMESH m_pMesh;						//メッシュ（頂点情報）へのポインタ

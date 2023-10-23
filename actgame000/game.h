@@ -11,7 +11,7 @@
 
 //前方宣言
 class CPlayer;			//プレイヤーの情報
-//class CScore;			//スコアの情報
+class CScore;			//スコアの情報
 //class CModel;			//モデルの情報
 class CEdit;			//エディットの情報
 //class CPause;			//ポーズ画面の情報
@@ -41,7 +41,7 @@ public:
 
 	void SetEnablePause(bool bPouse);			//ポーズ切り替え
 
-	//static CScore *GetScore(void) { return m_pScore; }			//スコアの情報
+	static CScore *GetScore(void) { return m_pScore; }			//スコアの情報s
 	static void SetGameMode(GAMEMODE gameMode) { m_gameMode = gameMode; }		//ゲームモードの設定
 	static GAMEMODE GetGameMode(void) { return m_gameMode; }					//ゲームモードの設定
 	static CPlayer *GetPlayer(void) { return m_pPlayer; }			//プレイヤーの情報取得
@@ -52,6 +52,7 @@ private:
 	static CPlayer *m_pPlayer;		//プレイヤーの情報
 	static CEdit *m_pEdit;			//エディットの情報
 	//static CPause *m_pPause;		//ポーズ画面の情報
+	static CScore *m_pScore;		//スコアの情報
 
 	static bool m_bReset;			//リセットしたか
 	static bool m_bPause;			//ポーズ画面か

@@ -19,7 +19,7 @@ public:
 	{
 		TYPEITEM_NONE = 0,
 		TYPEITEM_RHOMBUS,		//Ç–Çµå`
-		//TYPEITEM_ICE,			//ïX
+		TYPEITEM_STAR,			//êØ
 		TYPE_MAX
 	};
 
