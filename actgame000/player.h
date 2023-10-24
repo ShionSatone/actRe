@@ -34,17 +34,20 @@ public:
 
 	void Hit(void);
 
+	//設定処理
 	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }		//位置設定
 	void SetRotation(D3DXVECTOR3 rot) { m_rot = rot; }		//向き設定
 	void SetState(STATE state) { m_state = state; }			//状態設定
 
 	void SetDash(int nCntDash) { m_nDashCounter = nCntDash; }	//ダッシュ回数設定
 
+	//取得処理
 	D3DXVECTOR3 GetPosition(void) { return m_pos; }			//位置取得
 	D3DXVECTOR3 GetRotation(void) { return m_rot; }			//向き取得
 	D3DXVECTOR3 GetMove(void) { return m_move; }			//移動量取得
 
 	int GetPressFrame(void) { return m_nPressCounter; }		//キーを押したフレーム数
+	int GetNumSavePoint(void) { return m_nNumPosSave; }		//何番目のセーブポイントか取得
 
 	bool GetIsJump(void) { return m_bJump; }				//ジャンプの取得
 	bool GetIsMove(void) { return m_bMove; }				//移動の取得
@@ -104,7 +107,7 @@ private:
 	void LoadFile(void);					//モデルファイル読み込み
 	void RotCorrection(void);				//向きの補正処理
 
-	static char *m_apFileName[PARTS_MAX];		//ファイル名
+	static char *m_apFileName[PARTS_MAX];	//ファイル名
 
 	D3DXVECTOR3 m_pos;		//位置
 	D3DXVECTOR3 m_posOld;	//前回の位置

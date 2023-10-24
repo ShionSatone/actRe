@@ -26,7 +26,7 @@ bool CGame::m_bReset = true;				//リセットしたかどうか
 bool CGame::m_bPause = false;				//ポーズ画面か
 //CPause *CGame::m_pPause = NULL;			//ポーズ画面の情報
 CScore *CGame::m_pScore = NULL;				//スコアの情報
-bool CGame::m_bEnemyStart = false;			//スタートしたか
+bool CGame::m_bEnemySpawn = false;			//スタートしたか
 CGame::GAMEMODE CGame::m_gameMode = GAMEMODE_START;	//ゲームモード
 
 //==============================================================
@@ -36,7 +36,7 @@ CGame::CGame()
 {
 	m_nCntEnemy = 0;				//敵出現カウント
 
-	m_bEnemyStart = false;			//敵出現したか
+	m_bEnemySpawn = false;			//敵出現したか
 }
 
 //==============================================================
@@ -62,7 +62,7 @@ HRESULT CGame::Init(void)
 	pCamera->Init();
 
 	//敵の生成
-	CEnemy::Create(D3DXVECTOR3(1080.0f, -150.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	//CEnemy::Create(D3DXVECTOR3(1080.0f, -150.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//プレイヤーの生成
 	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(1080.0f, -150.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
@@ -158,8 +158,12 @@ void CGame::Update(void)
 			m_bPause = false;
 		}
 	}
-	else
-	{
+	else if(m_bPause == false)
+	{//ポーズしてないとき
+
+		//敵出現させる
+		CGame::SetEnemy();
+
 		if (pInputKeyboard->GetTrigger(DIK_RETURN) == true ||
 			pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_A, 0) == true)
 		{//ENTERキー押したら
@@ -190,4 +194,22 @@ void CGame::Draw(void)
 void CGame::SetEnablePause(bool bPouse)
 {
 	m_bPause = bPouse;
+}
+
+//==============================================================
+//敵出現処理
+//==============================================================
+void CGame::SetEnemy(void)
+{
+	D3DXVECTOR3 posPlayer = m_pPlayer->GetPosition();		//プレイヤーの位置取得
+	int nNumSavePoint = m_pPlayer->GetNumSavePoint();		//何番目のセーブポイントか取得
+
+	if (nNumSavePoint == 1 && m_bEnemySpawn == false)
+	{//最初のセーブポイントに来たら
+
+		//敵の生成
+		CEnemy::Create(D3DXVECTOR3(1080.0f, -150.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+		m_bEnemySpawn = true;		//敵出現した状態にする
+	}
 }

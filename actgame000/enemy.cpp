@@ -82,9 +82,8 @@ CEnemy::CEnemy()
 	m_pMotion = NULL;
 
 	//保存用構造体の初期化
-	for (int nCntSave = 0; nCntSave < MAX_POS; nCntSave++)
+	for (int nCntSave = 0; nCntSave < MAX_ENEMY_POS; nCntSave++)
 	{
-
 		m_aSaveAction[nCntSave].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//位置
 		m_aSaveAction[nCntSave].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//向き
 
@@ -138,7 +137,7 @@ CEnemy::CEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_nNumModel = 0;		//敵(パーツ)の総数
 
 	//保存用構造体の初期化
-	for (int nCntSave = 0; nCntSave < MAX_POS; nCntSave++)
+	for (int nCntSave = 0; nCntSave < MAX_ENEMY_POS; nCntSave++)
 	{
 		m_aSaveAction[nCntSave].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//位置
 		m_aSaveAction[nCntSave].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//向き
@@ -334,7 +333,7 @@ void CEnemy::Update(void)
 
 	m_nFrameCounter++;		//フレーム数加算
 
-	if (m_nFrameCounter >= MAX_POS)
+	if (m_nFrameCounter >= MAX_ENEMY_POS)
 	{//一定のフレーム数になったら
 
 		m_nFrameCounter = 0;		//フレーム数初期化

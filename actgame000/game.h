@@ -9,6 +9,9 @@
 
 #include "manager.h"
 
+//マクロ定義
+#define MAX_ENEMY_POS		(70)		//保存する最大フレーム数
+
 //前方宣言
 class CPlayer;			//プレイヤーの情報
 class CScore;			//スコアの情報
@@ -49,6 +52,8 @@ public:
 	//static bool GetPauseDisp(void) { return m_bPause; }			//ポーズしてるか取得
 
 private:
+	void SetEnemy(void);		//敵出現処理
+
 	static CPlayer *m_pPlayer;		//プレイヤーの情報
 	static CEdit *m_pEdit;			//エディットの情報
 	//static CPause *m_pPause;		//ポーズ画面の情報
@@ -56,7 +61,7 @@ private:
 
 	static bool m_bReset;			//リセットしたか
 	static bool m_bPause;			//ポーズ画面か
-	static bool m_bEnemyStart;			//スタートしたか
+	static bool m_bEnemySpawn;		//敵が出現したか
 
 	static GAMEMODE m_gameMode;		//ゲームモード
 	int m_nCntEnemy;				//敵出現カウント

@@ -19,7 +19,23 @@ public:
 	//マテリアルの種類
 	enum MAT
 	{
-		MAT_MAX = 0
+		PARTS_BODY = 0,		//[0]体
+		PARTS_HEAD,			//[1]頭
+		PARTS_HAIR,			//[2]髪
+		PARTS_LU_ARM,		//[3]左腕上
+		PARTS_LD_ARM,		//[4]左腕下
+		PARTS_L_HAND,		//[5]左手
+		PARTS_RU_ARM,		//[6]右腕上
+		PARTS_RD_ARM,		//[7]右腕下
+		PARTS_R_HAND,		//[8]右手
+		PARTS_WAIST,		//[9]腰
+		PARTS_LU_LEG,		//[10]左太もも
+		PARTS_LD_LEG,		//[11]左ふくらはぎ
+		PARTS_L_SHOE,		//[12]左靴
+		PARTS_RU_LEG,		//[13]右太もも
+		PARTS_RD_LEG,		//[14]右ふくらはぎ
+		PARTS_R_SHOE,		//[15]右靴
+		MAT_MAX
 	};
 
 	//モデルの構造体の定義

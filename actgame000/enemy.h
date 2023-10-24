@@ -8,9 +8,7 @@
 #define _ENEMY_H_		//2重インクルード防止のマクロを定義する
 
 #include "object.h"
-
-//マクロ定義
-#define MAX_POS		(70)		//保存する最大フレーム数
+#include "game.h"
 
 //前方宣言
 class CModelHier;	//モデルの階層構造
@@ -77,7 +75,7 @@ private:
 		PARTS_MAX
 	};
 
-	//プレイヤーの行動保存保存用
+	//プレイヤーの行動保存用
 	struct SaveAction
 	{
 		D3DXVECTOR3 pos;		//位置
@@ -131,7 +129,7 @@ private:
 
 	int m_nFrameCounter;	//フレーム数カウンター
 
-	SaveAction m_aSaveAction[MAX_POS];		//行動保存用
+	SaveAction m_aSaveAction[MAX_ENEMY_POS];		//行動保存用
 	CMotion *m_pMotion;		//モーション情報
 };
 

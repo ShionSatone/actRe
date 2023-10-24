@@ -10,7 +10,25 @@
 
 //静的メンバ変数宣言
 int CMaterial::m_nNumAll = -1;										//モデル番号
-const char *CMaterial::m_apFilename[MAX_TEX] = {};
+const char *CMaterial::m_apFilename[MAX_TEX] = 
+{
+	"data\\MODEL\\enemy\\00_body.x",
+	"data\\MODEL\\enemy\\01_head.x",
+	"data\\MODEL\\enemy\\02_hair.x",
+	"data\\MODEL\\enemy\\03_LU_arm.x",
+	"data\\MODEL\\enemy\\04_LD_arm.x",
+	"data\\MODEL\\enemy\\05_L_hand.x",
+	"data\\MODEL\\enemy\\06_RU_arm.x",
+	"data\\MODEL\\enemy\\07_RD_arm.x",
+	"data\\MODEL\\enemy\\08_R_arm.x",
+	"data\\MODEL\\enemy\\09_waist.x",
+	"data\\MODEL\\enemy\\10_LU_leg.x",
+	"data\\MODEL\\enemy\\11_LD_leg.x",
+	"data\\MODEL\\enemy\\12_L_shoe.x",
+	"data\\MODEL\\enemy\\13_RU_leg.x",
+	"data\\MODEL\\enemy\\14_RD_leg.x",
+	"data\\MODEL\\enemy\\15_R_shoe.x",
+};
 CMaterial::Material CMaterial::m_Material[MAX_TEX] = {};			//マテリアルの情報
 
 //==============================================================
