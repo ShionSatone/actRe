@@ -19,10 +19,6 @@
 #include "score.h"
 #include "sound.h"
 
-//マクロ定義
-#define ENEMYSPAWN_TIME		(20)			//敵出現時間
-
-
 //静的メンバ変数宣言
 CEdit *CGame::m_pEdit = NULL;				//エディットの情報
 CPlayer *CGame::m_pPlayer = NULL;			//プレイヤーの情報

@@ -1,16 +1,8 @@
-﻿  edit.cpp
-  enemy.cpp
-  game.cpp
-  item.cpp
-  model.cpp
-  modelHierarchy.cpp
-  motion.cpp
-  objectX.cpp
-  player.cpp
+﻿  game.cpp
   コード生成しています。
-  13 of 405 functions ( 3.2%) were compiled, the rest were copied from previous compilation.
-    2 functions were new in current compilation
-    6 functions had inline decision re-evaluated but remain unchanged
+  4 of 406 functions ( 1.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   actgame000.vcxproj -> C:\Users\student\Desktop\act\actRe\actgame000\actgame000.exe
   actgame000.vcxproj -> C:\Users\student\Desktop\act\actRe\actgame000\actgame000.pdb (Full PDB)

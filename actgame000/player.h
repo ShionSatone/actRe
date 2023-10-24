@@ -9,6 +9,10 @@
 
 #include "object.h"
 
+//マクロ定義
+#define NUM_SAVE_POINT		(6)		//セーブポイントの数
+
+//前方宣言
 class CModelHier;	//モデルの階層構造
 class CMotion;		//モーションの階層構造
 
@@ -73,6 +77,18 @@ private:
 		PARTS_MAX
 	};
 
+	//セーブポイント
+	enum POINT
+	{
+		POINT_DEFAULT = 0,		//初期値
+		POINT_DOWN_FLOOR,		//1番目
+		POINT_PIER,				//2番目
+		POINT_MAZE,				//3番目
+		POINT_BIGINEND,			//4番目
+		POINT_FALLING,			//5番目
+		POINT_MAX
+	};
+
 	void UpdateFront(void);			//手前側の更新処理
 	void UpdateState(void);			//状態の更新処理
 
@@ -84,6 +100,7 @@ private:
 
 	void ControlHumanPad(void);				//プレイヤーコントローラー操作(人間)
 	void Screen(void);						//画面外判定
+	void SavePoint(void);					//セーブポイント処理
 	void LoadFile(void);					//モデルファイル読み込み
 	void RotCorrection(void);				//向きの補正処理
 
@@ -91,7 +108,7 @@ private:
 
 	D3DXVECTOR3 m_pos;		//位置
 	D3DXVECTOR3 m_posOld;	//前回の位置
-	D3DXVECTOR3 m_posSave;	//復活用の位置
+	D3DXVECTOR3 m_posSavePoint[NUM_SAVE_POINT];	//全ての復活用の位置保存用
 	D3DXVECTOR3 m_move;		//移動量
 	D3DXVECTOR3 m_rot;		//向き
 	D3DXVECTOR3 m_max;		//人間の最大値
@@ -121,6 +138,8 @@ private:
 	int m_nCntHit;			//ヒットできるまでのカウンター
 	int m_nCntMove;			//足音のカウンター
 	int m_nCntSand;			//砂のパーティクルカウンター
+
+	int m_nNumPosSave;		//何番目のセーブポイントか
 
 	bool m_bPad;			//パッドのスティックを倒してるか
 

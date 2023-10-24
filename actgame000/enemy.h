@@ -10,7 +10,7 @@
 #include "object.h"
 
 //マクロ定義
-#define MAX_POS		(50)		//保存する最大フレーム数
+#define MAX_POS		(70)		//保存する最大フレーム数
 
 //前方宣言
 class CModelHier;	//モデルの階層構造

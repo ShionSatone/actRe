@@ -1,4 +1,3 @@
 ﻿  game.cpp
-cl : コマンド ライン warning D9028: 簡易リビルド時のエラーです、通常のビルドに戻します
   actgame000.vcxproj -> C:\Users\student\Desktop\act\actRe\actgame000\Debug\actgame000.exe
   actgame000.vcxproj -> C:\Users\student\Desktop\act\actRe\actgame000\Debug\actgame000.pdb (Full PDB)

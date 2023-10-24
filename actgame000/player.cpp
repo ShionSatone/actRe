@@ -34,6 +34,13 @@
 #define STOP_MOVE			(0.8f)		//止まる判定の移動量
 #define FILE_HUMAN			"data\\TEXT\\motion_player.txt"		//プレイヤーモデルのテキスト
 
+#define SAVE_POS_DEFAULT	(D3DXVECTOR3(1080.0f, 0.0f, 0.0f))			//初期値のセーブポイント
+#define SAVE_POS_DOWN_FLOOR	(D3DXVECTOR3(1200.0f, -950.0f, 0.0f))		//1番目のセーブポイント
+#define SAVE_POS_PIER		(D3DXVECTOR3(50.0f, -1800.0f, 0.0f))		//2番目のセーブポイント
+#define SAVE_POS_POINT_MAZE	(D3DXVECTOR3(1300.0f, -2800.0f, 0.0f))		//3番目のセーブポイント
+#define SAVE_POS_BIGINEND	(D3DXVECTOR3(100.0f, -3600.0f, 0.0f))		//4番目のセーブポイント
+#define SAVE_POS_FALLING	(D3DXVECTOR3(650.0f, -4300.0f, 0.0f))		//5番目のセーブポイント
+
 #define HIT_CNT				(60 * 2)	//攻撃当たるまでのカウント数
 #define DAMAGE_CNT			(9)			//ダメージカウント数
 #define APP_CNT				(100)		//点滅時間
@@ -68,7 +75,14 @@ CPlayer::CPlayer()
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//前回の位置
-	m_posSave = D3DXVECTOR3(1080.0f, 0.0f, 0.0f);		//復活用の位置
+
+	m_posSavePoint[POINT_DEFAULT] = SAVE_POS_DEFAULT;		//初期値のセーブポイント
+	m_posSavePoint[POINT_DOWN_FLOOR] = SAVE_POS_DOWN_FLOOR;	//1番目のセーブポイント
+	m_posSavePoint[POINT_PIER] = SAVE_POS_PIER;				//2番目のセーブポイント
+	m_posSavePoint[POINT_MAZE] = SAVE_POS_POINT_MAZE;		//3番目のセーブポイント
+	m_posSavePoint[POINT_BIGINEND] = SAVE_POS_BIGINEND;		//4番目のセーブポイント
+	m_posSavePoint[POINT_FALLING] = SAVE_POS_FALLING;		//5番目のセーブポイント
+
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//移動量
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//向き
 	m_max = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//モデルの最大値
@@ -102,7 +116,7 @@ CPlayer::CPlayer()
 	m_nCntHit = HIT_CNT;			//攻撃あたるまでのカウンター
 	m_bPad = false;					//パッドのスティックを倒してるか
 	m_nCntSand = STEP_CNT;			//砂のパーティクルカウンター
-
+	m_nNumPosSave = 0;		//何番目のセーブポイントか
 }
 
 //==============================================================
@@ -112,7 +126,14 @@ CPlayer::CPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	m_pos = pos;									//位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//前回の位置
-	m_posSave = D3DXVECTOR3(1080.0f, 0.0f, 0.0f);		//復活用の位置
+
+	m_posSavePoint[POINT_DEFAULT] = SAVE_POS_DEFAULT;		//初期値のセーブポイント
+	m_posSavePoint[POINT_DOWN_FLOOR] = SAVE_POS_DOWN_FLOOR;	//1番目のセーブポイント
+	m_posSavePoint[POINT_PIER] = SAVE_POS_PIER;				//2番目のセーブポイント
+	m_posSavePoint[POINT_MAZE] = SAVE_POS_POINT_MAZE;		//3番目のセーブポイント
+	m_posSavePoint[POINT_BIGINEND] = SAVE_POS_BIGINEND;		//4番目のセーブポイント
+	m_posSavePoint[POINT_FALLING] = SAVE_POS_FALLING;		//5番目のセーブポイント
+
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//移動量
 	m_max = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//モデルの最大値
 	m_min = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//モデルの最小値
@@ -147,6 +168,8 @@ CPlayer::CPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_nCntMove = STEP_CNT;		//足音のカウンター
 	m_bPad = false;				//パッドのスティックを倒してるか
 	m_nCntSand = STEP_CNT;		//砂のパーティクルカウンター
+	m_nNumPosSave = 0;		//何番目のセーブポイントか
+
 }
 
 //==============================================================
@@ -290,9 +313,11 @@ void CPlayer::Update(void)
 	m_pMotion->Update();
 
 	//デバッグ表示
-	pDebugProc->Print("\nプレイヤーの位置 (%f, %f, %f)\n", m_pos.x, m_pos.y, m_pos.z);
-	pDebugProc->Print("プレイヤーの移動量 (%f, %f, %f)\n", m_move.x, m_move.y, m_move.z);
-	pDebugProc->Print("プレイヤーの向き   (%f, %f, %f)\n", m_rot.x, m_rot.y, m_rot.z);
+	pDebugProc->Print("\nプレイヤーの位置    (%f, %f, %f)\n", m_pos.x, m_pos.y, m_pos.z);
+	pDebugProc->Print("プレイヤーの移動量    (%f, %f, %f)\n", m_move.x, m_move.y, m_move.z);
+	pDebugProc->Print("プレイヤーの向き      (%f, %f, %f)\n", m_rot.x, m_rot.y, m_rot.z);
+	pDebugProc->Print("現在のチェックポイント  (%f, %f, %f)\n", m_posSavePoint[m_nNumPosSave].x, m_posSavePoint[m_nNumPosSave].y, m_posSavePoint[m_nNumPosSave].z);
+
 }
 
 //==============================================================
@@ -379,6 +404,9 @@ void CPlayer::UpdateFront(void)
 	//向きの補正
 	CPlayer::RotCorrection();
 
+	//チェックポイント更新
+	CPlayer::SavePoint();
+
 	//画面外処理
 	CPlayer::Screen();
 
@@ -453,7 +481,7 @@ void CPlayer::UpdateState(void)
 
 	case STATE_DEATH:		//死亡状態
 
-		m_pos = m_posSave;		//セーブした場所に戻る
+		m_pos = m_posSavePoint[m_nNumPosSave];		//セーブした場所に戻る
 
 		m_state = CObject::STATE_NONE;		//点滅状態にする
 
@@ -472,6 +500,24 @@ void CPlayer::UpdateState(void)
 		//pFade->SetFade(CScene::MODE_RESULT);
 
 		break;
+	}
+}
+
+//==============================================================
+//セーブポイント処理
+//==============================================================
+void CPlayer::SavePoint(void)
+{
+	if (m_nNumPosSave < POINT_FALLING)
+	{//最大セーブ数より少なかったら
+
+		if (m_posSavePoint[m_nNumPosSave + 1].y >= m_pos.y &&
+			m_posSavePoint[m_nNumPosSave + 1].x - 100.0f <= m_pos.x &&
+			m_posSavePoint[m_nNumPosSave + 1].x + 100.0f >= m_pos.x )
+		{//次のチェックポイントを通り過ぎたら
+
+			m_nNumPosSave += 1;		//セーブポイントを変更
+		}
 	}
 }
 
@@ -917,11 +963,11 @@ void CPlayer::Screen(void)
 
 	//	if (m_rot.y < 0)
 	//	{
-	//		m_pos = D3DXVECTOR3(m_posSave.x - 100.0f, m_posSave.y, m_posSave.z);
+	//		m_pos = D3DXVECTOR3(m_posRespawn.x - 100.0f, m_posRespawn.y, m_posRespawn.z);
 	//	}
 	//	else if (m_rot.y > 0)
 	//	{
-	//		m_pos = D3DXVECTOR3(m_posSave.x + 100.0f, m_posSave.y, m_posSave.z);
+	//		m_pos = D3DXVECTOR3(m_posRespawn.x + 100.0f, m_posRespawn.y, m_posRespawn.z);
 	//	}
 
 	//	m_bLand = true;		//着地した
@@ -982,7 +1028,7 @@ void CPlayer::Hit(void)
 		m_nCntDamage = HIT_CNT;				//ダメージ状態を保つ時間設定
 		m_nCntHit = HIT_CNT;				//攻撃あたるまでのカウンター
 
-		m_pos = m_posSave;		//セーブした場所に戻る
+		m_pos = m_posSavePoint[m_nNumPosSave];		//セーブした場所に戻る
 
 		for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
 		{
