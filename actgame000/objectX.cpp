@@ -261,7 +261,7 @@ bool CObjectX::Collision(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *p
 			CObject::TYPE type = pObj->GetType();
 
 			if (type == TYPE_MODEL || type == TYPE_ENEMY || type == TYPE_ITEM || type == TYPE_PLAYER
-				|| type == TYPE_NEEDLE || type == TYPE_ALPHA_BLOCK)
+				|| type == TYPE_NEEDLE || type == TYPE_ALPHA_BLOCK || type == TYPE_DOWN_9BLOCK || type == TYPE_DOWN_6BLOCK)
 			{//種類がモデルの場合
 
 				//モデルの位置取得
@@ -334,7 +334,8 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 			{
 				pPlayer->SetDashAuto(false);		//透明ブロックに当たってない状態にする
 			}
-			else if (type == TYPE_ITEM || type == TYPE_ALPHA_BLOCK)
+
+			if (type == TYPE_ITEM || type == TYPE_ALPHA_BLOCK || type == TYPE_DOWN_9BLOCK || type == TYPE_DOWN_6BLOCK)
 			{//アイテム || 透明ブロックに当たった時
 
 				//アイテムのヒット処理
@@ -384,7 +385,8 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 			{
 				pPlayer->SetDashAuto(false);		//透明ブロックに当たってない状態にする
 			}
-			else if (type == TYPE_ITEM || type == TYPE_ALPHA_BLOCK)
+
+			if (type == TYPE_ITEM || type == TYPE_ALPHA_BLOCK || type == TYPE_DOWN_9BLOCK || type == TYPE_DOWN_6BLOCK)
 			{//アイテム || 透明ブロックに当たった時
 
 				//アイテムのヒット処理
@@ -432,7 +434,8 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 			{
 				pPlayer->SetDashAuto(false);		//透明ブロックに当たってない状態にする
 			}
-			else if (type == TYPE_ITEM || type == TYPE_ALPHA_BLOCK)
+
+			if (type == TYPE_ITEM || type == TYPE_ALPHA_BLOCK || type == TYPE_DOWN_9BLOCK || type == TYPE_DOWN_6BLOCK)
 			{//アイテム || 透明ブロックに当たった時
 
 				//アイテムのヒット処理
@@ -482,7 +485,8 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 			{
 				pPlayer->SetDashAuto(false);		//透明ブロックに当たってない状態にする
 			}
-			else if (type == TYPE_ITEM || type == TYPE_ALPHA_BLOCK)
+
+			if (type == TYPE_ITEM || type == TYPE_ALPHA_BLOCK || type == TYPE_DOWN_9BLOCK || type == TYPE_DOWN_6BLOCK)
 			{//アイテム || 透明ブロックに当たった時
 
 				//アイテムのヒット処理

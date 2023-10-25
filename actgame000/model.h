@@ -34,8 +34,6 @@ public:
 	void SetType(TYPE type);		//オブジェクトの種類設定
 	void Hit(void);					//ヒット処理
 
-	void HitAlphaBrock(CPlayer *pPlayer);		//透明ブロックの処理
-
 private:
 
 	static LPD3DXMESH m_pMesh;						//メッシュ（頂点情報）へのポインタ
@@ -45,9 +43,11 @@ private:
 
 	int m_nIdxModel;		//モデルの番号
 
-	bool m_bActionAlpha;	//透明ブロックに何かしらするのか
+	bool m_bActionDown;		//ブロックを落とすか
 
 	D3DXVECTOR3 m_pos;		//位置
+	D3DXVECTOR3 m_posOld;	//前回の位置
+	D3DXVECTOR3 m_move;		//前回の位置
 	D3DXVECTOR3 m_rot;		//向き
 	TYPE m_type;
 };

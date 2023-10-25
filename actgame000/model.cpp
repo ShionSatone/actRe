@@ -15,9 +15,7 @@
 #define NUM_MODEL			(2)			//モデルの種類
 #define POS					(10.0f)		//pos初期値
 #define MODEL_LEN			(3.0f)		//距離
-#define CURVE_RL			(0.5f)		//左右の角度
-#define CURVE_UP			(0.0f)		//上の角度
-#define CURVE_DOWN			(1.0f)		//下の角度
+#define MOVE_DOWN			(-10.0f)		//落下移動量
 
 //静的メンバ変数宣言
 LPD3DXMESH CModel::m_pMesh = NULL;						//メッシュ（頂点情報）へのポインタ
@@ -31,9 +29,11 @@ const char *CModel::m_pFilename = NULL;					//ファイルの名前
 CModel::CModel()
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
+	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//前回の位置
+	m_move = D3DXVECTOR3(0.0f, MOVE_DOWN, 0.0f);		//移動量
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//向き
 
-	m_bActionAlpha = false;			//透明ブロックに何かしらするのか
+	m_bActionDown = false;		//ブロックを落とすか
 }
 
 //==============================================================
@@ -42,9 +42,11 @@ CModel::CModel()
 CModel::CModel(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	m_pos = pos;		//位置
+	m_posOld = m_pos;	//前回の位置
+	m_move = D3DXVECTOR3(0.0f, MOVE_DOWN, 0.0f);		//移動量
 	m_rot = rot;		//向き
 
-	m_bActionAlpha = false;			//ブロックに何かしらするのか
+	m_bActionDown = false;		//ブロックを落とすか
 
 }
 
@@ -143,11 +145,11 @@ HRESULT CModel::Init(void)
 	{
 		m_type = CObject::TYPE_ALPHA_BLOCK;
 	}
-	/*else if (strcmp(m_pFilename, "data/MODEL/map/move_6block.x") == 0)
+	else if (strcmp(m_pFilename, "data/MODEL/map/move_6block.x") == 0)
 	{
 		m_type = CObject::TYPE_DOWN_6BLOCK;
 
-	}*/
+	}
 	else if (strcmp(m_pFilename, "data/MODEL/map/move_9block.x") == 0)
 	{
 		m_type = CObject::TYPE_DOWN_9BLOCK;
@@ -183,24 +185,18 @@ void CModel::Uninit(void)
 //==============================================================
 void CModel::Update(void)
 {
-	//if (m_bAction == true)
-	//{//モデルに何かするとき
+	if (m_bActionDown == true)
+	{//落下させるとき
 
-	//	switch (m_type)
-	//	{
-	//	case TYPE_ALPHA_BLOCK:		//透明ブロック
+		m_pos = CObjectX::GetPosition();		//位置取得
 
-	//		//透明ブロックの処理
-	//		//CModel::HitAlphaBrock();
+		m_posOld = m_pos;	//前回の位置
 
-	//		break;
+		m_pos += m_move;	//移動量加算
 
-	//	case TYPE_DOWN_9BLOCK:		//落下9ブロック
-
-
-	//		break;
-	//	}
-	//}
+		CObjectX::SetPosition(m_pos);
+		CObjectX::Collision(&m_pos, &m_posOld, &m_move, CObjectX::GetSizeMin(), CObjectX::GetSizeMax());
+	}
 
 	//オブジェクトXの更新処理
 	CObjectX::Update();
@@ -239,6 +235,18 @@ void CModel::Hit(void)
 
 		//プレイヤー自動ダッシュさせる
 		pPlayer->SetDashAuto(true);
+
+		break;
+
+	case TYPE_DOWN_6BLOCK:		//落下ブロック
+
+		m_bActionDown = true;	//ブロックを落とす
+
+		break;
+
+	case TYPE_DOWN_9BLOCK:		//落下ブロック
+
+		m_bActionDown = true;	//ブロックを落とす
 
 		break;
 	}
