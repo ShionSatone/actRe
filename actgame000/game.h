@@ -15,7 +15,8 @@
 //前方宣言
 class CPlayer;			//プレイヤーの情報
 class CScore;			//スコアの情報
-//class CModel;			//モデルの情報
+class CDeathUI;			//死亡UIの情報
+class CItemUI;			//アイテムUIの情報
 class CEdit;			//エディットの情報
 class CPause;			//ポーズ画面の情報
 class CFade;			//フェード
@@ -44,10 +45,12 @@ public:
 
 	void SetEnablePause(bool bPouse);			//ポーズ切り替え
 
-	static CScore *GetScore(void) { return m_pScore; }			//スコアの情報s
+	static CScore *GetScore(void) { return m_pScore; }			//スコアの情報
+	static CDeathUI *GetDeathUI(void) { return m_pDeathUI; }	//死亡数の情報
+	static CItemUI *GetItemUI(void) { return m_pItemUI; }		//アイテム数の情報
 	static void SetGameMode(GAMEMODE gameMode) { m_gameMode = gameMode; }		//ゲームモードの設定
 	static GAMEMODE GetGameMode(void) { return m_gameMode; }					//ゲームモードの設定
-	static CPlayer *GetPlayer(void) { return m_pPlayer; }			//プレイヤーの情報取得
+	static CPlayer *GetPlayer(void) { return m_pPlayer; }		//プレイヤーの情報取得
 	static CPause *GetPause(void) { return m_pPause; }			//ポーズ画面の情報
 	static bool GetPauseDisp(void) { return m_bPause; }			//ポーズしてるか取得
 
@@ -58,6 +61,8 @@ private:
 	static CEdit *m_pEdit;			//エディットの情報
 	static CPause *m_pPause;		//ポーズ画面の情報
 	static CScore *m_pScore;		//スコアの情報
+	static CDeathUI *m_pDeathUI;	//死亡UIの情報
+	static CItemUI *m_pItemUI;		//アイテムUIの情報
 
 	static bool m_bReset;			//リセットしたか
 	static bool m_bPause;			//ポーズ画面か

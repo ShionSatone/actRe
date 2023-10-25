@@ -18,15 +18,19 @@
 #include "fade.h"
 #include "score.h"
 #include "sound.h"
+#include "UI_death.h"
+#include "UI_item.h"
 
 //静的メンバ変数宣言
 CEdit *CGame::m_pEdit = NULL;				//エディットの情報
 CPlayer *CGame::m_pPlayer = NULL;			//プレイヤーの情報
 bool CGame::m_bReset = true;				//リセットしたかどうか
 bool CGame::m_bPause = false;				//ポーズ画面か
-CPause *CGame::m_pPause = NULL;			//ポーズ画面の情報
+CPause *CGame::m_pPause = NULL;				//ポーズ画面の情報
 CScore *CGame::m_pScore = NULL;				//スコアの情報
 bool CGame::m_bEnemySpawn = false;			//スタートしたか
+CDeathUI *CGame::m_pDeathUI = NULL;			//死亡UIの情報
+CItemUI *CGame::m_pItemUI = NULL;			//アイテムUIの情報
 CGame::GAMEMODE CGame::m_gameMode = GAMEMODE_START;	//ゲームモード
 
 //==============================================================
@@ -89,6 +93,12 @@ HRESULT CGame::Init(void)
 
 	//スコアの生成
 	m_pScore = CScore::Create();
+
+	//死亡UIの生成
+	m_pDeathUI = CDeathUI::Create();
+
+	//アイテムUIの生成
+	m_pItemUI = CItemUI::Create();
 
 	//ポーズ画面の生成
 	m_pPause = CPause::Create();

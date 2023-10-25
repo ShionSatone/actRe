@@ -11,6 +11,7 @@
 #include "player.h"
 #include "sound.h"
 #include "score.h"
+#include "UI_item.h"
 
 //マクロ定義
 #define RESPAWN_TIME	(60 * 2)		//アイテムがリスポーンする時間
@@ -161,7 +162,7 @@ void CItem::Hit(void)
 {
 	CPlayer *pPlayer = CGame::GetPlayer();
 	CSound *pSound = CManager::GetInstance()->GetSound();
-	CScore *pScore = CGame::GetScore();
+	CItemUI *pItemUI = CGame::GetItemUI();
 
 	if (m_type == TYPEITEM_RHOMBUS && m_bRespawn == false)
 	{//ひし形アイテムのとき
@@ -183,8 +184,8 @@ void CItem::Hit(void)
 		//SE再生
 		//pSound->Play(pSound->SOUND_LABEL_SE_ITEM000);
 
-		//スコア加算
-		//pScore->Add(1050);
+		//アイテム取得数加算
+		pItemUI->Add(1);
 
 		//終了処理
 		CItem::Uninit();

@@ -259,23 +259,3 @@ void CNumber::SetAnim(int nPatternAnim, float fDigitX)
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
 }
-
-//==============================================================
-//背景設定処理
-//==============================================================
-//void CNumber::SetType(float fTexU, float fTexV)
-//{
-//	VERTEX_2D * pVtx;		//頂点情報へのポインタ
-//
-//	//頂点バッファをロックし、頂点情報へのポインタを取得
-//	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-//
-//	//テクスチャ座標の更新
-//	pVtx[0].tex = D3DXVECTOR2(fTexU, fTexV);
-//	pVtx[1].tex = D3DXVECTOR2(fTexU + 1.0f, fTexV);
-//	pVtx[2].tex = D3DXVECTOR2(fTexU, fTexV + 1.0f);
-//	pVtx[3].tex = D3DXVECTOR2(fTexU + 1.0f, fTexV + 1.0f);
-//
-//	//頂点バッファをアンロックする
-//	m_pVtxBuff->Unlock();
-//}

@@ -17,6 +17,7 @@
 #include "sound.h"
 #include "fade.h"
 //#include "score.h"
+#include "UI_death.h"
 
 //マクロ定義
 #define PRIORITY			(3)			//優先順位
@@ -476,9 +477,10 @@ void CPlayer::UpdateState(void)
 void CPlayer::CollisionAction(void)
 {
 	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	bool bLand = CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max);
 
 	//当たり判定
-	if (CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max) == true)
+	if (bLand == true)
 	{//着地したら
 
 		m_nDashCounter = 0;		//ダッシュ数リセット
@@ -510,7 +512,7 @@ void CPlayer::CollisionAction(void)
 		//パーティクル生成
 		//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), m_particleType, m_nParticleLife, 50.0f);
 	}
-	else if (CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max) == false &&
+	else if (bLand == false &&
 		pInputKeyboard->GetPress(DIK_SPACE) == false)
 	{//地面についてない && ジャンプボタン押してない
 
@@ -1104,48 +1106,6 @@ void CPlayer::Screen(void)
 		//ゲーム画面
 		pFade->SetFade(CScene::MODE_RESULT);
 	}
-
-	//if (m_pos.y < 0.0f)
-	//{//画面下に出たら
-
-	//	m_move.y = 0.0f;
-	//	m_pos.y = 0.0f;
-
-	//	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
-
-	//	if (pInputKeyboard->GetPress(DIK_SPACE) == false)
-	//	{
-	//		m_bLand = true;		//着地した
-	//		m_bJump = false;	//ジャンプしてない
-	//	}
-
-	//	m_nDashCounter = 0;		//ダッシュ数リセット
-
-	//	//m_state = STATE_NONE;		//通常状態にする
-	//}
-
-	//if (m_pos.y < -200.0f && 
-	//	m_pos.x > -1000.0f && m_pos.x < 9700.0f)
-	//{//画面下に出たら
-
-	//	if (m_rot.y < 0)
-	//	{
-	//		m_pos = D3DXVECTOR3(m_posRespawn.x - 100.0f, m_posRespawn.y, m_posRespawn.z);
-	//	}
-	//	else if (m_rot.y > 0)
-	//	{
-	//		m_pos = D3DXVECTOR3(m_posRespawn.x + 100.0f, m_posRespawn.y, m_posRespawn.z);
-	//	}
-
-	//	m_bLand = true;		//着地した
-	//	m_bJump = false;	//ジャンプしてない
-
-	//	m_state = STATE_NONE;		//通常状態にする
-
-	//	//m_nCntDamage = 0;
-
-	//	//CPlayer::Hit();
-	//}
 }
 
 //==============================================================
@@ -1183,6 +1143,8 @@ void CPlayer::Draw(void)
 void CPlayer::Hit(void)
 {
 	CSound *pSound = CManager::GetInstance()->GetSound();
+	CDeathUI *pDeathUI = CGame::GetDeathUI();
+
 	int nLife = 0;
 
 	if (m_state != CObject::STATE_DAMAGE && m_state != CObject::STATE_APPEAR && m_nCntDamage <= 0)
@@ -1194,6 +1156,8 @@ void CPlayer::Hit(void)
 
 		m_nCntDamage = HIT_CNT;				//ダメージ状態を保つ時間設定
 		m_nCntHit = HIT_CNT;				//攻撃あたるまでのカウンター
+
+		pDeathUI->Add(1);		//死亡数加算
 
 		m_pos = m_posSavePoint[m_nNumPosSave];		//セーブした場所に戻る
 
