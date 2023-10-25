@@ -92,7 +92,7 @@ HRESULT CGame::Init(void)
 	CItem::Create(D3DXVECTOR3(200.0f, -5550.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
 
 	//ÉXÉRÉAÇÃê∂ê¨
-	m_pScore = CScore::Create();
+	//m_pScore = CScore::Create();
 
 	//éÄñSUIÇÃê∂ê¨
 	m_pDeathUI = CDeathUI::Create();

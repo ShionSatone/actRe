@@ -1,6 +1,7 @@
-﻿  item.cpp
+﻿  UI_death.cpp
+  UI_item.cpp
   コード生成しています。
-  1 of 448 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+  2 of 445 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。

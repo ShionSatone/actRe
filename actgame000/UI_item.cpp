@@ -15,12 +15,12 @@
 //マクロ定義
 #define PRIORITY		(7)					//優先順位
 #define SCORE_POS_X		(120.0f)			//アイテムUIのXの位置
-#define SCORE_POS_Y		(150.0f)				//アイテムUIのYの位置
+#define SCORE_POS_Y		(130.0f)				//アイテムUIのYの位置
 #define RESULT_SCORE_POS_X		(700.0f)							//リザルトのアイテムUIのXの位置
 #define RESULT_SCORE_POS_Y		(SCREEN_HEIGHT * 0.5f)				//リザルトのアイテムUIのYの位置
-#define SCORE_WIDTH		(50.0f * 0.5f)		//アイテムUIの横幅
-#define SCORE_HEIGHT	(80.0f * 0.5f)		//アイテムUIの縦幅
-#define SCORE_INTER		(50.0f)				//アイテムUIの間隔
+#define SCORE_WIDTH		(40.0f * 0.5f)		//アイテムUIの横幅
+#define SCORE_HEIGHT	(60.0f * 0.5f)		//アイテムUIの縦幅
+#define SCORE_INTER		(40.0f)				//アイテムUIの間隔
 #define NUM_TEX			(10)				//テクスチャの数字の数
 
 //静的メンバ変数宣言
@@ -102,9 +102,10 @@ HRESULT CItemUI::Init(void)
 	CTexture *pTexture = CManager::GetInstance()->GetTexture();
 
 	//テクスチャの読み込み
-	m_nIdxTex[TEX_ITEM] = pTexture->Regist("data\\TEXTURE\\space.jpg");		//アイテム
-	m_nIdxTex[TEX_NUMBER] = pTexture->Regist("data\\TEXTURE\\score01.png");		//数字
+	m_nIdxTex[TEX_ITEM] = pTexture->Regist("data\\TEXTURE\\star.png");		//アイテム
+	m_nIdxTex[TEX_NUMBER] = pTexture->Regist("data\\TEXTURE\\number000.png");		//数字
 
+	//アイコンの生成
 	if (m_pObject2D == NULL)
 	{//使用されてないとき
 
@@ -124,7 +125,7 @@ HRESULT CItemUI::Init(void)
 			m_pObject2D->SetSize(SCORE_HEIGHT, SCORE_HEIGHT);
 
 			//位置設定
-			m_pObject2D->SetPosition(D3DXVECTOR3(50.0f, 150.0f, 0.0f));
+			m_pObject2D->SetPosition(D3DXVECTOR3(50.0f, SCORE_POS_Y, 0.0f));
 		}
 	}
 

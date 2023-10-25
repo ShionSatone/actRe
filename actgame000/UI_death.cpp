@@ -18,9 +18,9 @@
 #define SCORE_POS_Y		(50.0f)				//Ž€–SUI‚ÌY‚ÌˆÊ’u
 #define RESULT_SCORE_POS_X		(700.0f)							//ƒŠƒUƒ‹ƒg‚ÌŽ€–SUI‚ÌX‚ÌˆÊ’u
 #define RESULT_SCORE_POS_Y		(SCREEN_HEIGHT * 0.5f)				//ƒŠƒUƒ‹ƒg‚ÌŽ€–SUI‚ÌY‚ÌˆÊ’u
-#define SCORE_WIDTH		(50.0f * 0.5f)		//Ž€–SUI‚Ì‰¡•
-#define SCORE_HEIGHT	(80.0f * 0.5f)		//Ž€–SUI‚Ìc•
-#define SCORE_INTER		(50.0f)				//Ž€–SUI‚ÌŠÔŠu
+#define SCORE_WIDTH		(40.0f * 0.5f)		//Ž€–SUI‚Ì‰¡•
+#define SCORE_HEIGHT	(60.0f * 0.5f)		//Ž€–SUI‚Ìc•
+#define SCORE_INTER		(40.0f)				//Ž€–SUI‚ÌŠÔŠu
 #define NUM_TEX			(10)				//ƒeƒNƒXƒ`ƒƒ‚Ì”Žš‚Ì”
 
 //Ã“Iƒƒ“ƒo•Ï”éŒ¾
@@ -102,9 +102,10 @@ HRESULT CDeathUI::Init(void)
 	CTexture *pTexture = CManager::GetInstance()->GetTexture();
 
 	//ƒeƒNƒXƒ`ƒƒ‚Ì“Ç‚Ýž‚Ý
-	m_nIdxTex[TEX_DEATH] = pTexture->Regist("data\\TEXTURE\\item000.png");		//Ž€–S
-	m_nIdxTex[TEX_NUMBER] = pTexture->Regist("data\\TEXTURE\\score01.png");		//”Žš
+	m_nIdxTex[TEX_DEATH] = pTexture->Regist("data\\TEXTURE\\death.png");		//Ž€–S
+	m_nIdxTex[TEX_NUMBER] = pTexture->Regist("data\\TEXTURE\\number001.png");		//”Žš
 
+	//ƒAƒCƒRƒ“‚Ì¶¬
 	if (m_pObject2D == NULL)
 	{//Žg—p‚³‚ê‚Ä‚È‚¢‚Æ‚«
 
@@ -123,7 +124,7 @@ HRESULT CDeathUI::Init(void)
 			m_pObject2D->SetSize(SCORE_HEIGHT, SCORE_HEIGHT);
 
 			//ˆÊ’uÝ’è
-			m_pObject2D->SetPosition(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
+			m_pObject2D->SetPosition(D3DXVECTOR3(50.0f, SCORE_POS_Y, 0.0f));
 		}
 	}
 
