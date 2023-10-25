@@ -61,9 +61,6 @@ HRESULT CGame::Init(void)
 	//カメラの初期化処理
 	pCamera->Init();
 
-	//敵の生成
-	//CEnemy::Create(D3DXVECTOR3(1080.0f, -150.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-
 	//プレイヤーの生成
 	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(1080.0f, -150.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
@@ -72,12 +69,17 @@ HRESULT CGame::Init(void)
 
 	//ひし形アイテム
 	CItem::Create(D3DXVECTOR3(600.0f, -1400.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_RHOMBUS);
+	CItem::Create(D3DXVECTOR3(1150.0f, -1550.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_RHOMBUS);
+	CItem::Create(D3DXVECTOR3(450.0f, -2450.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_RHOMBUS);
 	CItem::Create(D3DXVECTOR3(750.0f, -3050.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_RHOMBUS);
 	CItem::Create(D3DXVECTOR3(300.0f, -3200.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_RHOMBUS);
 
 	//星アイテム
 	CItem::Create(D3DXVECTOR3(150.0f, -350.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
+	CItem::Create(D3DXVECTOR3(300.0f, -1000.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
 	CItem::Create(D3DXVECTOR3(1200.0f, -1400.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
+	CItem::Create(D3DXVECTOR3(350.0f, -2650.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
+	CItem::Create(D3DXVECTOR3(150.0f, -2850.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
 	CItem::Create(D3DXVECTOR3(150.0f, -4050.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
 	CItem::Create(D3DXVECTOR3(1250.0f, -4150.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
 	CItem::Create(D3DXVECTOR3(150.0f, -4750.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);

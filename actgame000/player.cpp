@@ -34,7 +34,7 @@
 #define STOP_MOVE			(0.8f)		//止まる判定の移動量
 #define FILE_HUMAN			"data\\TEXT\\motion_player.txt"		//プレイヤーモデルのテキスト
 
-#define SAVE_POS_DEFAULT	(D3DXVECTOR3(1080.0f, 0.0f, 0.0f))			//初期値のセーブポイント
+#define SAVE_POS_DEFAULT	(D3DXVECTOR3(900.0f, 0.0f, 0.0f))			//初期値のセーブポイント
 #define SAVE_POS_DOWN_FLOOR	(D3DXVECTOR3(1200.0f, -950.0f, 0.0f))		//1番目のセーブポイント
 #define SAVE_POS_PIER		(D3DXVECTOR3(50.0f, -1800.0f, 0.0f))		//2番目のセーブポイント
 #define SAVE_POS_POINT_MAZE	(D3DXVECTOR3(1300.0f, -2800.0f, 0.0f))		//3番目のセーブポイント
@@ -127,7 +127,7 @@ CPlayer::CPlayer()
 //==============================================================
 CPlayer::CPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
-	m_pos = pos;									//位置
+	m_pos = SAVE_POS_DEFAULT;									//位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//前回の位置
 	m_moveSave = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//移動量保存用
 
@@ -1079,7 +1079,12 @@ void CPlayer::SetDashAuto(bool bDashAuto)
 
 	m_bCollisionAlpha = bDashAuto;
 
-	if (m_bCollisionAlpha == false)
+	if (m_bCollisionAlpha == true)
+	{//透明ブロックに当たった時
+
+		m_nDashCounter = 0;		//ダッシュカウンターをリセット
+	}
+	else if (m_bCollisionAlpha == false)
 	{//透明ブロックに当たってないとき
 
 		m_bDashAuto = false;		//自動ダッシュしない状態にする
