@@ -8,6 +8,8 @@
 #include "manager.h"
 #include "renderer.h"
 #include "material.h"
+#include "player.h"
+#include "game.h"
 
 //マクロ定義
 #define NUM_MODEL			(2)			//モデルの種類
@@ -30,6 +32,8 @@ CModel::CModel()
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//向き
+
+	m_bActionAlpha = false;			//透明ブロックに何かしらするのか
 }
 
 //==============================================================
@@ -39,6 +43,9 @@ CModel::CModel(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	m_pos = pos;		//位置
 	m_rot = rot;		//向き
+
+	m_bActionAlpha = false;			//ブロックに何かしらするのか
+
 }
 
 //==============================================================
@@ -176,6 +183,25 @@ void CModel::Uninit(void)
 //==============================================================
 void CModel::Update(void)
 {
+	//if (m_bAction == true)
+	//{//モデルに何かするとき
+
+	//	switch (m_type)
+	//	{
+	//	case TYPE_ALPHA_BLOCK:		//透明ブロック
+
+	//		//透明ブロックの処理
+	//		//CModel::HitAlphaBrock();
+
+	//		break;
+
+	//	case TYPE_DOWN_9BLOCK:		//落下9ブロック
+
+
+	//		break;
+	//	}
+	//}
+
 	//オブジェクトXの更新処理
 	CObjectX::Update();
 }
@@ -205,5 +231,15 @@ void CModel::SetType(TYPE type)
 //==============================================================
 void CModel::Hit(void)
 {
+	CPlayer *pPlayer = CGame::GetPlayer();
 
+	switch (m_type)
+	{
+	case TYPE_ALPHA_BLOCK:		//透明ブロック
+
+		//プレイヤー自動ダッシュさせる
+		pPlayer->SetDashAuto(true);
+
+		break;
+	}
 }

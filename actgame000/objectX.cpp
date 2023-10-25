@@ -260,8 +260,8 @@ bool CObjectX::Collision(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVECTOR3 *p
 			//種類を取得
 			CObject::TYPE type = pObj->GetType();
 
-			if (type == pObj->TYPE_MODEL || type == TYPE_ENEMY || type == TYPE_ITEM || type == TYPE_PLAYER
-				|| type == TYPE_NEEDLE/* || type == TYPE_ALPHA_BLOCK*/ )
+			if (type == TYPE_MODEL || type == TYPE_ENEMY || type == TYPE_ITEM || type == TYPE_PLAYER
+				|| type == TYPE_NEEDLE || type == TYPE_ALPHA_BLOCK)
 			{//種類がモデルの場合
 
 				//モデルの位置取得
@@ -318,12 +318,24 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 			}
 			else
 			{
-				pPos->x = posModel.x + minModel.x + Min.z;		//ブロックの左に立たせる
-				pMove->x = 0.0f;		//移動量を０にする
+				CPlayer *pPlayer = CGame::GetPlayer();
+
+				if (type != TYPE_ITEM && pPlayer->GetIsDashAuto() == false)
+				{//アイテム以外のとき
+
+					pPos->x = posModel.x + minModel.x + Min.z;		//ブロックの左に立たせる
+					pMove->x = 0.0f;		//移動量を０にする
+				}
 			}
 
-			if (type == TYPE_ITEM)
-			{//アイテムに当たった時
+			CPlayer *pPlayer = CGame::GetPlayer();
+
+			if (type != TYPE_ALPHA_BLOCK && pPlayer->GetIsDashAuto() == true)
+			{
+				pPlayer->SetDashAuto(false);		//透明ブロックに当たってない状態にする
+			}
+			else if (type == TYPE_ITEM || type == TYPE_ALPHA_BLOCK)
+			{//アイテム || 透明ブロックに当たった時
 
 				//アイテムのヒット処理
 				pObj->Hit();
@@ -355,14 +367,25 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 			}
 			else
 			{
+				CPlayer *pPlayer = CGame::GetPlayer();
 
-				pPos->x = posModel.x + maxModel.x - Min.z;		//ブロックの右に立たせる
-				pMove->x = 0.0f;		//移動量を０にする
+				if (type != TYPE_ITEM && pPlayer->GetIsDashAuto() == false)
+				{//アイテム以外のとき
+
+					pPos->x = posModel.x + maxModel.x - Min.z;		//ブロックの右に立たせる
+					pMove->x = 0.0f;		//移動量を０にする
+				}
 
 			}
 
-			if (type == TYPE_ITEM)
-			{//アイテムに当たった時
+			CPlayer *pPlayer = CGame::GetPlayer();
+
+			if (type != TYPE_ALPHA_BLOCK && pPlayer->GetIsDashAuto() == true)
+			{
+				pPlayer->SetDashAuto(false);		//透明ブロックに当たってない状態にする
+			}
+			else if (type == TYPE_ITEM || type == TYPE_ALPHA_BLOCK)
+			{//アイテム || 透明ブロックに当たった時
 
 				//アイテムのヒット処理
 				pObj->Hit();
@@ -393,12 +416,24 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 			}
 			else
 			{
-				pPos->y = posModel.y + minModel.y - Max.y;		//ブロックの底下に立たせる
-				pMove->y = 0.0f;		//移動量を０にする
+				CPlayer *pPlayer = CGame::GetPlayer();
+
+				if (type != TYPE_ITEM && pPlayer->GetIsDashAuto() == false)
+				{//アイテム以外のとき
+
+					pPos->y = posModel.y + minModel.y - Max.y;		//ブロックの底下に立たせる
+					pMove->y = 0.0f;		//移動量を０にする
+				}
 			}
 
-			if (type == TYPE_ITEM)
-			{//アイテムに当たった時
+			CPlayer *pPlayer = CGame::GetPlayer();
+
+			if (type != TYPE_ALPHA_BLOCK && pPlayer->GetIsDashAuto() == true)
+			{
+				pPlayer->SetDashAuto(false);		//透明ブロックに当たってない状態にする
+			}
+			else if (type == TYPE_ITEM || type == TYPE_ALPHA_BLOCK)
+			{//アイテム || 透明ブロックに当たった時
 
 				//アイテムのヒット処理
 				pObj->Hit();
@@ -429,14 +464,26 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 			}
 			else
 			{
-				pPos->y = posModel.y + maxModel.y;		//ブロックの上に立たせる
-				pMove->y = 0.0f;		//移動量を０にする
+				CPlayer *pPlayer = CGame::GetPlayer();
 
-				bLand = true;		//着地した状態にする
+				if (type != TYPE_ITEM && pPlayer->GetIsDashAuto() == false)
+				{//アイテム以外のとき
+
+					pPos->y = posModel.y + maxModel.y;		//ブロックの上に立たせる
+					pMove->y = 0.0f;		//移動量を０にする
+
+					bLand = true;		//着地した状態にする
+				}
 			}
 
-			if (type == TYPE_ITEM)
-			{//アイテムに当たった時
+			CPlayer *pPlayer = CGame::GetPlayer();
+
+			if (type != TYPE_ALPHA_BLOCK && pPlayer->GetIsDashAuto() == true)
+			{
+				pPlayer->SetDashAuto(false);		//透明ブロックに当たってない状態にする
+			}
+			else if (type == TYPE_ITEM || type == TYPE_ALPHA_BLOCK)
+			{//アイテム || 透明ブロックに当たった時
 
 				//アイテムのヒット処理
 				pObj->Hit();

@@ -85,6 +85,8 @@ private:
 		bool bJump;			//ジャンプしたかの判定
 		bool bLand;			//着地したか
 		bool bDash;			//ダッシュしたか
+		bool bDashAuto;		//自動ダッシュしてるか
+
 	};
 
 	void UpdateFront(void);			//手前側の更新処理
@@ -120,6 +122,7 @@ private:
 	bool m_bJump;			//ジャンプしたかの判定
 	bool m_bLand;			//着地したか
 	bool m_bDash;			//ダッシュしたか
+	bool m_bDashAuto;		//自動ダッシュしてるか
 
 	float m_fRotDest;		//目標
 	float m_fRotDiff;		//差分

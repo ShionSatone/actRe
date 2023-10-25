@@ -75,6 +75,7 @@ CPlayer::CPlayer()
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//前回の位置
+	m_moveSave = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//移動量保存用
 
 	m_posSavePoint[POINT_DEFAULT] = SAVE_POS_DEFAULT;		//初期値のセーブポイント
 	m_posSavePoint[POINT_DOWN_FLOOR] = SAVE_POS_DOWN_FLOOR;	//1番目のセーブポイント
@@ -102,6 +103,8 @@ CPlayer::CPlayer()
 	m_bMove = false;		//歩いてるか
 	m_bLand = true;			//着地した
 	m_bDash = false;		//ダッシュしたか
+	m_bDashAuto = false;	//自動ダッシュするか
+	m_bCollisionAlpha = false;		//透明ブロックに当たったか
 
 	m_fRotDest = 0.0f;		//目標
 	m_fRotDiff = 0.0f;		//差分
@@ -126,6 +129,7 @@ CPlayer::CPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	m_pos = pos;									//位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//前回の位置
+	m_moveSave = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//移動量保存用
 
 	m_posSavePoint[POINT_DEFAULT] = SAVE_POS_DEFAULT;		//初期値のセーブポイント
 	m_posSavePoint[POINT_DOWN_FLOOR] = SAVE_POS_DOWN_FLOOR;	//1番目のセーブポイント
@@ -153,6 +157,8 @@ CPlayer::CPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_bMove = false;		//歩いてるか
 	m_bLand = true;			//着地した
 	m_bDash = false;		//ダッシュしたか
+	m_bDashAuto = false;	//自動ダッシュするか
+	m_bCollisionAlpha = false;		//透明ブロックに当たったか
 
 	m_fRotDest = 0.0f;	//目標
 	m_fRotDiff = 0.0f;	//差分
@@ -326,80 +332,41 @@ void CPlayer::Update(void)
 void CPlayer::UpdateFront(void)
 {
 	//CLife *pLife = CGame::GetLife();
-	CSound *pSound = CManager::GetInstance()->GetSound();
-	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 
-	//プレイヤーの操作
-	CPlayer::ControlFrontKeyboard();
-	//CPlayer::ControlHumanPad();
+	if (m_bDashAuto == false)
+	{//自動ダッシュしてないとき
 
-	//足音鳴らす
-	if (m_bMove == true && m_bJump == false)
-	{//歩いてるとき && ジャンプしてない
-
-		if ((m_nCntMove % STEP_CNT) == 0)
-		{//一定時間たったら
-
-			//BGM再生
-			pSound->Play(pSound->SOUND_LABEL_SE_STEP);
-		}
-	}
-	else
-	{
-		m_nCntMove = STEP_CNT;
+		//プレイヤーの操作
+		CPlayer::ControlFrontKeyboard();
+		//CPlayer::ControlHumanPad();
 	}
 
-	m_nCntMove++;		//足音鳴らすカウンター加算
+	//足音鳴らす処理
+	CPlayer::SEStep();
 
 	//位置更新
-	m_pos += m_move;
+	if (m_bDashAuto == true)
+	{//自動ダッシュしてる間
+
+		m_pos += m_moveSave;		//自動ダッシュの移動量加算
+	}
+	else if (m_bDashAuto == false)
+	{//自動ダッシュしてない間
+
+		m_pos += m_move;			//普通の移動量加算
+	}
 
 	//状態更新
 	CPlayer::UpdateState();
 
-	//当たり判定
-	if (CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max) == true)
-	{//着地したら
+	//当たった時の行動処理
+	CPlayer::CollisionAction();
 
-		m_nDashCounter = 0;		//ダッシュ数リセット
-
-		if (m_bLand == false)
-		{
-			//パーティクルの生成
-			//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y, m_pos.z), D3DXCOLOR(0.8f, 0.7f, 0.6f, 0.8f), PARTICLETYPE_MOVE, 20, 10.0f);
-		}
-
-		m_bJump = false;	//ジャンプしてない状態にする
-		m_bLand = true;		//着地した状態にする
-
-		//if ((m_pMotion->GetType() != m_pMotion->MOTIONTYPE_MOVE && m_bMove == true && m_bJump == false && m_bLand == true))
-		//{//地面についたら(そのあと移動)
-
-		//	//移動状態にする
-		//	m_pMotion->Set(m_pMotion->MOTIONTYPE_MOVE);
-
-
-		//}
-		//else if ((m_pMotion->GetType() == m_pMotion->MOTIONTYPE_JUMP && m_bMove == false && m_bJump == false && m_bLand == true))
-		//{//地面についたら(完全に止まる)
-
-		//	//着地状態にする
-		//	m_pMotion->Set(m_pMotion->MOTIONTYPE_LAND);
-		//}
-
-		//パーティクル生成
-		//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), m_particleType, m_nParticleLife, 50.0f);
+	if (m_bDashAuto == false)
+	{
+		//移動量を更新
+		m_move.x += (0.0f - m_move.x) * 0.1f;
 	}
-	else if (CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max) == false &&
-		pInputKeyboard->GetPress(DIK_SPACE) == false)
-	{//地面についてない && ジャンプボタン押してない
-
-		m_bJump = true;		//ジャンプしてる状態にする
-		m_bLand = false;	//着地してない状態にする
-	}
-
-	//移動量を更新
-	m_move.x += (0.0f - m_move.x) * 0.1f;
 
 	//向きの補正
 	CPlayer::RotCorrection();
@@ -504,6 +471,55 @@ void CPlayer::UpdateState(void)
 }
 
 //==============================================================
+//当たった時の行動処理
+//==============================================================
+void CPlayer::CollisionAction(void)
+{
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+
+	//当たり判定
+	if (CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max) == true)
+	{//着地したら
+
+		m_nDashCounter = 0;		//ダッシュ数リセット
+
+		if (m_bLand == false)
+		{
+			//パーティクルの生成
+			//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y, m_pos.z), D3DXCOLOR(0.8f, 0.7f, 0.6f, 0.8f), PARTICLETYPE_MOVE, 20, 10.0f);
+		}
+
+		m_bJump = false;	//ジャンプしてない状態にする
+		m_bLand = true;		//着地した状態にする
+
+		//if ((m_pMotion->GetType() != m_pMotion->MOTIONTYPE_MOVE && m_bMove == true && m_bJump == false && m_bLand == true))
+		//{//地面についたら(そのあと移動)
+
+		//	//移動状態にする
+		//	m_pMotion->Set(m_pMotion->MOTIONTYPE_MOVE);
+
+
+		//}
+		//else if ((m_pMotion->GetType() == m_pMotion->MOTIONTYPE_JUMP && m_bMove == false && m_bJump == false && m_bLand == true))
+		//{//地面についたら(完全に止まる)
+
+		//	//着地状態にする
+		//	m_pMotion->Set(m_pMotion->MOTIONTYPE_LAND);
+		//}
+
+		//パーティクル生成
+		//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), m_particleType, m_nParticleLife, 50.0f);
+	}
+	else if (CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max) == false &&
+		pInputKeyboard->GetPress(DIK_SPACE) == false)
+	{//地面についてない && ジャンプボタン押してない
+
+		m_bJump = true;		//ジャンプしてる状態にする
+		m_bLand = false;	//着地してない状態にする
+	}
+}
+
+//==============================================================
 //セーブポイント処理
 //==============================================================
 void CPlayer::SavePoint(void)
@@ -579,6 +595,32 @@ void CPlayer::RotCorrection(void)
 }
 
 //==============================================================
+//足音鳴らす処理
+//==============================================================
+void CPlayer::SEStep(void)
+{
+	CSound *pSound = CManager::GetInstance()->GetSound();
+
+	//足音鳴らす
+	if (m_bMove == true && m_bJump == false)
+	{//歩いてるとき && ジャンプしてない
+
+		if ((m_nCntMove % STEP_CNT) == 0)
+		{//一定時間たったら
+
+			//BGM再生
+			pSound->Play(pSound->SOUND_LABEL_SE_STEP);
+		}
+	}
+	else
+	{
+		m_nCntMove = STEP_CNT;
+	}
+
+	m_nCntMove++;		//足音鳴らすカウンター加算
+}
+
+//==============================================================
 //プレイヤーのキーボード操作処理(手前側)
 //==============================================================
 void CPlayer::ControlFrontKeyboard(void)
@@ -588,13 +630,13 @@ void CPlayer::ControlFrontKeyboard(void)
 
 	//移動処理
 	CPlayer::ControlFrontKeyboardMove();
-
+	
 	//ジャンプ処理
 	CPlayer::ControlFrontKeyboardJump();
 
 	//ダッシュ処理
 	if (m_nDashCounter < MAX_DASH)
-	{//最大ジャンプ数未満の場合
+	{//最大ジャンプ数未満 && オートダッシュしてる間
 
 		CPlayer::ControlFrontKeyboardDash();
 	}
@@ -709,11 +751,22 @@ void CPlayer::ControlFrontKeyboardDash(void)
 				m_bDash = true;			//ダッシュした状態にする
 				m_bJump = true;			//ジャンプした状態にする
 
-				m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
-				m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
+				if (m_bCollisionAlpha == true)
+				{//自動ダッシュ
 
-				m_nDashCounter++;		//ダッシュ回数加算
+					m_bDashAuto = true;		//自動ダッシュした状態にする
 
+					m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
+					m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
+				}
+				else if (m_bCollisionAlpha == false)
+				{
+					m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
+					m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
+
+					m_nDashCounter++;		//ダッシュ回数加算
+
+				}
 			}
 		}
 		else if (pInputKeyboard->GetPress(DIK_S) == true)
@@ -725,11 +778,22 @@ void CPlayer::ControlFrontKeyboardDash(void)
 				m_bDash = true;			//ダッシュした状態にする
 				m_bJump = true;			//ジャンプした状態にする
 
-				m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
-				m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
+				if (m_bCollisionAlpha == true)
+				{//自動ダッシュ
 
-				m_nDashCounter++;		//ダッシュ回数加算
+					m_bDashAuto = true;		//自動ダッシュした状態にする
 
+					m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
+					m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
+				}
+				else if(m_bCollisionAlpha == false)
+				{
+					m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
+					m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
+
+					m_nDashCounter++;		//ダッシュ回数加算
+
+				}
 			}
 		}
 		else if (pInputKeyboard->GetTrigger(DIK_J) == true)
@@ -739,12 +803,23 @@ void CPlayer::ControlFrontKeyboardDash(void)
 			m_bDash = true;			//ダッシュした状態にする
 			m_bJump = true;			//ジャンプした状態にする
 
-			m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
+			if (m_bCollisionAlpha == true)
+			{//自動ダッシュ
 
-			m_nDashCounter++;		//ダッシュ回数加算
+				m_bDashAuto = true;		//自動ダッシュした状態にする
 
+				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+			}
+			else if (m_bCollisionAlpha == false)
+			{
+				m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
+
+				m_nDashCounter++;		//ダッシュ回数加算
+
+			}
 		}
 	}
 	else if (pInputKeyboard->GetPress(DIK_A) == true)
@@ -758,11 +833,21 @@ void CPlayer::ControlFrontKeyboardDash(void)
 				m_bDash = true;			//ダッシュした状態にする
 				m_bJump = true;			//ジャンプした状態にする
 
-				m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
-				m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
+				if (m_bCollisionAlpha == true)
+				{//自動ダッシュ
 
-				m_nDashCounter++;		//ダッシュ回数加算
+					m_bDashAuto = true;		//自動ダッシュした状態にする
 
+					m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
+					m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
+				}
+				else if (m_bCollisionAlpha == false)
+				{
+					m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
+					m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
+
+					m_nDashCounter++;		//ダッシュ回数加算
+				}
 			}
 		}
 		else if (pInputKeyboard->GetPress(DIK_S) == true)
@@ -774,11 +859,21 @@ void CPlayer::ControlFrontKeyboardDash(void)
 				m_bDash = true;			//ダッシュした状態にする
 				m_bJump = true;			//ジャンプした状態にする
 
-				m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
-				m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
+				if (m_bCollisionAlpha == true)
+				{//自動ダッシュ
 
-				m_nDashCounter++;		//ダッシュ回数加算
+					m_bDashAuto = true;		//自動ダッシュした状態にする
 
+					m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
+					m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
+				}
+				else if (m_bCollisionAlpha == false)
+				{
+					m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
+					m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
+
+					m_nDashCounter++;		//ダッシュ回数加算
+				}
 			}
 		}
 		else if (pInputKeyboard->GetTrigger(DIK_J) == true)
@@ -788,12 +883,22 @@ void CPlayer::ControlFrontKeyboardDash(void)
 			m_bDash = true;			//ダッシュした状態にする
 			m_bJump = true;			//ジャンプした状態にする
 
-			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
+			if (m_bCollisionAlpha == true)
+			{//自動ダッシュ
 
-			m_nDashCounter++;		//ダッシュ回数加算
+				m_bDashAuto = true;		//自動ダッシュした状態にする
 
+				m_moveSave.x = sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_moveSave.y = cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+			}
+			else if (m_bCollisionAlpha == false)
+			{
+				m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
+
+				m_nDashCounter++;		//ダッシュ回数加算
+			}
 		}
 	}
 	else if (pInputKeyboard->GetPress(DIK_W) == true)
@@ -805,11 +910,21 @@ void CPlayer::ControlFrontKeyboardDash(void)
 			m_bDash = true;			//ダッシュした状態にする
 			m_bJump = true;			//ジャンプした状態にする
 
-			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_DASH_MOVE;
-			m_move.y += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_DASH_MOVE;
+			if (m_bCollisionAlpha == true)
+			{//自動ダッシュ
 
-			m_nDashCounter++;		//ダッシュ回数加算
+				m_bDashAuto = true;		//自動ダッシュした状態にする
 
+				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -CURVE_UP) * FRONT_DASH_MOVE;
+				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -CURVE_UP) * FRONT_DASH_MOVE;
+			}
+			else if (m_bCollisionAlpha == false)
+			{
+				m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_DASH_MOVE;
+				m_move.y += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_DASH_MOVE;
+
+				m_nDashCounter++;		//ダッシュ回数加算
+			}
 		}
 	}
 	else if (pInputKeyboard->GetPress(DIK_S) == true)
@@ -821,11 +936,21 @@ void CPlayer::ControlFrontKeyboardDash(void)
 			m_bDash = true;			//ダッシュした状態にする
 			m_bJump = true;			//ジャンプした状態にする
 
-			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_DASH_MOVE;
-			m_move.y += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_DASH_MOVE;
+			if (m_bCollisionAlpha == true)
+			{//自動ダッシュ
 
-			m_nDashCounter++;		//ダッシュ回数加算
+				m_bDashAuto = true;		//自動ダッシュした状態にする
 
+				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -CURVE_DOWN) * FRONT_DASH_MOVE;
+				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -CURVE_DOWN) * FRONT_DASH_MOVE;
+			}
+			else if (m_bCollisionAlpha == false)
+			{
+				m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_DASH_MOVE;
+				m_move.y += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_DASH_MOVE;
+
+				m_nDashCounter++;		//ダッシュ回数加算
+			}
 		}
 	}
 	else if (pInputKeyboard->GetTrigger(DIK_J) == true)
@@ -837,24 +962,44 @@ void CPlayer::ControlFrontKeyboardDash(void)
 			m_move.x = 0.0f;		//移動量リセット
 			m_move.z = 0.0f;		//移動量リセット
 
-			m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
+			if (m_bCollisionAlpha == true)
+			{//自動ダッシュ
 
-			m_nDashCounter++;		//ダッシュ回数加算
+				m_bDashAuto = true;		//自動ダッシュした状態にする
 
+				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -CURVE_RL) * FRONT_DASH_MOVE;
+				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -CURVE_RL) * FRONT_DASH_MOVE;
+			}
+			else if (m_bCollisionAlpha == false)
+			{
+				m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
+
+				m_nDashCounter++;		//ダッシュ回数加算
+			}
 		}
 		else if (m_rot.y <= 0)
 		{
 			m_move.x = 0.0f;		//移動量リセット
 			m_move.z = 0.0f;		//移動量リセット
 
-			m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
-			m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
+			if (m_bCollisionAlpha == true)
+			{//自動ダッシュ
 
-			m_nDashCounter++;		//ダッシュ回数加算
+				m_bDashAuto = true;		//自動ダッシュした状態にする
 
+				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+			}
+			else if (m_bCollisionAlpha == false)
+			{
+				m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
+
+				m_nDashCounter++;		//ダッシュ回数加算
+			}
 		}
 
 		m_bDash = true;		//ダッシュした状態にする
@@ -921,6 +1066,23 @@ void CPlayer::ControlHumanPad(void)
 	if (pInputJoyPad->GetPressRX(0).y == 0.0f && pInputJoyPad->GetPressRX(0).x == 0.0f)
 	{
 		m_bPad = false;		//スティックを倒してない状態にする
+	}
+}
+
+//==============================================================
+//プレイヤーの自動ダッシュ処理
+//==============================================================
+void CPlayer::SetDashAuto(bool bDashAuto)
+{ 
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
+
+	m_bCollisionAlpha = bDashAuto;
+
+	if (m_bCollisionAlpha == false)
+	{//透明ブロックに当たってないとき
+
+		m_bDashAuto = false;		//自動ダッシュしない状態にする
 	}
 }
 

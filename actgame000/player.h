@@ -40,6 +40,7 @@ public:
 	void SetState(STATE state) { m_state = state; }			//状態設定
 
 	void SetDash(int nCntDash) { m_nDashCounter = nCntDash; }	//ダッシュ回数設定
+	void SetDashAuto(bool bDashAuto);		//自動ダッシュの設定
 
 	//取得処理
 	D3DXVECTOR3 GetPosition(void) { return m_pos; }			//位置取得
@@ -53,6 +54,7 @@ public:
 	bool GetIsMove(void) { return m_bMove; }				//移動の取得
 	bool GetIsDash(void) { return m_bDash; }				//ダッシュの取得
 	bool GetIsLand(void) { return m_bLand; }				//着地の取得
+	bool GetIsDashAuto(void) { return m_bDashAuto; }		//自動ダッシュの判定取得
 
 	D3DXVECTOR3 GetSizeMin(void) { return m_min; }			//大きさの最大値取得
 	D3DXVECTOR3 GetSizeMax(void) { return m_max; }			//大きさの最小値取得
@@ -106,6 +108,8 @@ private:
 	void SavePoint(void);					//セーブポイント処理
 	void LoadFile(void);					//モデルファイル読み込み
 	void RotCorrection(void);				//向きの補正処理
+	void SEStep(void);				//足音鳴らす処理
+	void CollisionAction(void);		//当たった時の処理
 
 	static char *m_apFileName[PARTS_MAX];	//ファイル名
 
@@ -113,6 +117,7 @@ private:
 	D3DXVECTOR3 m_posOld;	//前回の位置
 	D3DXVECTOR3 m_posSavePoint[NUM_SAVE_POINT];	//全ての復活用の位置保存用
 	D3DXVECTOR3 m_move;		//移動量
+	D3DXVECTOR3 m_moveSave;	//移動量保存用
 	D3DXVECTOR3 m_rot;		//向き
 	D3DXVECTOR3 m_max;		//人間の最大値
 	D3DXVECTOR3 m_min;		//人間の最小値
@@ -127,6 +132,8 @@ private:
 	bool m_bJump;			//ジャンプしたかの判定
 	bool m_bLand;			//着地したか
 	bool m_bDash;			//ダッシュしたか
+	bool m_bDashAuto;		//自動ダッシュするか
+	bool m_bCollisionAlpha;		//透明ブロックに当たったか
 
 	float m_fRotDest;		//目標
 	float m_fRotDiff;		//差分

@@ -91,6 +91,7 @@ CEnemy::CEnemy()
 		m_aSaveAction[nCntSave].bMove = false;			//移動
 		m_aSaveAction[nCntSave].bDash = false;			//ダッシュ
 		m_aSaveAction[nCntSave].bJump = true;			//ジャンプ
+		m_aSaveAction[nCntSave].bDashAuto = false;		//自動ダッシュ
 		m_aSaveAction[nCntSave].bLand = false;			//着地
 	}
 
@@ -105,6 +106,7 @@ CEnemy::CEnemy()
 	m_bMove = false;		//歩いてるかの判定
 	m_bLand = true;			//着地した
 	m_bDash = false;		//ダッシュしたか
+	m_bDashAuto = false;	//自動ダッシュしてるか
 
 	m_fRotDest = 0.0f;		//目標
 	m_fRotDiff = 0.0f;		//差分
@@ -145,7 +147,8 @@ CEnemy::CEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 		//判定
 		m_aSaveAction[nCntSave].bMove = false;			//移動
 		m_aSaveAction[nCntSave].bDash = false;			//ダッシュ
-		m_aSaveAction[nCntSave].bJump = true;				//ジャンプ
+		m_aSaveAction[nCntSave].bDashAuto = false;		//自動ダッシュ
+		m_aSaveAction[nCntSave].bJump = true;			//ジャンプ
 		m_aSaveAction[nCntSave].bLand = false;			//着地
 	}
 
@@ -157,6 +160,7 @@ CEnemy::CEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_bMove = false;		//歩いてるかの判定
 	m_bLand = true;			//着地した
 	m_bDash = false;		//ダッシュしたか
+	m_bDashAuto = false;	//自動ダッシュしてるか
 
 	m_fRotDest = 0.0f;	//目標
 	m_fRotDiff = 0.0f;	//差分
@@ -310,6 +314,7 @@ void CEnemy::Update(void)
 
 		m_bMove = m_aSaveAction[m_nFrameCounter].bMove;		//移動判定
 		m_bDash = m_aSaveAction[m_nFrameCounter].bDash;		//ダッシュ判定
+		m_bDashAuto = m_aSaveAction[m_nFrameCounter].bDashAuto;		//自動ダッシュ判定
 		m_bJump = m_aSaveAction[m_nFrameCounter].bJump;		//ジャンプ判定
 		m_bLand = m_aSaveAction[m_nFrameCounter].bLand;		//着地判定
 	}
@@ -319,6 +324,7 @@ void CEnemy::Update(void)
 	m_aSaveAction[m_nFrameCounter].rot = pPlayer->GetRotation();		//向き
 	m_aSaveAction[m_nFrameCounter].bMove = pPlayer->GetIsMove();		//移動判定
 	m_aSaveAction[m_nFrameCounter].bDash = pPlayer->GetIsDash();		//ダッシュ判定
+	m_aSaveAction[m_nFrameCounter].bDashAuto = pPlayer->GetIsDashAuto();	//自動ダッシュ判定
 	m_aSaveAction[m_nFrameCounter].bJump = pPlayer->GetIsJump();		//ジャンプ判定
 	m_aSaveAction[m_nFrameCounter].bLand = pPlayer->GetIsLand();		//着地判定
 
@@ -359,46 +365,51 @@ void CEnemy::UpdateFront(void)
 	//CLife *pLife = CGame::GetLife();
 	CSound *pSound = CManager::GetInstance()->GetSound();
 	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CPlayer *pPlayer = CGame::GetPlayer();		//プレイヤーの情報取得
 
-	//当たり判定
-	if (CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max) == true)
-	{//着地したら
+	if (m_bDashAuto == false)
+	{//自動ダッシュしてないとき
 
-		//m_nDashCounter = 0;		//ダッシュ数リセット
+		//当たり判定
+		if (CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max) == true)
+		{//着地したら
 
-		//if (m_bLand == false)
-		//{
-		//	//パーティクルの生成
-		//	//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y, m_pos.z), D3DXCOLOR(0.8f, 0.7f, 0.6f, 0.8f), PARTICLETYPE_MOVE, 20, 10.0f);
-		//}
+			//m_nDashCounter = 0;		//ダッシュ数リセット
 
-		//m_bJump = false;	//ジャンプしてない状態にする
-		//m_bLand = true;		//着地した状態にする
+			//if (m_bLand == false)
+			//{
+			//	//パーティクルの生成
+			//	//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y, m_pos.z), D3DXCOLOR(0.8f, 0.7f, 0.6f, 0.8f), PARTICLETYPE_MOVE, 20, 10.0f);
+			//}
 
-		//if ((m_pMotion->GetType() != m_pMotion->MOTIONTYPE_MOVE && m_bMove == true && m_bJump == false && m_bLand == true))
-		//{//地面についたら(そのあと移動)
+			//m_bJump = false;	//ジャンプしてない状態にする
+			//m_bLand = true;		//着地した状態にする
 
-		//	//移動状態にする
-		//	m_pMotion->Set(m_pMotion->MOTIONTYPE_MOVE);
+			//if ((m_pMotion->GetType() != m_pMotion->MOTIONTYPE_MOVE && m_bMove == true && m_bJump == false && m_bLand == true))
+			//{//地面についたら(そのあと移動)
+
+			//	//移動状態にする
+			//	m_pMotion->Set(m_pMotion->MOTIONTYPE_MOVE);
 
 
-		//}
-		//else if ((m_pMotion->GetType() == m_pMotion->MOTIONTYPE_JUMP && m_bMove == false && m_bJump == false && m_bLand == true))
-		//{//地面についたら(完全に止まる)
+			//}
+			//else if ((m_pMotion->GetType() == m_pMotion->MOTIONTYPE_JUMP && m_bMove == false && m_bJump == false && m_bLand == true))
+			//{//地面についたら(完全に止まる)
 
-		//	//着地状態にする
-		//	m_pMotion->Set(m_pMotion->MOTIONTYPE_LAND);
-		//}
+			//	//着地状態にする
+			//	m_pMotion->Set(m_pMotion->MOTIONTYPE_LAND);
+			//}
 
-		//パーティクル生成
-		//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), m_particleType, m_nParticleLife, 50.0f);
-	}
-	else if (CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max) == false &&
-		pInputKeyboard->GetPress(DIK_SPACE) == false)
-	{//地面についてない && ジャンプボタン押してない
+			//パーティクル生成
+			//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), m_particleType, m_nParticleLife, 50.0f);
+		}
+		else if (CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max) == false &&
+			pInputKeyboard->GetPress(DIK_SPACE) == false)
+		{//地面についてない && ジャンプボタン押してない
 
-		//m_bJump = true;		//ジャンプしてる状態にする
-		//m_bLand = false;	//着地してない状態にする
+			//m_bJump = true;		//ジャンプしてる状態にする
+			//m_bLand = false;	//着地してない状態にする
+		}
 	}
 
 	//状態更新

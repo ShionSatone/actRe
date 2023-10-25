@@ -12,6 +12,9 @@
 //マクロ定義
 #define MAX_MODEL			(640)		//モデルの数
 
+//前方宣言
+class CPlayer;		//プレイヤー
+
 //モデルクラスの定義
 class CModel : public CObjectX
 {
@@ -31,13 +34,18 @@ public:
 	void SetType(TYPE type);		//オブジェクトの種類設定
 	void Hit(void);					//ヒット処理
 
+	void HitAlphaBrock(CPlayer *pPlayer);		//透明ブロックの処理
+
 private:
+
 	static LPD3DXMESH m_pMesh;						//メッシュ（頂点情報）へのポインタ
 	static LPD3DXBUFFER m_pBuffMat;					//マテリアルへのポインタ
 	static DWORD m_dwNumMat;						//マテリアルの数
 	static const char *m_pFilename;					//ファイルの名前
 
 	int m_nIdxModel;		//モデルの番号
+
+	bool m_bActionAlpha;	//透明ブロックに何かしらするのか
 
 	D3DXVECTOR3 m_pos;		//位置
 	D3DXVECTOR3 m_rot;		//向き
