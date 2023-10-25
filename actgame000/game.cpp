@@ -14,7 +14,7 @@
 #include "wall.h"
 #include "item.h"
 //#include "ranking.h"
-//#include "pause.h"
+#include "pause.h"
 #include "fade.h"
 #include "score.h"
 #include "sound.h"
@@ -24,7 +24,7 @@ CEdit *CGame::m_pEdit = NULL;				//エディットの情報
 CPlayer *CGame::m_pPlayer = NULL;			//プレイヤーの情報
 bool CGame::m_bReset = true;				//リセットしたかどうか
 bool CGame::m_bPause = false;				//ポーズ画面か
-//CPause *CGame::m_pPause = NULL;			//ポーズ画面の情報
+CPause *CGame::m_pPause = NULL;			//ポーズ画面の情報
 CScore *CGame::m_pScore = NULL;				//スコアの情報
 bool CGame::m_bEnemySpawn = false;			//スタートしたか
 CGame::GAMEMODE CGame::m_gameMode = GAMEMODE_START;	//ゲームモード
@@ -91,7 +91,7 @@ HRESULT CGame::Init(void)
 	m_pScore = CScore::Create();
 
 	//ポーズ画面の生成
-	//m_pPause = CPause::Create();
+	m_pPause = CPause::Create();
 
 	//BGM再生
 	//pSound->Play(pSound->SOUND_LABEL_BGM002);
@@ -126,11 +126,11 @@ void CGame::Uninit(void)
 	}
 
 	//ポーズの破棄
-	/*if (m_pPause != NULL)
+	if (m_pPause != NULL)
 	{
 		m_pPause->Uninit();
 		m_pPause = NULL;
-	}*/
+	}
 
 	//オブジェクト（自分自身の破棄）
 	CObject::Release();
@@ -172,13 +172,7 @@ void CGame::Update(void)
 
 			//ゲーム画面
 			pFade->SetFade(CScene::MODE_RESULT);
-
-			//bReset = true;
 		}
-		///*else
-		//{
-		//bReset = false;
-		//}*/
 	}
 }
 

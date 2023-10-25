@@ -153,6 +153,9 @@
     <ClCompile Include="item.cpp">
       <Filter>ソース ファイル\objectX</Filter>
     </ClCompile>
+    <ClCompile Include="pause.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="manager.h">
@@ -256,6 +259,9 @@
     </ClInclude>
     <ClInclude Include="item.h">
       <Filter>ヘッダー ファイル\objectX</Filter>
+    </ClInclude>
+    <ClInclude Include="pause.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

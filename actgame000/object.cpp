@@ -135,7 +135,7 @@ void CObject::UpdateAll(void)
 {
 	CObject *pObject = m_pTop;		//先頭のオブジェクトを代入
 	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();		//デバッグ表示の情報取得
-	//CGame *pGame = CGame::GetGame();
+	CGame *pGame = CGame::GetGame();
 
 	while (pObject != NULL)
 	{//オブジェクトが使用されてる間
@@ -145,24 +145,24 @@ void CObject::UpdateAll(void)
 		if (pObject->m_bDeath == false)
 		{//死亡フラグが立ってないとき
 
-			//if (pGame->GetPauseDisp() == true)
-			//{//ポーズ画面のとき
+			if (pGame->GetPauseDisp() == true)
+			{//ポーズ画面のとき
 
-			//	if (pObject->GetType() == TYPE_PAUSE || pObject->GetType() == TYPE_SCENE || pObject->GetType() == TYPE_FADE)
-			//	{
-			//		//更新処理
-			//		pObject->Update();
-			//	}
-			//}
-			//else if (pGame->GetPauseDisp() == false)
-			//{//ポーズ画面じゃないとき
-
-				//if (pObject->GetType() != TYPE_PAUSE)
+				if (pObject->GetType() == TYPE_PAUSE || pObject->GetType() == TYPE_SCENE || pObject->GetType() == TYPE_FADE)
 				{
 					//更新処理
 					pObject->Update();
 				}
-			//}
+			}
+			else if (pGame->GetPauseDisp() == false)
+			{//ポーズ画面じゃないとき
+
+				if (pObject->GetType() != TYPE_PAUSE)
+				{
+					//更新処理
+					pObject->Update();
+				}
+			}
 		}
 
 		pObject = pObjectNext;		//次のオブジェクトを代入
@@ -216,7 +216,7 @@ void CObject::DrawAll(void)
 {
 	CCamera *pCamera = CManager::GetInstance()->GetCamera();
 	CObject *pObject = m_pTop;		//先頭のオブジェクトを代入
-	//CGame *pGame = CGame::GetGame();
+	CGame *pGame = CGame::GetGame();
 
 	//カメラの設定
 	pCamera->SetCamera();
@@ -226,21 +226,21 @@ void CObject::DrawAll(void)
 
 		CObject *pObjectNext = pObject->m_pNext;		//次のオブジェクトを保存
 
-		//if (pGame->GetPauseDisp() == true)
-		//{//ポーズ画面のとき
+		if (pGame->GetPauseDisp() == true)
+		{//ポーズ画面のとき
 
-		//	//描画処理
-		//	pObject->Draw();
-		//}
-		//else if (pGame->GetPauseDisp() == false)
-		//{//ポーズ画面じゃないとき
+			//描画処理
+			pObject->Draw();
+		}
+		else if (pGame->GetPauseDisp() == false)
+		{//ポーズ画面じゃないとき
 
 			if (pObject->GetType() != TYPE_PAUSE)
 			{
 				//描画処理
 				pObject->Draw();
 			}
-		//}
+		}
 
 		pObject = pObjectNext;		//次のオブジェクトを代入
 	}
