@@ -10,7 +10,7 @@
 #include"objectX.h"
 
 //マクロ定義
-#define MAX_DEBUG_MODEL			(640)		//モデルの数
+#define MAX_DEBUG_MODEL			(960)		//モデルの数
 #define MAX_STR					(128)		//最大文字数
 
 //前方宣言

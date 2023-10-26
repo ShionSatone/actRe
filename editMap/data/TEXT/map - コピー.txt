@@ -59,11 +59,6 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	INDEX = 1						# モデル番号
-	POS = 900.0 0.0 -0.0
-END_MODELSET
-
-MODELSET
 	INDEX = 3						# モデル番号
 	POS = 1100.0 0.0 -0.0
 END_MODELSET
@@ -101,11 +96,6 @@ END_MODELSET
 MODELSET
 	INDEX = 3						# モデル番号
 	POS = 750.0 -50.0 -0.0
-END_MODELSET
-
-MODELSET
-	INDEX = 1						# モデル番号
-	POS = 900.0 -50.0 -0.0
 END_MODELSET
 
 MODELSET
@@ -2991,5 +2981,230 @@ END_MODELSET
 MODELSET
 	INDEX = 2						# モデル番号
 	POS = -50.0 -100.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -250.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -400.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -550.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -700.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -850.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -1000.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -1150.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -1300.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -1450.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -1600.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -1750.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -1900.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -2050.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -2200.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -2350.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -2500.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -2650.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -2800.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -2950.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -3100.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -3250.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -3400.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -3550.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -3700.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -3850.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -4000.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -4150.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -4300.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -4450.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -4600.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -4750.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -4900.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -5050.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -5200.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -5350.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -5500.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -5650.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -5800.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = -50.0 -5950.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 4						# モデル番号
+	POS = 50.0 -1950.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = 900.0 -50.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = 900.0 100.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 2						# モデル番号
+	POS = 1100.0 50.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 3						# モデル番号
+	POS = 950.0 200.0 0.0
+END_MODELSET
+
+MODELSET
+	INDEX = 1						# モデル番号
+	POS = 1100.0 200.0 0.0
 END_MODELSET
 

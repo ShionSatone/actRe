@@ -35,12 +35,16 @@
 #define STOP_MOVE			(0.8f)		//止まる判定の移動量
 #define FILE_HUMAN			"data\\TEXT\\motion_player.txt"		//プレイヤーモデルのテキスト
 
-#define SAVE_POS_DEFAULT	(D3DXVECTOR3(900.0f, 0.0f, 0.0f))			//初期値のセーブポイント
-#define SAVE_POS_DOWN_FLOOR	(D3DXVECTOR3(1200.0f, -950.0f, 0.0f))		//1番目のセーブポイント
-#define SAVE_POS_PIER		(D3DXVECTOR3(50.0f, -1800.0f, 0.0f))		//2番目のセーブポイント
-#define SAVE_POS_POINT_MAZE	(D3DXVECTOR3(1300.0f, -2800.0f, 0.0f))		//3番目のセーブポイント
-#define SAVE_POS_BIGINEND	(D3DXVECTOR3(100.0f, -3600.0f, 0.0f))		//4番目のセーブポイント
-#define SAVE_POS_FALLING	(D3DXVECTOR3(650.0f, -4300.0f, 0.0f))		//5番目のセーブポイント
+#define SAVE_POS_DEFAULT		(D3DXVECTOR3(-5400.0f, 1000.0f, 0.0f))		//チュートリアルの初期値のセーブポイント
+#define SAVE_POS_ARTBRIDGE		(D3DXVECTOR3(-2750.0f, 1300.0f, 0.0f))		//チュートリアルの1番目のセーブポイント
+#define SAVE_POS_ENEMYBRIDGE	(D3DXVECTOR3(-350.0f, 1000.0f, 0.0f))		//チュートリアルの2番目のセーブポイント
+
+#define SAVE_POS_START		(D3DXVECTOR3(1000.0f, -150.0f, 0.0f))		//ゲームの初期値のセーブポイント
+#define SAVE_POS_DOWN_FLOOR	(D3DXVECTOR3(1200.0f, -950.0f, 0.0f))		//ゲームの1番目のセーブポイント
+#define SAVE_POS_PIER		(D3DXVECTOR3(50.0f, -1800.0f, 0.0f))		//ゲームの2番目のセーブポイント
+#define SAVE_POS_POINT_MAZE	(D3DXVECTOR3(1300.0f, -2800.0f, 0.0f))		//ゲームの3番目のセーブポイント
+#define SAVE_POS_BIGINEND	(D3DXVECTOR3(100.0f, -3600.0f, 0.0f))		//ゲームの4番目のセーブポイント
+#define SAVE_POS_FALLING	(D3DXVECTOR3(650.0f, -4300.0f, 0.0f))		//ゲームの5番目のセーブポイント
 
 #define HIT_CNT				(60 * 2)	//攻撃当たるまでのカウント数
 #define DAMAGE_CNT			(9)			//ダメージカウント数
@@ -78,12 +82,16 @@ CPlayer::CPlayer()
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//前回の位置
 	m_moveSave = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//移動量保存用
 
-	m_posSavePoint[POINT_DEFAULT] = SAVE_POS_DEFAULT;		//初期値のセーブポイント
-	m_posSavePoint[POINT_DOWN_FLOOR] = SAVE_POS_DOWN_FLOOR;	//1番目のセーブポイント
-	m_posSavePoint[POINT_PIER] = SAVE_POS_PIER;				//2番目のセーブポイント
-	m_posSavePoint[POINT_MAZE] = SAVE_POS_POINT_MAZE;		//3番目のセーブポイント
-	m_posSavePoint[POINT_BIGINEND] = SAVE_POS_BIGINEND;		//4番目のセーブポイント
-	m_posSavePoint[POINT_FALLING] = SAVE_POS_FALLING;		//5番目のセーブポイント
+	m_posSavePoint[POINT_DEFAULT] = SAVE_POS_DEFAULT;			//チュートリアルの初期値のセーブポイント
+	m_posSavePoint[POINT_ARTBRIDGE] = SAVE_POS_ARTBRIDGE;		//チュートリアルの初期値のセーブポイント
+	m_posSavePoint[POINT_ENEMYBRIDGE] = SAVE_POS_ENEMYBRIDGE;	//チュートリアルの初期値のセーブポイント
+
+	m_posSavePoint[POINT_START] = SAVE_POS_START;			//ゲームの初期値のセーブポイント
+	m_posSavePoint[POINT_DOWN_FLOOR] = SAVE_POS_DOWN_FLOOR;	//ゲームの1番目のセーブポイント
+	m_posSavePoint[POINT_PIER] = SAVE_POS_PIER;				//ゲームの2番目のセーブポイント
+	m_posSavePoint[POINT_MAZE] = SAVE_POS_POINT_MAZE;		//ゲームの3番目のセーブポイント
+	m_posSavePoint[POINT_BIGINEND] = SAVE_POS_BIGINEND;		//ゲームの4番目のセーブポイント
+	m_posSavePoint[POINT_FALLING] = SAVE_POS_FALLING;		//ゲームの5番目のセーブポイント
 
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//移動量
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//向き
@@ -128,16 +136,20 @@ CPlayer::CPlayer()
 //==============================================================
 CPlayer::CPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
-	m_pos = SAVE_POS_DEFAULT;									//位置
+	m_pos = SAVE_POS_DEFAULT;						//位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//前回の位置
 	m_moveSave = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//移動量保存用
 
-	m_posSavePoint[POINT_DEFAULT] = SAVE_POS_DEFAULT;		//初期値のセーブポイント
-	m_posSavePoint[POINT_DOWN_FLOOR] = SAVE_POS_DOWN_FLOOR;	//1番目のセーブポイント
-	m_posSavePoint[POINT_PIER] = SAVE_POS_PIER;				//2番目のセーブポイント
-	m_posSavePoint[POINT_MAZE] = SAVE_POS_POINT_MAZE;		//3番目のセーブポイント
-	m_posSavePoint[POINT_BIGINEND] = SAVE_POS_BIGINEND;		//4番目のセーブポイント
-	m_posSavePoint[POINT_FALLING] = SAVE_POS_FALLING;		//5番目のセーブポイント
+	m_posSavePoint[POINT_DEFAULT] = SAVE_POS_DEFAULT;			//チュートリアルの初期値のセーブポイント
+	m_posSavePoint[POINT_ARTBRIDGE] = SAVE_POS_ARTBRIDGE;		//チュートリアルの初期値のセーブポイント
+	m_posSavePoint[POINT_ENEMYBRIDGE] = SAVE_POS_ENEMYBRIDGE;	//チュートリアルの初期値のセーブポイント
+
+	m_posSavePoint[POINT_START] = SAVE_POS_START;			//ゲームの初期値のセーブポイント
+	m_posSavePoint[POINT_DOWN_FLOOR] = SAVE_POS_DOWN_FLOOR;	//ゲームの1番目のセーブポイント
+	m_posSavePoint[POINT_PIER] = SAVE_POS_PIER;				//ゲームの2番目のセーブポイント
+	m_posSavePoint[POINT_MAZE] = SAVE_POS_POINT_MAZE;		//ゲームの3番目のセーブポイント
+	m_posSavePoint[POINT_BIGINEND] = SAVE_POS_BIGINEND;		//ゲームの4番目のセーブポイント
+	m_posSavePoint[POINT_FALLING] = SAVE_POS_FALLING;		//ゲームの5番目のセーブポイント
 
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//移動量
 	m_max = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//モデルの最大値
@@ -527,14 +539,37 @@ void CPlayer::CollisionAction(void)
 void CPlayer::SavePoint(void)
 {
 	if (m_nNumPosSave < POINT_FALLING)
-	{//最大セーブ数より少なかったら
+	{//最大チェックポイント数より少なかったら
 
-		if (m_posSavePoint[m_nNumPosSave + 1].y >= m_pos.y &&
-			m_posSavePoint[m_nNumPosSave + 1].x - 100.0f <= m_pos.x &&
-			m_posSavePoint[m_nNumPosSave + 1].x + 100.0f >= m_pos.x )
-		{//次のチェックポイントを通り過ぎたら
+		int nNumSave = m_nNumPosSave + 1;		//次のチェックポイント
 
-			m_nNumPosSave += 1;		//セーブポイントを変更
+		if ((m_nNumPosSave + 1) == POINT_ARTBRIDGE || (m_nNumPosSave + 1) == POINT_ENEMYBRIDGE)
+		{//次のチェックポイントがチュートリアルの位置だったら
+
+			if (m_posSavePoint[nNumSave].x <= m_pos.x)
+			{//次のチェックポイントを通り過ぎたら
+
+				m_nNumPosSave += 1;		//セーブポイントを変更
+			}
+		}
+		else if ((m_nNumPosSave + 1) == POINT_START)
+		{//次のチェックポイントがゲーム開始位置だったら
+
+			if (m_posSavePoint[nNumSave].y >= m_pos.y)
+			{//次のチェックポイントを通り過ぎたら
+
+				m_nNumPosSave += 1;		//セーブポイントを変更
+			}
+		}
+		else
+		{
+			if (m_posSavePoint[nNumSave].y >= m_pos.y &&
+				m_posSavePoint[nNumSave].x - 100.0f <= m_pos.x &&
+				m_posSavePoint[nNumSave].x + 100.0f >= m_pos.x)
+			{//次のチェックポイントを通り過ぎたら
+
+				m_nNumPosSave += 1;		//セーブポイントを変更
+			}
 		}
 	}
 }

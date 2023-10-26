@@ -371,45 +371,7 @@ void CEnemy::UpdateFront(void)
 	{//自動ダッシュしてないとき
 
 		//当たり判定
-		if (CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max) == true)
-		{//着地したら
-
-			//m_nDashCounter = 0;		//ダッシュ数リセット
-
-			//if (m_bLand == false)
-			//{
-			//	//パーティクルの生成
-			//	//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y, m_pos.z), D3DXCOLOR(0.8f, 0.7f, 0.6f, 0.8f), PARTICLETYPE_MOVE, 20, 10.0f);
-			//}
-
-			//m_bJump = false;	//ジャンプしてない状態にする
-			//m_bLand = true;		//着地した状態にする
-
-			//if ((m_pMotion->GetType() != m_pMotion->MOTIONTYPE_MOVE && m_bMove == true && m_bJump == false && m_bLand == true))
-			//{//地面についたら(そのあと移動)
-
-			//	//移動状態にする
-			//	m_pMotion->Set(m_pMotion->MOTIONTYPE_MOVE);
-
-
-			//}
-			//else if ((m_pMotion->GetType() == m_pMotion->MOTIONTYPE_JUMP && m_bMove == false && m_bJump == false && m_bLand == true))
-			//{//地面についたら(完全に止まる)
-
-			//	//着地状態にする
-			//	m_pMotion->Set(m_pMotion->MOTIONTYPE_LAND);
-			//}
-
-			//パーティクル生成
-			//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), m_particleType, m_nParticleLife, 50.0f);
-		}
-		else if (CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max) == false &&
-			pInputKeyboard->GetPress(DIK_SPACE) == false)
-		{//地面についてない && ジャンプボタン押してない
-
-			//m_bJump = true;		//ジャンプしてる状態にする
-			//m_bLand = false;	//着地してない状態にする
-		}
+		CObjectX::CollisionEnemy(&m_pos, &m_posOld, &m_move, m_min, m_max);
 	}
 
 	//状態更新

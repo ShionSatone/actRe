@@ -56,8 +56,8 @@ CCamera::~CCamera()
 //==============================================================
 HRESULT CCamera::Init(void)
 {
-	float fPosX = 650.0f;
-	float fPosY = 0.0f;
+	float fPosX = -5400.0f;
+	float fPosY = 1000.0f;
 
 	m_posV = D3DXVECTOR3(fPosX, fPosY + 189.0f, -500.0f);	//‹“_‚Ì‰Šú‰»
 	m_posR = D3DXVECTOR3(fPosX, fPosY + 168.0f, -500.0f);	//’‹“_‚Ì‰Šú‰»

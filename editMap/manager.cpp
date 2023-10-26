@@ -200,8 +200,8 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	//全てのテクスチャ3Dの読み込み
 	CManager::Load3DAll();
 
-	float posX = 650.0f;
-	float posY = 0.0f;
+	float posX = -5400.0f;
+	float posY = 1000.0f;
 
 	//プレイヤーの生成
 	m_pPlayerModel = CPlayerModel::Create(D3DXVECTOR3(posX, posY, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));

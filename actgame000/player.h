@@ -9,9 +9,6 @@
 
 #include "object.h"
 
-//マクロ定義
-#define NUM_SAVE_POINT		(6)		//セーブポイントの数
-
 //前方宣言
 class CModelHier;	//モデルの階層構造
 class CMotion;		//モーションの階層構造
@@ -20,6 +17,22 @@ class CMotion;		//モーションの階層構造
 class CPlayer : public CObject
 {
 public:
+
+	//セーブポイント
+	enum POINT
+	{
+		POINT_DEFAULT = 0,		//チュートリアルの初期値
+		POINT_ARTBRIDGE,		//チュートリアルの1番目
+		POINT_ENEMYBRIDGE,		//チュートリアルの2番目
+
+		POINT_START,			//ゲームの初期値
+		POINT_DOWN_FLOOR,		//ゲームの1番目
+		POINT_PIER,				//ゲームの2番目
+		POINT_MAZE,				//ゲームの3番目
+		POINT_BIGINEND,			//ゲームの4番目
+		POINT_FALLING,			//ゲームの5番目
+		POINT_MAX
+	};
 
 	CPlayer();		//コンストラクタ
 	CPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot);		//コンストラクタ(オーバーロード)
@@ -82,18 +95,6 @@ private:
 		PARTS_MAX
 	};
 
-	//セーブポイント
-	enum POINT
-	{
-		POINT_DEFAULT = 0,		//初期値
-		POINT_DOWN_FLOOR,		//1番目
-		POINT_PIER,				//2番目
-		POINT_MAZE,				//3番目
-		POINT_BIGINEND,			//4番目
-		POINT_FALLING,			//5番目
-		POINT_MAX
-	};
-
 	void UpdateFront(void);			//手前側の更新処理
 	void UpdateState(void);			//状態の更新処理
 
@@ -115,7 +116,7 @@ private:
 
 	D3DXVECTOR3 m_pos;		//位置
 	D3DXVECTOR3 m_posOld;	//前回の位置
-	D3DXVECTOR3 m_posSavePoint[NUM_SAVE_POINT];	//全ての復活用の位置保存用
+	D3DXVECTOR3 m_posSavePoint[POINT_MAX];	//全ての復活用の位置保存用
 	D3DXVECTOR3 m_move;		//移動量
 	D3DXVECTOR3 m_moveSave;	//移動量保存用
 	D3DXVECTOR3 m_rot;		//向き

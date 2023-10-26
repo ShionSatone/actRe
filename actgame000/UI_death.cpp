@@ -103,7 +103,7 @@ HRESULT CDeathUI::Init(void)
 
 	//テクスチャの読み込み
 	m_nIdxTex[TEX_DEATH] = pTexture->Regist("data\\TEXTURE\\death.png");		//死亡
-	m_nIdxTex[TEX_NUMBER] = pTexture->Regist("data\\TEXTURE\\number001.png");		//数字
+	m_nIdxTex[TEX_NUMBER] = pTexture->Regist("data\\TEXTURE\\number001.png");	//数字
 
 	//アイコンの生成
 	if (m_pObject2D == NULL)
