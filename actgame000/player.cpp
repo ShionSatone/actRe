@@ -16,8 +16,8 @@
 #include "game.h"
 #include "sound.h"
 #include "fade.h"
-//#include "score.h"
 #include "UI_death.h"
+#include "UI_item.h"
 
 //マクロ定義
 #define PRIORITY			(3)			//優先順位
@@ -1137,6 +1137,15 @@ void CPlayer::Screen(void)
 	{//一番下まで行ったら
 
 		CFade *pFade = CManager::GetInstance()->GetFade();			//フェードの情報取得
+		CDeathUI *pDeathUI = CGame::GetDeathUI();
+		CItemUI *pItemUI = CGame::GetItemUI();
+
+		//スコア保存
+		CManager::GetInstance()->SetNumDeath(pDeathUI->Get());
+		CManager::GetInstance()->SetNumItem(pItemUI->Get());
+
+		//リザルトの判定
+		CManager::GetInstance()->SetResult(true);
 
 		//ゲーム画面
 		pFade->SetFade(CScene::MODE_RESULT);

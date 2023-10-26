@@ -58,12 +58,12 @@ HRESULT CTitle::Init(void)
 
 	CBg::Create();
 	
-	//if (CManager::GetBgm() == false)
-	//{
+	if (CManager::GetInstance()->GetBgm() == false)
+	{
 
-	//	//BGM再生
-	//	pSound->Play(pSound->SOUND_LABEL_BGM000);
-	//}
+		//BGM再生
+		//pSound->Play(pSound->SOUND_LABEL_BGM000);
+	}
 
 	return S_OK;
 }
@@ -89,19 +89,17 @@ void CTitle::Update(void)
 	{//ENTERキー押したら
 
 		//ゲーム画面
-		pFade->SetFade(CScene::MODE_TUTORIAL);
-
-		//bReset = true;
+		pFade->SetFade(CScene::MODE_GAME);
 	}
 
 	//if (m_nCntTrans >= TRANS_TIME)
 	//{//遷移する時間になったら
 
-	//	//CManager::SetBgm(true);
+	//	CManager::GetInstance()->SetBgm(true);
 	//	pFade->SetFade(CScene::MODE_RANKING);
 
-	//	//CRanking *pRanking = CScene::GetRanking();		//ランキングの情報取得
-	//	//pRanking->SetSound(true);
+	//	CRanking *pRanking = CScene::GetRanking();		//ランキングの情報取得
+	//	pRanking->SetSound(true);
 	//}
 
 	//m_nCntTrans++;

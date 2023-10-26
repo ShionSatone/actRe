@@ -9,9 +9,6 @@
 
 #include "manager.h"
 
-//前方宣言
-class CScore;			//スコアの情報
-
 //リザルト画面クラスの定義
 class CResult : public CScene
 {
@@ -25,9 +22,7 @@ public:
 	void Draw(void);
 
 private:
-	static CScore *m_pScore;		//スコアの情報
 
-	static bool bReset;				//リセットしたか
 };
 
 #endif

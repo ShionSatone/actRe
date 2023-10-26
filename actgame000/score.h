@@ -37,6 +37,8 @@ public:
 	static void Add(int nValue);				//スコア足して設定
 
 private:
+	int Calculation(void);		//スコア計算処理
+
 	static LPDIRECT3DTEXTURE9 m_pTexture;		//テクスチャへのポインタ
 	int m_nIdxTex;		//テクスチャの番号
 

@@ -36,7 +36,7 @@ public:
 	void Draw(void);
 	void Reset(void);
 	void Set(int nNum);
-	//void SetSound(bool bgm) { m_bBgm = bgm; }
+	void SetSound(bool bgm) { m_bBgm = bgm; }
 
 private:
 	static CNumber *m_apNumber[NUM_DIGIT * MAX_RANK];

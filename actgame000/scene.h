@@ -47,7 +47,7 @@ public:
 	void SetMode(MODE mode) { m_mode = mode; }		//モード設定
 
 	static CGame *GetGame(void) { return m_pGame; }		//ゲーム画面取得
-	//static CRanking *GetRanking(void) { return m_pRanking; }		//ランキング画面取得
+	static CRanking *GetRanking(void) { return m_pRanking; }		//ランキング画面取得
 
 private:
 	MODE m_mode;			//ゲームモード

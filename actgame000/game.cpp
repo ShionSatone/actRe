@@ -82,7 +82,6 @@ HRESULT CGame::Init(void)
 
 	//êØÉAÉCÉeÉÄ
 	CItem::Create(D3DXVECTOR3(-800.0f, 1000.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
-
 	CItem::Create(D3DXVECTOR3(150.0f, -350.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
 	CItem::Create(D3DXVECTOR3(300.0f, -1000.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
 	CItem::Create(D3DXVECTOR3(1200.0f, -1400.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);

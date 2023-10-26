@@ -54,18 +54,20 @@ public:
 	CCamera *GetCamera(void) { return m_pCamera; }			//カメラの情報
 	CLight *GetLight(void) { return m_pLight; }				//ライトの情報
 
-//	static CPlayer *GetPlayer(void) { return m_pPlayer; }			//プレイヤーの取得
-//	static CEnemy *GetEnemy(void) { return m_pEnemy; }				//敵の情報
-
-
 	void SetMode(CScene::MODE mode);		//ゲームモード設定
-	CScene::MODE GetMode(void);			//ゲームモード取得
+	CScene::MODE GetMode(void);				//ゲームモード取得
 	void SetNumScore(int nNum) { m_nScore = nNum; }		//スコアの設定
+	void SetNumDeath(int nNum) { m_nNumDeath = nNum; }	//死亡数の設定
+	void SetNumItem(int nNum) { m_nNumItem = nNum; }	//アイテム数の設定
+
 	int GetNumScore(void) { return m_nScore; }			//スコアの取得
-//	static void SetBgm(bool bBgm) { m_bBgm = bBgm; }		//BGMの設定
-//	static bool GetBgm(void) { return m_bBgm; }				//BGMの取得
-//	static void SetResult(bool bResult) { m_bResult = bResult; }	//リザルトの判定の設定
-//	static bool GetResult(void) { return m_bResult; }				//リザルトの判定取得
+	int GetNumDeath(void) { return m_nNumDeath; }		//死亡数の取得
+	int GetNumItem(void) { return m_nNumItem; }			//アイテム数の取得
+
+	void SetBgm(bool bBgm) { m_bBgm = bBgm; }		//BGMの設定
+	bool GetBgm(void) { return m_bBgm; }				//BGMの取得
+	void SetResult(bool bResult) { m_bResult = bResult; }	//リザルトの判定の設定
+	bool GetResult(void) { return m_bResult; }				//リザルトの判定取得
 
 	void SetFps(int nFps);			//FPSの設定
 
@@ -81,15 +83,13 @@ private:
 	static CTexture *m_pTexture;		//テクスチャの情報
 	static CMaterial *m_pMaterial;		//マテリアルの情報
 	static CFade *m_pFade;				//フェードの情報
-
 	static CCamera *m_pCamera;			//カメラの情報
 	static CLight *m_pLight;			//ライトの情報
 
-//	static CPlayer *m_pPlayer;			//プレイヤーの情報
-//	static CEnemy *m_pEnemy;			//敵の情報
-
-
 	static int m_nScore;				//スコア
+	static int m_nNumDeath;				//死亡数
+	static int m_nNumItem;				//アイテム数
+
 	static bool m_bBgm;					//BGMストップするか
 	static bool m_bResult;				//リザルトの判定
 };

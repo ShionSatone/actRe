@@ -86,10 +86,10 @@ HRESULT CRanking::Init(void)
 	CRanking::Reset();
 
 	//設定処理
-	/*if (CManager::GetBgm() == false)
+	if (CManager::GetInstance()->GetBgm() == false)
 	{
 		CRanking::Set(m_nNum);
-	}*/
+	}
 
 	//初期化処理
 	for (int nCntRank = 0; nCntRank < MAX_RANK; nCntRank++)
@@ -140,11 +140,11 @@ void CRanking::Uninit(void)
 {
 	CSound *pSound = CManager::GetInstance()->GetSound();
 
-	//if (CManager::GetInstance()->GetBgm() == false)
-	//{
-	//	//BGMの停止
-	//	pSound->Stop();
-	//}
+	if (CManager::GetInstance()->GetBgm() == false)
+	{
+		//BGMの停止
+		pSound->Stop();
+	}
 	
 	for (int nCntScore = 0; nCntScore < NUM_DIGIT * MAX_RANK; nCntScore++)
 	{
@@ -173,7 +173,7 @@ void CRanking::Update(void)
 
 	m_nCntColor++;
 
-	if (((pInputKeyboard->GetTrigger(DIK_RETURN) == true || pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_A, 0) == true) && bReset == false) ||
+	if (((pInputKeyboard->GetTrigger(DIK_RETURN) == true || pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_A, 0) == true)) ||
 		m_nCntTrans >= TRANS_TIME)
 	{//ENTERキー押したら
 
@@ -181,44 +181,40 @@ void CRanking::Update(void)
 		pFade->SetFade(CScene::MODE_TITLE);
 		bReset = true;
 	}
-	else
+
+	if (CManager::GetInstance()->GetBgm() == false)
 	{
-		bReset = false;
+		if ((m_nCntColor % 40) == 0 && m_nRankUpdate >= 0)
+		{//一定時間たったら
+
+			m_bCol = m_bCol ? false : true;
+
+			if (m_bCol == true)
+			{
+				//現在のスコアの色戻す
+				for (int nCntScore = 0; nCntScore < NUM_DIGIT; nCntScore++)
+				{
+					int nCnt = nCntScore + (m_nRankUpdate * NUM_DIGIT);
+
+					m_apNumber[nCnt]->SetColor(CObject::TYPE_NONE, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
+				}
+			}
+			else
+			{
+				//現在のスコアの色変更
+				for (int nCntScore = 0; nCntScore < NUM_DIGIT; nCntScore++)
+				{
+					int nCnt = nCntScore + (m_nRankUpdate * NUM_DIGIT);
+
+					m_apNumber[nCnt]->SetColor(CObject::TYPE_NONE, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+
+				}
+			}
+
+			m_nCntColor = 0;
+		}
 	}
-
-	//if (CManager::GetInstance()->GetBgm() == false)
-	//{
-	//	if ((m_nCntColor % 40) == 0 && m_nRankUpdate >= 0)
-	//	{//一定時間たったら
-
-	//		m_bCol = m_bCol ? false : true;
-
-	//		if (m_bCol == true)
-	//		{
-	//			//現在のスコアの色戻す
-	//			for (int nCntScore = 0; nCntScore < NUM_DIGIT; nCntScore++)
-	//			{
-	//				int nCnt = nCntScore + (m_nRankUpdate * NUM_DIGIT);
-
-	//				m_apNumber[nCnt]->SetColor(CObject::TYPE_NONE, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-
-	//			}
-	//		}
-	//		else
-	//		{
-	//			//現在のスコアの色変更
-	//			for (int nCntScore = 0; nCntScore < NUM_DIGIT; nCntScore++)
-	//			{
-	//				int nCnt = nCntScore + (m_nRankUpdate * NUM_DIGIT);
-
-	//				m_apNumber[nCnt]->SetColor(CObject::TYPE_NONE, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
-
-	//			}
-	//		}
-
-	//		m_nCntColor = 0;
-	//	}
-	//}
 
 	m_nCntTrans++;		//遷移するまでの時間
 }

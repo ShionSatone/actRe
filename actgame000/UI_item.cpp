@@ -13,15 +13,24 @@
 #include "game.h"
 
 //マクロ定義
-#define PRIORITY		(7)					//優先順位
-#define SCORE_POS_X		(120.0f)			//アイテムUIのXの位置
-#define SCORE_POS_Y		(130.0f)				//アイテムUIのYの位置
-#define RESULT_SCORE_POS_X		(700.0f)							//リザルトのアイテムUIのXの位置
-#define RESULT_SCORE_POS_Y		(SCREEN_HEIGHT * 0.5f)				//リザルトのアイテムUIのYの位置
-#define SCORE_WIDTH		(40.0f * 0.5f)		//アイテムUIの横幅
-#define SCORE_HEIGHT	(60.0f * 0.5f)		//アイテムUIの縦幅
-#define SCORE_INTER		(40.0f)				//アイテムUIの間隔
-#define NUM_TEX			(10)				//テクスチャの数字の数
+#define PRIORITY				(7)						//優先順位
+#define SCORE_POS_X				(120.0f)				//アイテムUIのXの位置
+#define SCORE_POS_Y				(130.0f)				//アイテムUIのYの位置
+#define RESULT_SCORE_POS_X		(600.0f)				//リザルトのアイテムUIのXの位置
+#define RESULT_SCORE_POS_Y		(350.0f)				//リザルトのアイテムUIのYの位置
+#define SCORE_WIDTH				(40.0f * 0.5f)			//アイテムUIの横幅
+#define SCORE_HEIGHT			(60.0f * 0.5f)			//アイテムUIの縦幅
+
+#define RESULT_SCORE_WIDTH		(60.0f * 0.5f)			//リザルトのアイテムUIの横幅
+#define RESULT_SCORE_HEIGHT		(80.0f * 0.5f)			//リザルトのアイテムUIの縦幅
+#define RESULT_ICON_WIDTH		(100.0f * 0.5f)			//リザルトのスコアの横幅
+#define RESULT_ICON_HEIGHT		(100.0f * 0.5f)			//リザルトのスコアの縦幅
+
+#define SCORE_INTER				(40.0f)					//アイテムUIの間隔
+#define RESULT_SCORE_INTER		(60.0f)					//死亡UIの間隔
+#define NUM_TEX					(10)					//テクスチャの数字の数
+#define ICON_POS				(D3DXVECTOR3(50.0f, SCORE_POS_Y, 0.0f))				//アイコンの位置
+#define RESULT_ICON_POS			(D3DXVECTOR3(500.0f, RESULT_SCORE_POS_Y, 0.0f))		//アイコンの位置
 
 //静的メンバ変数宣言
 LPDIRECT3DTEXTURE9 CItemUI::m_pTexture = NULL;		//テクスチャ
@@ -81,7 +90,7 @@ CItemUI *CItemUI::Create(void)
 		if (CManager::GetInstance()->GetMode() == CScene::MODE_RESULT)
 		{//リザルトだったら
 			
-			m_nNum = CManager::GetInstance()->GetNumScore();
+			m_nNum = CManager::GetInstance()->GetNumItem();
 		}
 
 		//種類設定
@@ -115,17 +124,28 @@ HRESULT CItemUI::Init(void)
 		if (m_pObject2D != NULL)
 		{//生成できたら
 
-			//アイテムテクスチャ割り当て
+			//死亡テクスチャ割り当て
 			m_pObject2D->BindTexture(m_nIdxTex[TEX_ITEM]);
 
 			//種類設定
 			m_pObject2D->SetType(CObject::TYPE_SCORE);
 
-			//大きさ設定
-			m_pObject2D->SetSize(SCORE_HEIGHT, SCORE_HEIGHT);
+			if (CManager::GetInstance()->GetMode() == CScene::MODE_RESULT)
+			{
+				//大きさ設定
+				m_pObject2D->SetSize(RESULT_ICON_WIDTH, RESULT_ICON_HEIGHT);
 
-			//位置設定
-			m_pObject2D->SetPosition(D3DXVECTOR3(50.0f, SCORE_POS_Y, 0.0f));
+				//位置設定
+				m_pObject2D->SetPosition(RESULT_ICON_POS);
+			}
+			else
+			{
+				//大きさ設定
+				m_pObject2D->SetSize(SCORE_HEIGHT, SCORE_HEIGHT);
+
+				//位置設定
+				m_pObject2D->SetPosition(ICON_POS);
+			}
 		}
 	}
 
@@ -141,21 +161,24 @@ HRESULT CItemUI::Init(void)
 			if (m_apNumber[nCntScore] != NULL)
 			{//生成出来たら
 
-				//大きさ設定
-				m_apNumber[nCntScore]->SetSize(SCORE_WIDTH, SCORE_HEIGHT);
-
 				//数字テクスチャ割り当て
 				m_apNumber[nCntScore]->BindTexture(m_nIdxTex[TEX_NUMBER]);
 
 				if (CManager::GetInstance()->GetMode() == CScene::MODE_RESULT)
 				{//リザルトだったら
 
+					//大きさ設定
+					m_apNumber[nCntScore]->SetSize(RESULT_SCORE_WIDTH, RESULT_SCORE_HEIGHT);
+
 					//アイテムUIの位置設定
 					m_apNumber[nCntScore]->SetPosition(CObject::TYPE_SCORE,
-						D3DXVECTOR3(RESULT_SCORE_POS_X + (nCntScore * SCORE_INTER), RESULT_SCORE_POS_Y, 0.0f), SCORE_WIDTH, SCORE_HEIGHT);
+						D3DXVECTOR3(RESULT_SCORE_POS_X + (nCntScore * RESULT_SCORE_INTER), RESULT_SCORE_POS_Y, 0.0f), RESULT_SCORE_WIDTH, RESULT_SCORE_HEIGHT);
 				}
 				else
 				{
+					//大きさ設定
+					m_apNumber[nCntScore]->SetSize(SCORE_WIDTH, SCORE_HEIGHT);
+
 					//アイテムUIの位置設定
 					m_apNumber[nCntScore]->SetPosition(CObject::TYPE_SCORE,
 						D3DXVECTOR3(SCORE_POS_X + (nCntScore * SCORE_INTER), SCORE_POS_Y, 0.0f), SCORE_WIDTH, SCORE_HEIGHT);
@@ -182,6 +205,12 @@ void CItemUI::Uninit(void)
 			m_apNumber[nCntScore] = NULL;
 
 		}
+	}
+
+	if (m_pObject2D != NULL)
+	{
+		m_pObject2D->Uninit();
+		m_pObject2D = NULL;
 	}
 
 	//オブジェクト（自分自身の破棄）

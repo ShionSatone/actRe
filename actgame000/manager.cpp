@@ -37,6 +37,8 @@ CLight *CManager::m_pLight = NULL;					//ライトの情報
 //CPlayer *CManager::m_pPlayer = NULL;			//プレイヤーの情報
 
 int CManager::m_nScore = 0;						//スコア
+int CManager::m_nNumDeath = 0;					//死亡数
+int CManager::m_nNumItem = 0;					//アイテム数
 bool CManager::m_bBgm = false;					//BGMストップするか
 bool CManager::m_bResult = true;				//リザルトの判定
 
@@ -360,6 +362,7 @@ void CManager::Uninit(void)
 	//マネージャの破棄
 	if (m_pManager != NULL)
 	{
+		delete m_pManager;
 		m_pManager = NULL;
 	}
 }

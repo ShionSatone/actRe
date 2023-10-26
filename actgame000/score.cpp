@@ -9,22 +9,30 @@
 #include "renderer.h"
 #include "number.h"
 #include "texture.h"
-//#include "playerModel.h"
 #include "game.h"
+#include "UI_death.h"
+#include "UI_item.h"
 
 //マクロ定義
-#define PRIORITY		(7)					//優先順位
-#define SCORE_POS_X		(880.0f)			//スコアのXの位置
-#define SCORE_POS_Y		(50.0f)				//スコアのYの位置
-#define RESULT_SCORE_POS_X		(700.0f)							//スコアのXの位置
-#define RESULT_SCORE_POS_Y		(SCREEN_HEIGHT * 0.5f)				//スコアのYの位置
-#define SCORE_WIDTH		(50.0f * 0.5f)		//スコアの横幅
-#define SCORE_HEIGHT	(80.0f * 0.5f)		//スコアの縦幅
-#define SCORE_INTER		(50.0f)				//スコアの間隔
-#define NUM_TEX			(10)				//テクスチャの数字の数
+#define PRIORITY				(7)						//優先順位
+#define SCORE_POS_X				(880.0f)				//スコアのXの位置
+#define SCORE_POS_Y				(50.0f)					//スコアのYの位置
+#define RESULT_SCORE_POS_X		(440.0f)				//スコアのXの位置
+#define RESULT_SCORE_POS_Y		(550.0f)				//スコアのYの位置
+#define SCORE_WIDTH				(50.0f * 0.5f)			//スコアの横幅
+#define SCORE_HEIGHT			(80.0f * 0.5f)			//スコアの縦幅
+
+#define SCORE_INTER				(50.0f)					//スコアの間隔
+#define RESULT_SCORE_INTER		(60.0f)					//リザルトのスコアの間隔
+#define NUM_TEX					(10)					//テクスチャの数字の数
+
+#define CLEAR_BONUS				(3000)					//クリアボーナス
+#define NO_DEATH_BONUS			(188888)				//1回も死亡してないボーナス
+#define DEATH_SCORE				(-1050)					//死んだときに引かれるスコア
+#define ITEM_SCORE				(13000)					//アイテムスコア
 
 //静的メンバ変数宣言
-LPDIRECT3DTEXTURE9 CScore::m_pTexture = NULL;		//テクスチャ
+LPDIRECT3DTEXTURE9 CScore::m_pTexture = NULL;			//テクスチャ
 CNumber *CScore::m_apNumber[NUM_DIGIT] = {};
 int CScore::m_nNum = 0;			//スコアの値
 int CScore::m_aTexU[NUM_DIGIT] = {};
@@ -108,7 +116,8 @@ CScore *CScore::Create(void)
 		if (CManager::GetInstance()->GetMode() == CScene::MODE_RESULT)
 		{//リザルトだったら
 			
-			m_nNum = CManager::GetInstance()->GetNumScore();
+			m_nNum = pScore->Calculation();		//スコア
+			CManager::GetInstance()->SetNumScore(m_nNum);		//スコア設定
 
 		}
 
@@ -155,7 +164,7 @@ HRESULT CScore::Init(void)
 
 					//スコアの位置設定
 					m_apNumber[nCntScore]->SetPosition(CObject::TYPE_SCORE,
-						D3DXVECTOR3(RESULT_SCORE_POS_X + (nCntScore * SCORE_INTER), RESULT_SCORE_POS_Y, 0.0f), SCORE_WIDTH, SCORE_HEIGHT);
+						D3DXVECTOR3(RESULT_SCORE_POS_X + (nCntScore * RESULT_SCORE_INTER), RESULT_SCORE_POS_Y, 0.0f), SCORE_WIDTH, SCORE_HEIGHT);
 				}
 				else
 				{
@@ -253,4 +262,31 @@ void CScore::Add(int nValue)
 void CScore::BindTexture(LPDIRECT3DTEXTURE9 pTexture)
 {
 	m_pTexture = pTexture;		//テクスチャ割り当て
+}
+
+//==============================================================
+//スコアの計算処理
+//==============================================================
+int CScore::Calculation(void)
+{
+	int nNumDeath = CManager::GetInstance()->GetNumDeath();		//死亡数取得
+	int nNumItem = CManager::GetInstance()->GetNumItem();		//アイテム数取得
+	int nBonus = 0;		//ボーナススコア
+
+	nBonus += CLEAR_BONUS;		//クリアボーナス
+
+	if(nNumDeath <= 0)
+	{//1回も死んでない
+
+		nBonus += NO_DEATH_BONUS;		//死んでないボーナス
+	}
+	else if (nNumItem <= 0 && nNumDeath > 0)
+	{//アイテム取得してない && 死亡したとき
+
+		return nBonus;
+	}
+
+	nBonus = (nNumItem * ITEM_SCORE) + (nNumDeath * DEATH_SCORE) + nBonus;
+
+	return nBonus;
 }
