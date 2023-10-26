@@ -162,6 +162,9 @@
     <ClCompile Include="UI_item.cpp">
       <Filter>ソース ファイル\object2D</Filter>
     </ClCompile>
+    <ClCompile Include="titleTexture.cpp">
+      <Filter>ソース ファイル\object2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="manager.h">
@@ -273,6 +276,9 @@
       <Filter>ヘッダー ファイル\object2D</Filter>
     </ClInclude>
     <ClInclude Include="UI_item.h">
+      <Filter>ヘッダー ファイル\object2D</Filter>
+    </ClInclude>
+    <ClInclude Include="titleTexture.h">
       <Filter>ヘッダー ファイル\object2D</Filter>
     </ClInclude>
   </ItemGroup>

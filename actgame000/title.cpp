@@ -13,6 +13,7 @@
 #include "fade.h"
 #include "texture.h"
 #include "ranking.h"
+#include "titleTexture.h"
 
 #include "bg.h"
 
@@ -57,6 +58,9 @@ HRESULT CTitle::Init(void)
 	pCamera->Init();
 
 	CBg::Create();
+
+	//タイトルのテクスチャ
+	CTitleTex::Create();
 	
 	if (CManager::GetInstance()->GetBgm() == false)
 	{
