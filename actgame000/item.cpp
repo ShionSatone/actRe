@@ -169,7 +169,7 @@ void CItem::Hit(void)
 
 		pPlayer->SetDash(0);		//ダッシュ回数リセット
 
-		CObjectX::SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));		//モデルの色設定
+		CObjectX::SetColor(D3DXCOLOR(0.4f, 0.4f, 0.4f, 0.3f));		//モデルの色設定
 		CObjectX::SetState(CObjectX::STATE_DAMAGE);					//モデルの状態設定
 
 		//リスポーンする状態にする

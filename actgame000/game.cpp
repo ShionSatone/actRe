@@ -186,14 +186,6 @@ void CGame::Update(void)
 
 		//“GoŒ»‚³‚¹‚é
 		CGame::SetEnemy();
-
-		//if (pInputKeyboard->GetTrigger(DIK_RETURN) == true ||
-		//	pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_A, 0) == true)
-		//{//ENTERƒL[‰Ÿ‚µ‚½‚ç
-
-		//	//ƒQ[ƒ€‰æ–Ê
-		//	pFade->SetFade(CScene::MODE_RESULT);
-		//}
 	}
 }
 

@@ -1460,6 +1460,13 @@ void CPlayer::SetDashAuto(bool bDashAuto)
 //==============================================================
 void CPlayer::Screen(void)
 {
+	if (m_pos.y <= 0.0f && m_pos.x <= 35.0f)
+	{//•Ç’Ê‚è”²‚¯‚½‚ç
+
+		m_pos.x = 35.0f;
+		m_move.x = 0.0f;
+	}
+
 	if (m_pos.y <= -6000.0f)
 	{//ˆê”Ô‰º‚Ü‚Ås‚Á‚½‚ç
 

@@ -26,7 +26,7 @@
 #define RESULT_SCORE_INTER		(60.0f)					//リザルトのスコアの間隔
 #define NUM_TEX					(10)					//テクスチャの数字の数
 
-#define CLEAR_BONUS				(3000)					//クリアボーナス
+#define CLEAR_BONUS				(3150)					//クリアボーナス
 #define NO_DEATH_BONUS			(188888)				//1回も死亡してないボーナス
 #define DEATH_SCORE				(-1050)					//死んだときに引かれるスコア
 #define ITEM_SCORE				(13000)					//アイテムスコア
@@ -139,7 +139,7 @@ HRESULT CScore::Init(void)
 	CTexture *pTexture = CManager::GetInstance()->GetTexture();
 
 	//テクスチャの読み込み
-	m_nIdxTex = pTexture->Regist("data\\TEXTURE\\score01.png");
+	m_nIdxTex = pTexture->Regist("data\\TEXTURE\\score00.png");
 
 	//初期化処理
 	for (int nCntScore = 0; nCntScore < NUM_DIGIT; nCntScore++)

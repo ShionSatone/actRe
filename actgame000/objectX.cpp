@@ -856,5 +856,5 @@ void CObjectX::SetColor(D3DXCOLOR col)
 	m_matColor.MatD3D.Ambient = D3DXCOLOR(col.r, col.g, col.b, col.a);		//マテリアルデータへのポインタ
 	m_matColor.MatD3D.Emissive = D3DXCOLOR(col.r, col.g, col.b, col.a);		//マテリアルデータへのポインタ
 	m_matColor.MatD3D.Power = 5.0f;
-	m_matColor.MatD3D.Specular = D3DXCOLOR(0.0f, col.g, col.b, col.a);
+	m_matColor.MatD3D.Specular = D3DXCOLOR(col.r, col.g, col.b, col.a);
 }
