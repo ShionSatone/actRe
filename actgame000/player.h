@@ -104,7 +104,11 @@ private:
 	void ControlFrontKeyboardJump(void);	//プレイヤーキーボードのジャンプ操作(手前側)
 	void ControlFrontKeyboardDash(void);	//プレイヤーキーボードのダッシュ操作(手前側)
 
-	void ControlHumanPad(void);				//プレイヤーコントローラー操作(人間)
+	void ControlFrontJoyPad(void);			//プレイヤーパッド操作(手前側)
+	void ControlFrontJoyPadMove(void);		//プレイヤーパッドの移動操作(手前側)
+	void ControlFrontJoyPadJump(void);		//プレイヤーパッドのジャンプ操作(手前側)
+	void ControlFrontJoyPadDash(void);		//プレイヤーパッドのダッシュ操作(手前側)
+
 	void Screen(void);						//画面外判定
 	void SavePoint(void);					//セーブポイント処理
 	void LoadFile(void);					//モデルファイル読み込み

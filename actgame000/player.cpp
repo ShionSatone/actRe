@@ -350,8 +350,8 @@ void CPlayer::UpdateFront(void)
 	{//自動ダッシュしてないとき
 
 		//プレイヤーの操作
-		CPlayer::ControlFrontKeyboard();
-		//CPlayer::ControlHumanPad();
+		//CPlayer::ControlFrontKeyboard();
+		CPlayer::ControlFrontJoyPad();
 	}
 
 	//足音鳴らす処理
@@ -489,6 +489,8 @@ void CPlayer::UpdateState(void)
 void CPlayer::CollisionAction(void)
 {
 	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+	CInputJoyPad *pInputJoyPad = CManager::GetInstance()->GetInputJoyPad();				//パッドの情報取得
+
 	bool bLand = CObjectX::Collision(&m_pos, &m_posOld, &m_move, m_min, m_max);
 
 	//当たり判定
@@ -525,7 +527,7 @@ void CPlayer::CollisionAction(void)
 		//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), m_particleType, m_nParticleLife, 50.0f);
 	}
 	else if (bLand == false &&
-		pInputKeyboard->GetPress(DIK_SPACE) == false)
+		pInputKeyboard->GetPress(DIK_SPACE) == false && pInputJoyPad->GetPress(pInputJoyPad->BUTTON_A, 0) == false)
 	{//地面についてない && ジャンプボタン押してない
 
 		m_bJump = true;		//ジャンプしてる状態にする
@@ -663,6 +665,7 @@ void CPlayer::SEStep(void)
 void CPlayer::ControlFrontKeyboard(void)
 {
 	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
+
 	CSound *pSound = CManager::GetInstance()->GetSound();
 
 	//移動処理
@@ -1045,14 +1048,365 @@ void CPlayer::ControlFrontKeyboardDash(void)
 }
 
 //==============================================================
-//プレイヤーのパッド操作処理(人間)
+//プレイヤーのパッド操作処理(手前側)
 //==============================================================
-void CPlayer::ControlHumanPad(void)
+void CPlayer::ControlFrontJoyPad(void)
 {
-	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
-	CInputJoyPad *pInputJoyPad = CManager::GetInstance()->GetInputJoyPad();			//パッドの情報
-	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
 	CSound *pSound = CManager::GetInstance()->GetSound();
+
+	//移動処理
+	CPlayer::ControlFrontJoyPadMove();
+
+	//ジャンプ処理
+	CPlayer::ControlFrontJoyPadJump();
+
+	//ダッシュ処理
+	if (m_nDashCounter < MAX_DASH)
+	{//最大ジャンプ数未満 && オートダッシュしてる間
+
+		CPlayer::ControlFrontJoyPadDash();
+	}
+}
+
+//==============================================================
+//プレイヤーのキーボードのジャンプ操作処理(手前側)
+//==============================================================
+void CPlayer::ControlFrontJoyPadJump(void)
+{
+	CInputJoyPad *pInputJoyPad = CManager::GetInstance()->GetInputJoyPad();				//パッドの情報取得
+	CSound *pSound = CManager::GetInstance()->GetSound();
+
+	if (pInputJoyPad->GetPress(pInputJoyPad->BUTTON_A, 0) == true && m_bJump == false && m_move.y <= JUMP_HEIGHT)
+	{
+		//ジャンプする
+		m_move.y += ADD_MOVE_Y;
+
+		m_nPressCounter++;		//フレーム数加算
+
+		if (m_move.y >= JUMP_HEIGHT)
+		{
+			//ジャンプした状態にする
+			m_bJump = true;
+			m_bLand = false;
+		}
+	}
+
+	if (pInputJoyPad->GetRelease(pInputJoyPad->BUTTON_A, 0) == true && m_bJump == false)
+	{
+		//ジャンプした状態にする
+		m_bJump = true;
+		m_bLand = false;
+	}
+
+	//ジャンプ
+	if (pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_A, 0) == true && m_bJump == false)
+	{//SPACEキーを押してたら && ジャンプしてなかったら
+
+		//BGM再生
+		pSound->Play(pSound->SOUND_LABEL_SE_JUMP);
+
+		//モーションの設定
+		//m_pMotion->Set(m_pMotion->MOTIONTYPE_JUMP);
+	}
+
+	if (m_move.y >= JUMP_HEIGHT ||
+		(m_bJump == true && (m_move.x <= 7.0f && m_move.x >= -7.0f)) ||
+		(m_bDash == true && (m_move.x <= 7.0f && m_move.x >= -7.0f)))
+	{
+		//移動量加算
+		m_move.y -= MOVE_Y;
+
+		if (m_move.y <= 0.0f)
+		{//着地したら
+
+			m_bDash = false;
+		}
+	}
+}
+
+//==============================================================
+//プレイヤーのキーボードのダッシュ操作処理(手前側)
+//==============================================================
+void CPlayer::ControlFrontJoyPadDash(void)
+{
+	CInputJoyPad *pInputJoyPad = CManager::GetInstance()->GetInputJoyPad();				//パッドの情報取得
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
+
+	if (pInputJoyPad->GetPressLX(0).x > 0.0f)
+	{//右
+
+		if (pInputJoyPad->GetPressLX(0).y > 0.0f)
+		{//上
+			if (pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_X, 0) == true)
+			{
+				m_move.x = 0.0f;		//移動量リセット
+				m_move.y = 0.0f;		//移動量リセット
+				m_bDash = true;			//ダッシュした状態にする
+				m_bJump = true;			//ジャンプした状態にする
+
+				if (m_bCollisionAlpha == true)
+				{//自動ダッシュ
+
+					m_bDashAuto = true;		//自動ダッシュした状態にする
+
+					m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
+					m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
+				}
+				else if (m_bCollisionAlpha == false)
+				{
+					m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
+					m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
+
+					m_nDashCounter++;		//ダッシュ回数加算
+
+				}
+			}
+		}
+		else if (pInputJoyPad->GetPressLX(0).y < 0.0f)
+		{//下
+			if (pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_X, 0) == true)
+			{
+				m_move.x = 0.0f;		//移動量リセット
+				m_move.y = 0.0f;		//移動量リセット
+				m_bDash = true;			//ダッシュした状態にする
+				m_bJump = true;			//ジャンプした状態にする
+
+				if (m_bCollisionAlpha == true)
+				{//自動ダッシュ
+
+					m_bDashAuto = true;		//自動ダッシュした状態にする
+
+					m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
+					m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
+				}
+				else if (m_bCollisionAlpha == false)
+				{
+					m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
+					m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
+
+					m_nDashCounter++;		//ダッシュ回数加算
+
+				}
+			}
+		}
+		else if (pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_X, 0) == true)
+		{
+			m_move.x = 0.0f;		//移動量リセット
+			m_move.z = 0.0f;		//移動量リセット
+			m_bDash = true;			//ダッシュした状態にする
+			m_bJump = true;			//ジャンプした状態にする
+
+			if (m_bCollisionAlpha == true)
+			{//自動ダッシュ
+
+				m_bDashAuto = true;		//自動ダッシュした状態にする
+
+				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+			}
+			else if (m_bCollisionAlpha == false)
+			{
+				m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
+
+				m_nDashCounter++;		//ダッシュ回数加算
+
+			}
+		}
+	}
+	else if (pInputJoyPad->GetPressLX(0).x < 0.0f)
+	{//左
+		if (pInputJoyPad->GetPressLX(0).y > 0.0f)
+		{//上
+			if (pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_X, 0) == true)
+			{
+				m_move.x = 0.0f;		//移動量リセット
+				m_move.y = 0.0f;		//移動量リセット
+				m_bDash = true;			//ダッシュした状態にする
+				m_bJump = true;			//ジャンプした状態にする
+
+				if (m_bCollisionAlpha == true)
+				{//自動ダッシュ
+
+					m_bDashAuto = true;		//自動ダッシュした状態にする
+
+					m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
+					m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
+				}
+				else if (m_bCollisionAlpha == false)
+				{
+					m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
+					m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
+
+					m_nDashCounter++;		//ダッシュ回数加算
+				}
+			}
+		}
+		else if (pInputJoyPad->GetPressLX(0).y < 0.0f)
+		{//下
+			if (pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_X, 0) == true)
+			{
+				m_move.x = 0.0f;		//移動量リセット
+				m_move.y = 0.0f;		//移動量リセット
+				m_bDash = true;			//ダッシュした状態にする
+				m_bJump = true;			//ジャンプした状態にする
+
+				if (m_bCollisionAlpha == true)
+				{//自動ダッシュ
+
+					m_bDashAuto = true;		//自動ダッシュした状態にする
+
+					m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
+					m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
+				}
+				else if (m_bCollisionAlpha == false)
+				{
+					m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
+					m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
+
+					m_nDashCounter++;		//ダッシュ回数加算
+				}
+			}
+		}
+		else if (pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_X, 0) == true)
+		{
+			m_move.x = 0.0f;		//移動量リセット
+			m_move.z = 0.0f;		//移動量リセット
+			m_bDash = true;			//ダッシュした状態にする
+			m_bJump = true;			//ジャンプした状態にする
+
+			if (m_bCollisionAlpha == true)
+			{//自動ダッシュ
+
+				m_bDashAuto = true;		//自動ダッシュした状態にする
+
+				m_moveSave.x = sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_moveSave.y = cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+			}
+			else if (m_bCollisionAlpha == false)
+			{
+				m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
+
+				m_nDashCounter++;		//ダッシュ回数加算
+			}
+		}
+	}
+	else if (pInputJoyPad->GetPressLX(0).y > 0.0f)
+	{//上
+		if (pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_X, 0) == true)
+		{
+			m_move.x = 0.0f;		//移動量リセット
+			m_move.y = 0.0f;		//移動量リセット
+			m_bDash = true;			//ダッシュした状態にする
+			m_bJump = true;			//ジャンプした状態にする
+
+			if (m_bCollisionAlpha == true)
+			{//自動ダッシュ
+
+				m_bDashAuto = true;		//自動ダッシュした状態にする
+
+				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -CURVE_UP) * FRONT_DASH_MOVE;
+				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -CURVE_UP) * FRONT_DASH_MOVE;
+			}
+			else if (m_bCollisionAlpha == false)
+			{
+				m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_DASH_MOVE;
+				m_move.y += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_DASH_MOVE;
+
+				m_nDashCounter++;		//ダッシュ回数加算
+			}
+		}
+	}
+	else if (pInputJoyPad->GetPressLX(0).y < 0.0f)
+	{//下
+		if (pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_X, 0) == true)
+		{
+			m_move.x = 0.0f;		//移動量リセット
+			m_move.y = 0.0f;		//移動量リセット
+			m_bDash = true;			//ダッシュした状態にする
+			m_bJump = true;			//ジャンプした状態にする
+
+			if (m_bCollisionAlpha == true)
+			{//自動ダッシュ
+
+				m_bDashAuto = true;		//自動ダッシュした状態にする
+
+				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -CURVE_DOWN) * FRONT_DASH_MOVE;
+				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -CURVE_DOWN) * FRONT_DASH_MOVE;
+			}
+			else if (m_bCollisionAlpha == false)
+			{
+				m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_DASH_MOVE;
+				m_move.y += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_DASH_MOVE;
+
+				m_nDashCounter++;		//ダッシュ回数加算
+			}
+		}
+	}
+	else if (pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_X, 0) == true)
+	{//Jキーだけを押したとき
+
+		if (m_rot.y > 0)
+		{//プレイヤーの向きが左だったら
+
+			m_move.x = 0.0f;		//移動量リセット
+			m_move.z = 0.0f;		//移動量リセット
+
+			if (m_bCollisionAlpha == true)
+			{//自動ダッシュ
+
+				m_bDashAuto = true;		//自動ダッシュした状態にする
+
+				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -CURVE_RL) * FRONT_DASH_MOVE;
+				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -CURVE_RL) * FRONT_DASH_MOVE;
+			}
+			else if (m_bCollisionAlpha == false)
+			{
+				m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
+
+				m_nDashCounter++;		//ダッシュ回数加算
+			}
+		}
+		else if (m_rot.y <= 0)
+		{
+			m_move.x = 0.0f;		//移動量リセット
+			m_move.z = 0.0f;		//移動量リセット
+
+			if (m_bCollisionAlpha == true)
+			{//自動ダッシュ
+
+				m_bDashAuto = true;		//自動ダッシュした状態にする
+
+				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+			}
+			else if (m_bCollisionAlpha == false)
+			{
+				m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+				m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
+
+				m_nDashCounter++;		//ダッシュ回数加算
+			}
+		}
+
+		m_bDash = true;		//ダッシュした状態にする
+		m_bJump = true;		//ジャンプした状態にする
+	}
+}
+
+//==============================================================
+//プレイヤーのパッドの移動操作処理(手前側)
+//==============================================================
+void CPlayer::ControlFrontJoyPadMove(void)
+{
+	CInputJoyPad *pInputJoyPad = CManager::GetInstance()->GetInputJoyPad();				//パッドの情報取得
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
 
 	//移動
 	if (pInputJoyPad->GetPressLX(0).x > 0.0f)
@@ -1065,7 +1419,6 @@ void CPlayer::ControlHumanPad(void)
 	}
 	else if (pInputJoyPad->GetPressLX(0).x < 0.0f)
 	{//左
-
 		m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_MOVE;
 		m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_MOVE;
 		m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
@@ -1077,32 +1430,6 @@ void CPlayer::ControlHumanPad(void)
 	{//歩いてないとき
 
 		m_bMove = false;		//歩いてない状態にする
-	}
-
-	if (CManager::GetInstance()->GetMode() == CScene::MODE_GAME)
-	{
-		//ジャンプ
-		if (pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_B, 0) == true && m_bJump == false)
-		{//Bボタンを押してたら && ジャンプしてなかったら
-
-			//ジャンプする
-			m_move.y = JUMP_HEIGHT;
-
-			//ジャンプした状態にする
-			m_bJump = true;
-			m_bLand = false;
-
-			//BGM再生
-			pSound->Play(pSound->SOUND_LABEL_SE_JUMP);
-
-			//モーションの設定
-			m_pMotion->Set(m_pMotion->MOTIONTYPE_JUMP);
-		}
-	}
-
-	if (pInputJoyPad->GetPressRX(0).y == 0.0f && pInputJoyPad->GetPressRX(0).x == 0.0f)
-	{
-		m_bPad = false;		//スティックを倒してない状態にする
 	}
 }
 

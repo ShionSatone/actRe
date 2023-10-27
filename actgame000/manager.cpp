@@ -220,7 +220,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	{
 #if _DEBUG
 
-		m_pScene = CScene::Create(CScene::MODE_GAME);
+		m_pScene = CScene::Create(CScene::MODE_TITLE);
 
 #else
 

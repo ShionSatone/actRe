@@ -187,13 +187,13 @@ void CGame::Update(void)
 		//敵出現させる
 		CGame::SetEnemy();
 
-		if (pInputKeyboard->GetTrigger(DIK_RETURN) == true ||
-			pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_A, 0) == true)
-		{//ENTERキー押したら
+		//if (pInputKeyboard->GetTrigger(DIK_RETURN) == true ||
+		//	pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_A, 0) == true)
+		//{//ENTERキー押したら
 
-			//ゲーム画面
-			pFade->SetFade(CScene::MODE_RESULT);
-		}
+		//	//ゲーム画面
+		//	pFade->SetFade(CScene::MODE_RESULT);
+		//}
 	}
 }
 

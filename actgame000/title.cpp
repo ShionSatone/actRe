@@ -101,13 +101,6 @@ void CTitle::Update(void)
 	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 	CFade *pFade = CManager::GetInstance()->GetFade();		//フェードの情報取得
 
-	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
-	{//ENTERキー押したら
-
-		//ゲーム画面
-		pFade->SetFade(CScene::MODE_GAME);
-	}
-
 	//if (m_nCntTrans >= TRANS_TIME)
 	//{//遷移する時間になったら
 

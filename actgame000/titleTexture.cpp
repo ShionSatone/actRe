@@ -216,7 +216,7 @@ void CTitleTex::Update(void)
 
 			CManager::GetInstance()->SetBgm(false);
 
-			pFade->SetFade(CScene::MODE_TUTORIAL);
+			pFade->SetFade(CScene::MODE_GAME);
 		}
 
 		break;
