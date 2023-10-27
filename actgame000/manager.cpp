@@ -277,12 +277,6 @@ void CManager::Uninit(void)
 		m_pTexture = NULL;
 	}
 
-	//フェードの破棄
-	/*if (m_pFade != NULL)
-	{
-		m_pFade = NULL;
-	}*/
-
 	//シーンの破棄
 	if (m_pScene != NULL)
 	{

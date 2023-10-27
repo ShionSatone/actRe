@@ -13,13 +13,13 @@
 #include "enemy.h"
 #include "wall.h"
 #include "item.h"
-//#include "ranking.h"
 #include "pause.h"
 #include "fade.h"
 #include "score.h"
 #include "sound.h"
 #include "UI_death.h"
 #include "UI_item.h"
+#include "wall.h"
 
 //静的メンバ変数宣言
 CEdit *CGame::m_pEdit = NULL;				//エディットの情報
@@ -65,8 +65,19 @@ HRESULT CGame::Init(void)
 	//カメラの初期化処理
 	pCamera->Init();
 
+	//壁の生成
+	for (int nCntWallWidth = 0; nCntWallWidth < 10; nCntWallWidth++)
+	{//横
+		for (int nCntWallHeight = 0; nCntWallHeight < 15; nCntWallHeight++)
+		{//縦
+
+			CWall::Create(D3DXVECTOR3(-7000.0f + (nCntWallWidth * 1000.0f), 2000.0f + (nCntWallHeight * -1000.0f), 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0);
+
+		}
+	}
+
 	//プレイヤーの生成
-	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(-5400.0f, 1000.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(-5400.0f, 1000.0f, 0.0f), D3DXVECTOR3(0.0f, -0.5f * D3DX_PI, 0.0f));
 
 	//エディットの生成
 	m_pEdit = CEdit::Create();
@@ -93,9 +104,6 @@ HRESULT CGame::Init(void)
 	CItem::Create(D3DXVECTOR3(1250.0f, -5100.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
 	CItem::Create(D3DXVECTOR3(150.0f, -5050.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
 	CItem::Create(D3DXVECTOR3(200.0f, -5550.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CItem::TYPEITEM_STAR);
-
-	//スコアの生成
-	//m_pScore = CScore::Create();
 
 	//死亡UIの生成
 	m_pDeathUI = CDeathUI::Create();

@@ -57,6 +57,7 @@ HRESULT CCamera::Init(void)
 {
 	m_posV = D3DXVECTOR3(0.0f, 189.0f, -500.0f);	//視点の初期化
 	m_posR = D3DXVECTOR3(0.0f, 168.0f, -500.0f);	//注視点の初期化
+	
 	m_vecU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);			//上方向ベクトルの初期化
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//向きの初期化
 	m_posVDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//目的の視点の初期化
@@ -96,8 +97,6 @@ void CCamera::Update(void)
 {
 	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();		//デバッグ表示の情報取得
-	//CPlayerModel *pPlayer = CGame::GetPlayerModel();			//プレイヤーの情報取得
-	//CGame *pGame = CScene::GetGame();
 
 	if (CManager::GetInstance()->GetMode() == CScene::MODE_GAME)
 	{//ゲーム画面のとき
@@ -106,7 +105,13 @@ void CCamera::Update(void)
 		CCamera::Control();
 
 	}
-	
+	else
+	{//それ以外(リザルト)のとき
+
+		m_posV = D3DXVECTOR3(-4680, 1271.0f, 300.0f);	//視点の初期化
+		m_posR = D3DXVECTOR3(0.0f, 1250.0f, 300.0f);	//注視点の初期化
+	}
+
 	//移動処理
 	m_posV.x = m_posR.x + sinf(m_rot.y) * -cosf(m_rot.x) * LENGRH;
 	m_posV.y = (m_posR.y + CAMERA_PLEN) + sinf(m_rot.x) * LENGRH;

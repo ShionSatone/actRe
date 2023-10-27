@@ -70,7 +70,7 @@ CRanking::~CRanking()
 //==============================================================
 HRESULT CRanking::Init(void)
 {
-	D3DXVECTOR3 posScore = D3DXVECTOR3(SCREEN_WIDTH * 0.5f - (SCORE_WIDTH * 2.0f * 4), 200.0f, 0.0f);	//位置
+	D3DXVECTOR3 posScore = D3DXVECTOR3(SCREEN_WIDTH * 0.5f - (SCORE_WIDTH * 2.0f * 3.5f), 200.0f, 0.0f);	//位置
 	m_nNum = CManager::GetInstance()->GetNumScore();		//スコア代入
 
 	int nDigit;		//桁数

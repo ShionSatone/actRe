@@ -79,7 +79,7 @@ HRESULT CTitleTex::Init(void)
 	CTexture *pTexture = CManager::GetInstance()->GetTexture();
 
 	//テクスチャの読み込み
-	m_nIdxTexture[0] = pTexture->Regist("data\\TEXTURE\\title.jpg");
+	m_nIdxTexture[0] = pTexture->Regist("data\\TEXTURE\\title.png");
 	m_nIdxTexture[1] = pTexture->Regist("data\\TEXTURE\\enter.png");
 
 	for (int nCntTex = 0; nCntTex < NUM_TITLE_TEX; nCntTex++)
@@ -104,10 +104,10 @@ HRESULT CTitleTex::Init(void)
 				if (nCntTex == 0)
 				{
 					//大きさ設定
-					m_apObject2D[nCntTex]->SetSize(200.0f, 100.0f);
+					m_apObject2D[nCntTex]->SetSize(220.0f, 74.0f);
 
 					//位置設定
-					m_apObject2D[nCntTex]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 200.0f, 0.0f));
+					m_apObject2D[nCntTex]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 150.0f, 0.0f));
 
 				}
 				else if (nCntTex == 1)

@@ -14,7 +14,7 @@
 #include "texture.h"
 #include "ranking.h"
 #include "titleTexture.h"
-
+#include "edit.h"
 #include "bg.h"
 
 //マクロ定義
@@ -57,7 +57,19 @@ HRESULT CTitle::Init(void)
 	//カメラの初期化処理
 	pCamera->Init();
 
-	CBg::Create();
+	//壁の生成
+	for (int nCntWallWidth = 0; nCntWallWidth < 3; nCntWallWidth++)
+	{//横
+		for (int nCntWallHeight = 0; nCntWallHeight < 3; nCntWallHeight++)
+		{//縦
+
+			CWall::Create(D3DXVECTOR3(-1000.0f + (nCntWallWidth * 1000.0f), 2000.0f + (nCntWallHeight * -1000.0f), 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0);
+
+		}
+	}
+
+	//エディットの生成
+	m_pEdit = CEdit::Create();
 
 	//タイトルのテクスチャ
 	CTitleTex::Create();
