@@ -168,6 +168,9 @@
     <ClCompile Include="effect.cpp">
       <Filter>ソース ファイル\billboard</Filter>
     </ClCompile>
+    <ClCompile Include="tutorial_texture.cpp">
+      <Filter>ソース ファイル\object3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="manager.h">
@@ -286,6 +289,9 @@
     </ClInclude>
     <ClInclude Include="effect.h">
       <Filter>ヘッダー ファイル\billboard</Filter>
+    </ClInclude>
+    <ClInclude Include="tutorial_texture.h">
+      <Filter>ヘッダー ファイル\object3D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

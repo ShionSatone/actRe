@@ -20,6 +20,7 @@
 #include "UI_death.h"
 #include "UI_item.h"
 #include "wall.h"
+#include "tutorial_texture.h"
 
 //静的メンバ変数宣言
 CEdit *CGame::m_pEdit = NULL;				//エディットの情報
@@ -75,6 +76,14 @@ HRESULT CGame::Init(void)
 
 		}
 	}
+
+	//チュートリアル画像の生成
+	CTutorialUI::Create(D3DXVECTOR3(-5700.0f, 1300.0f, -90.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CTutorialUI::STEP_MOVE);
+	CTutorialUI::Create(D3DXVECTOR3(-4600.0f, 1000.0f, -90.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CTutorialUI::STEP_JUMP);
+	CTutorialUI::Create(D3DXVECTOR3(-4300.0f, 1500.0f, 90.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CTutorialUI::STEP_DASH);
+	CTutorialUI::Create(D3DXVECTOR3(-2200.0f, 1400.0f, 90.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CTutorialUI::STEP_ALPHA);
+	CTutorialUI::Create(D3DXVECTOR3(-900.0f, 1300.0f, 90.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CTutorialUI::STEP_ITEM);
+	CTutorialUI::Create(D3DXVECTOR3(-100.0f, 1450.0f, 90.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CTutorialUI::STEP_ENEMY);
 
 	//プレイヤーの生成
 	m_pPlayer = m_pPlayer->Create(D3DXVECTOR3(-5400.0f, 1000.0f, 0.0f), D3DXVECTOR3(0.0f, -0.5f * D3DX_PI, 0.0f));

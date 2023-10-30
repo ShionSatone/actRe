@@ -193,6 +193,7 @@
     <ClCompile Include="title.cpp" />
     <ClCompile Include="titleTexture.cpp" />
     <ClCompile Include="tutorial.cpp" />
+    <ClCompile Include="tutorial_texture.cpp" />
     <ClCompile Include="UI_death.cpp" />
     <ClCompile Include="UI_item.cpp" />
     <ClCompile Include="wall.cpp" />
@@ -234,6 +235,7 @@
     <ClInclude Include="title.h" />
     <ClInclude Include="titleTexture.h" />
     <ClInclude Include="tutorial.h" />
+    <ClInclude Include="tutorial_texture.h" />
     <ClInclude Include="UI_death.h" />
     <ClInclude Include="UI_item.h" />
     <ClInclude Include="wall.h" />
