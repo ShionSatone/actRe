@@ -320,16 +320,13 @@ void CEnemy::Update(void)
 	}
 
 	//プレイヤーの情報代入
-	m_aSaveAction[m_nFrameCounter].pos = pPlayer->GetPosition();		//位置
-	m_aSaveAction[m_nFrameCounter].rot = pPlayer->GetRotation();		//向き
-	m_aSaveAction[m_nFrameCounter].bMove = pPlayer->GetIsMove();		//移動判定
-	m_aSaveAction[m_nFrameCounter].bDash = pPlayer->GetIsDash();		//ダッシュ判定
+	m_aSaveAction[m_nFrameCounter].pos = pPlayer->GetPosition();			//位置
+	m_aSaveAction[m_nFrameCounter].rot = pPlayer->GetRotation();			//向き
+	m_aSaveAction[m_nFrameCounter].bMove = pPlayer->GetIsMove();			//移動判定
+	m_aSaveAction[m_nFrameCounter].bDash = pPlayer->GetIsDash();			//ダッシュ判定
 	m_aSaveAction[m_nFrameCounter].bDashAuto = pPlayer->GetIsDashAuto();	//自動ダッシュ判定
-	m_aSaveAction[m_nFrameCounter].bJump = pPlayer->GetIsJump();		//ジャンプ判定
-	m_aSaveAction[m_nFrameCounter].bLand = pPlayer->GetIsLand();		//着地判定
-
-	//移動量を更新
-	//m_move.x += (0.0f - m_move.x) * 0.1f;
+	m_aSaveAction[m_nFrameCounter].bJump = pPlayer->GetIsJump();			//ジャンプ判定
+	m_aSaveAction[m_nFrameCounter].bLand = pPlayer->GetIsLand();			//着地判定
 
 	//手前側の更新処理
 	CEnemy::UpdateFront();
@@ -351,6 +348,13 @@ void CEnemy::Update(void)
 		}
 	}
 
+	//状態設定
+	for (int nCntEnemy = 0; nCntEnemy < PARTS_MAX; nCntEnemy++)
+	{
+		m_apModel[nCntEnemy]->SetState(m_state);
+
+	}
+
 	//デバッグ表示
 	pDebugProc->Print("\n敵の位置 (%f, %f, %f)\n", m_pos.x, m_pos.y, m_pos.z);
 	pDebugProc->Print("敵の移動量 (%f, %f, %f)\n", m_move.x, m_move.y, m_move.z);
@@ -362,7 +366,6 @@ void CEnemy::Update(void)
 //==============================================================
 void CEnemy::UpdateFront(void)
 {
-	//CLife *pLife = CGame::GetLife();
 	CSound *pSound = CManager::GetInstance()->GetSound();
 	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 	CPlayer *pPlayer = CGame::GetPlayer();		//プレイヤーの情報取得
@@ -379,9 +382,6 @@ void CEnemy::UpdateFront(void)
 
 	//向きの補正
 	CEnemy::RotCorrection();
-
-	//画面外処理
-	//CEnemy::Screen();
 
 	if (m_bChaseStart == true)
 	{//追いかけ開始したら
@@ -435,11 +435,6 @@ void CEnemy::MotionManager(void)
 		//歩かせる
 		m_pMotion->Set(m_pMotion->MOTIONTYPE_MOVE);
 	}
-	//else if (m_pMotion->IsFinish() == true && m_bAction == true)
-	//{//攻撃が終わったら
-
-	//	m_bAction = false;		//攻撃してない状態にする
-	//}
 	else if ((m_pMotion->GetType() != m_pMotion->MOTIONTYPE_NEUTRAL && m_pMotion->IsFinish() == true) ||
 		(m_pMotion->GetType() != m_pMotion->MOTIONTYPE_NEUTRAL && 
 			m_bMove == false && m_bJump == false && m_bLand == true))

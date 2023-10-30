@@ -130,7 +130,7 @@ private:
 	STATE m_state;			//敵の状態
 	ENEMYSTATE m_enemyState;		//敵の動きの状態
 
-	int m_nFrameCounter;	//フレーム数カウンター
+	int m_nFrameCounter;	//フレーム数カウンタ
 
 	SaveAction m_aSaveAction[MAX_ENEMY_POS];		//行動保存用
 	CMotion *m_pMotion;		//モーション情報

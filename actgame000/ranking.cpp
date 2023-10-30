@@ -80,7 +80,7 @@ HRESULT CRanking::Init(void)
 	CTexture *pTexture = CManager::GetInstance()->GetTexture();
 
 	//地上テクスチャの読み込み
-	m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\score00.png");
+	m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\number02.png");
 
 	//リセット処理
 	CRanking::Reset();

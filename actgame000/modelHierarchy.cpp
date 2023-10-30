@@ -44,9 +44,9 @@ CModelHier::CModelHier()
 	m_pMesh = NULL;
 
 	m_state = CObjectX::STATE_NONE;		//通常状態
-	m_matColor.MatD3D.Diffuse = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);		//マテリアルデータへのポインタ
-	m_matColor.MatD3D.Ambient = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);		//マテリアルデータへのポインタ
-	m_matColor.MatD3D.Emissive = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);		//マテリアルデータへのポインタ
+	m_matColor.MatD3D.Diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);		//マテリアルデータへのポインタ
+	m_matColor.MatD3D.Ambient = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);		//マテリアルデータへのポインタ
+	m_matColor.MatD3D.Emissive = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);		//マテリアルデータへのポインタ
 	m_matColor.MatD3D.Power = 5.0f;
 	m_matColor.MatD3D.Specular = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
 	m_nAppear = 0;		//点滅時間

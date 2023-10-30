@@ -139,7 +139,7 @@ HRESULT CScore::Init(void)
 	CTexture *pTexture = CManager::GetInstance()->GetTexture();
 
 	//テクスチャの読み込み
-	m_nIdxTex = pTexture->Regist("data\\TEXTURE\\score00.png");
+	m_nIdxTex = pTexture->Regist("data\\TEXTURE\\number02.png");
 
 	//初期化処理
 	for (int nCntScore = 0; nCntScore < NUM_DIGIT; nCntScore++)

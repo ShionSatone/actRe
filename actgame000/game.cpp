@@ -219,10 +219,13 @@ void CGame::SetEnablePause(bool bPouse)
 //==============================================================
 void CGame::SetEnemy(void)
 {
+	CSound *pSound = CManager::GetInstance()->GetSound();
 	int nNumSavePoint = m_pPlayer->GetNumSavePoint();		//何番目のセーブポイントか取得
 
 	if (nNumSavePoint == CPlayer::POINT_ENEMYBRIDGE && m_bEnemySpawn == false)
 	{//敵が出現する場所に来たら
+
+		pSound->Play(pSound->SOUND_LABEL_SE_APPEAR);
 
 		//敵の生成
 		CEnemy::Create(D3DXVECTOR3(-5400.0f, 1000.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));

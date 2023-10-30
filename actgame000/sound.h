@@ -33,11 +33,13 @@ public:
 		SOUND_LABEL_SE_ENTER002,		// 決定音002
 		SOUND_LABEL_SE_SWITCH,			// スイッチ音
 		SOUND_LABEL_SE_STEP,			// 歩く音
-		SOUND_LABEL_SE_JUMP,			// ジャンプ音
+		SOUND_LABEL_SE_JUMP000,			// ジャンプ音
+		SOUND_LABEL_SE_JUMP001,			// ジャンプ音
 		SOUND_LABEL_SE_DASH,			// ダッシュ音
 		SOUND_LABEL_SE_DASH_AUTO,		// オートダッシュ音
 		SOUND_LABEL_SE_COLLAPSE00,		// 崩れる音
 		SOUND_LABEL_SE_COLLAPSE01,		// 崩れた音
+		SOUND_LABEL_SE_APPEAR,			// 出現する音
 
 		SOUND_LABEL_MAX,
 	};

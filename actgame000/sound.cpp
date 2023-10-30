@@ -27,11 +27,13 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[SOUND_LABEL_MAX] =
 	{ "data/SE/enter002.wav", 0 },		// 決定音002
 	{ "data/SE/switch.wav", 0 },		// スイッチ音
 	{ "data/SE/step.wav", 0 },			// 歩く音
-	{ "data/SE/jump.wav", 0 },			// ジャンプ音
+	{ "data/SE/jump000.wav", 0 },		// ジャンプ音
+	{ "data/SE/jump001.wav", 0 },		// ジャンプ音
 	{ "data/SE/dash.wav", 0 },			// ダッシュ音
 	{ "data/SE/autodash.wav", 0 },		// オートダッシュ音
 	{ "data/SE/collapse00.wav", 0 },	// 崩れる音
 	{ "data/SE/collapse01.wav", 0 },	// 崩れた音
+	{ "data/SE/appear000.wav", 0 },		// 出現する音
 
 };
 
