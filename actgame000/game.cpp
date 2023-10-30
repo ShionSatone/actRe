@@ -115,7 +115,7 @@ HRESULT CGame::Init(void)
 	m_pPause = CPause::Create();
 
 	//BGMÄ¶
-	//pSound->Play(pSound->SOUND_LABEL_BGM002);
+	pSound->Play(pSound->SOUND_LABEL_BGM002);
 
 	CObject::SetType(CObject::TYPE_SCENE);
 

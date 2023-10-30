@@ -49,7 +49,7 @@
 #define HIT_CNT				(60 * 2)	//攻撃当たるまでのカウント数
 #define DAMAGE_CNT			(9)			//ダメージカウント数
 #define APP_CNT				(100)		//点滅時間
-#define STEP_CNT			(25)		//歩く音のカウンター
+#define STEP_CNT			(10)		//歩く音のカウンター
 
 //静的メンバ変数宣言
 char *CPlayer::m_apFileName[PARTS_MAX] =
@@ -350,8 +350,22 @@ void CPlayer::UpdateFront(void)
 	{//自動ダッシュしてないとき
 
 		//プレイヤーの操作
-		//CPlayer::ControlFrontKeyboard();
+		CPlayer::ControlFrontKeyboard();
 		CPlayer::ControlFrontJoyPad();
+
+		if (m_move.y >= JUMP_HEIGHT ||
+			(m_bJump == true && (m_move.x <= 7.0f && m_move.x >= -7.0f)) ||
+			(m_bDash == true && (m_move.x <= 7.0f && m_move.x >= -7.0f)))
+		{
+			//移動量加算
+			m_move.y -= MOVE_Y;
+
+			if (m_move.y <= 0.0f)
+			{//着地したら
+
+				m_bDash = false;
+			}
+		}
 	}
 
 	//足音鳴らす処理
@@ -644,19 +658,23 @@ void CPlayer::SEStep(void)
 	if (m_bMove == true && m_bJump == false)
 	{//歩いてるとき && ジャンプしてない
 
-		if ((m_nCntMove % STEP_CNT) == 0)
+		if ((m_nCntMove >= STEP_CNT))
 		{//一定時間たったら
 
 			//BGM再生
 			pSound->Play(pSound->SOUND_LABEL_SE_STEP);
+
+			m_nCntMove = 0;
 		}
+
+		m_nCntMove++;		//足音鳴らすカウンター加算
 	}
-	else
-	{
+	else if(m_bMove == false)
+	{//歩いてないとき
+
 		m_nCntMove = STEP_CNT;
 	}
 
-	m_nCntMove++;		//足音鳴らすカウンター加算
 }
 
 //==============================================================
@@ -744,31 +762,6 @@ void CPlayer::ControlFrontKeyboardJump(void)
 		m_bJump = true;
 		m_bLand = false;
 	}
-
-	//ジャンプ
-	if (pInputKeyboard->GetTrigger(DIK_SPACE) == true && m_bJump == false)
-	{//SPACEキーを押してたら && ジャンプしてなかったら
-
-		//BGM再生
-		pSound->Play(pSound->SOUND_LABEL_SE_JUMP);
-
-		//モーションの設定
-		//m_pMotion->Set(m_pMotion->MOTIONTYPE_JUMP);
-	}
-
-	if (m_move.y >= JUMP_HEIGHT || 
-		(m_bJump == true && (m_move.x <= 7.0f && m_move.x >= -7.0f)) ||
-		(m_bDash == true && (m_move.x <= 7.0f && m_move.x >= -7.0f)))
-	{
-		//移動量加算
-		m_move.y -= MOVE_Y;
-
-		if (m_move.y <= 0.0f)
-		{//着地したら
-
-			m_bDash = false;
-		}
-	}
 }
 
 //==============================================================
@@ -778,6 +771,7 @@ void CPlayer::ControlFrontKeyboardDash(void)
 {
 	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();		//キーボードの情報取得
 	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
+	CSound *pSound = CManager::GetInstance()->GetSound();
 
 	if (pInputKeyboard->GetPress(DIK_D) == true)
 	{//右
@@ -798,9 +792,15 @@ void CPlayer::ControlFrontKeyboardDash(void)
 
 					m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
 					m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
+
+					//BGM再生
+					pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 				}
 				else if (m_bCollisionAlpha == false)
 				{
+					//BGM再生
+					pSound->Play(pSound->SOUND_LABEL_SE_DASH);
+
 					m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
 					m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
 
@@ -825,11 +825,17 @@ void CPlayer::ControlFrontKeyboardDash(void)
 
 					m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
 					m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
+
+					//BGM再生
+					pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 				}
 				else if(m_bCollisionAlpha == false)
 				{
 					m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
 					m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
+
+					//BGM再生
+					pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 					m_nDashCounter++;		//ダッシュ回数加算
 
@@ -850,12 +856,18 @@ void CPlayer::ControlFrontKeyboardDash(void)
 
 				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 			}
 			else if (m_bCollisionAlpha == false)
 			{
 				m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 				m_nDashCounter++;		//ダッシュ回数加算
 
@@ -880,11 +892,17 @@ void CPlayer::ControlFrontKeyboardDash(void)
 
 					m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
 					m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
+
+					//BGM再生
+					pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 				}
 				else if (m_bCollisionAlpha == false)
 				{
 					m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
 					m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
+
+					//BGM再生
+					pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 					m_nDashCounter++;		//ダッシュ回数加算
 				}
@@ -906,11 +924,17 @@ void CPlayer::ControlFrontKeyboardDash(void)
 
 					m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
 					m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
+
+					//BGM再生
+					pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 				}
 				else if (m_bCollisionAlpha == false)
 				{
 					m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
 					m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
+
+					//BGM再生
+					pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 					m_nDashCounter++;		//ダッシュ回数加算
 				}
@@ -930,12 +954,18 @@ void CPlayer::ControlFrontKeyboardDash(void)
 
 				m_moveSave.x = sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_moveSave.y = cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 			}
 			else if (m_bCollisionAlpha == false)
 			{
 				m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 				m_nDashCounter++;		//ダッシュ回数加算
 			}
@@ -957,11 +987,17 @@ void CPlayer::ControlFrontKeyboardDash(void)
 
 				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -CURVE_UP) * FRONT_DASH_MOVE;
 				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -CURVE_UP) * FRONT_DASH_MOVE;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 			}
 			else if (m_bCollisionAlpha == false)
 			{
 				m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_DASH_MOVE;
 				m_move.y += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_DASH_MOVE;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 				m_nDashCounter++;		//ダッシュ回数加算
 			}
@@ -983,11 +1019,17 @@ void CPlayer::ControlFrontKeyboardDash(void)
 
 				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -CURVE_DOWN) * FRONT_DASH_MOVE;
 				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -CURVE_DOWN) * FRONT_DASH_MOVE;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 			}
 			else if (m_bCollisionAlpha == false)
 			{
 				m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_DASH_MOVE;
 				m_move.y += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_DASH_MOVE;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 				m_nDashCounter++;		//ダッシュ回数加算
 			}
@@ -1009,12 +1051,18 @@ void CPlayer::ControlFrontKeyboardDash(void)
 
 				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -CURVE_RL) * FRONT_DASH_MOVE;
 				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -CURVE_RL) * FRONT_DASH_MOVE;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 			}
 			else if (m_bCollisionAlpha == false)
 			{
 				m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 				m_nDashCounter++;		//ダッシュ回数加算
 			}
@@ -1031,12 +1079,18 @@ void CPlayer::ControlFrontKeyboardDash(void)
 
 				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 			}
 			else if (m_bCollisionAlpha == false)
 			{
 				m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 				m_nDashCounter++;		//ダッシュ回数加算
 			}
@@ -1069,7 +1123,7 @@ void CPlayer::ControlFrontJoyPad(void)
 }
 
 //==============================================================
-//プレイヤーのキーボードのジャンプ操作処理(手前側)
+//プレイヤーのパッドのジャンプ操作処理(手前側)
 //==============================================================
 void CPlayer::ControlFrontJoyPadJump(void)
 {
@@ -1097,40 +1151,16 @@ void CPlayer::ControlFrontJoyPadJump(void)
 		m_bJump = true;
 		m_bLand = false;
 	}
-
-	//ジャンプ
-	if (pInputJoyPad->GetTrigger(pInputJoyPad->BUTTON_A, 0) == true && m_bJump == false)
-	{//SPACEキーを押してたら && ジャンプしてなかったら
-
-		//BGM再生
-		pSound->Play(pSound->SOUND_LABEL_SE_JUMP);
-
-		//モーションの設定
-		//m_pMotion->Set(m_pMotion->MOTIONTYPE_JUMP);
-	}
-
-	if (m_move.y >= JUMP_HEIGHT ||
-		(m_bJump == true && (m_move.x <= 7.0f && m_move.x >= -7.0f)) ||
-		(m_bDash == true && (m_move.x <= 7.0f && m_move.x >= -7.0f)))
-	{
-		//移動量加算
-		m_move.y -= MOVE_Y;
-
-		if (m_move.y <= 0.0f)
-		{//着地したら
-
-			m_bDash = false;
-		}
-	}
 }
 
 //==============================================================
-//プレイヤーのキーボードのダッシュ操作処理(手前側)
+//プレイヤーのパッドのダッシュ操作処理(手前側)
 //==============================================================
 void CPlayer::ControlFrontJoyPadDash(void)
 {
 	CInputJoyPad *pInputJoyPad = CManager::GetInstance()->GetInputJoyPad();				//パッドの情報取得
 	CCamera *pCamera = CManager::GetInstance()->GetCamera();		//カメラの情報取得
+	CSound *pSound = CManager::GetInstance()->GetSound();
 
 	if (pInputJoyPad->GetPressLX(0).x > 0.0f)
 	{//右
@@ -1151,11 +1181,17 @@ void CPlayer::ControlFrontJoyPadDash(void)
 
 					m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
 					m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
+
+					//BGM再生
+					pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 				}
 				else if (m_bCollisionAlpha == false)
 				{
 					m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
 					m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * 0.25f) * FRONT_DASH_MOVE;
+
+					//BGM再生
+					pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 					m_nDashCounter++;		//ダッシュ回数加算
 
@@ -1178,11 +1214,17 @@ void CPlayer::ControlFrontJoyPadDash(void)
 
 					m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
 					m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
+
+					//BGM再生
+					pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 				}
 				else if (m_bCollisionAlpha == false)
 				{
 					m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
 					m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * 0.75f) * FRONT_DASH_MOVE;
+
+					//BGM再生
+					pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 					m_nDashCounter++;		//ダッシュ回数加算
 
@@ -1203,12 +1245,18 @@ void CPlayer::ControlFrontJoyPadDash(void)
 
 				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 			}
 			else if (m_bCollisionAlpha == false)
 			{
 				m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 				m_nDashCounter++;		//ダッシュ回数加算
 
@@ -1233,11 +1281,17 @@ void CPlayer::ControlFrontJoyPadDash(void)
 
 					m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
 					m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
+
+					//BGM再生
+					pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 				}
 				else if (m_bCollisionAlpha == false)
 				{
 					m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
 					m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * -0.25f) * FRONT_DASH_MOVE;
+
+					//BGM再生
+					pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 					m_nDashCounter++;		//ダッシュ回数加算
 				}
@@ -1259,11 +1313,17 @@ void CPlayer::ControlFrontJoyPadDash(void)
 
 					m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
 					m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
+
+					//BGM再生
+					pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 				}
 				else if (m_bCollisionAlpha == false)
 				{
 					m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
 					m_move.y += cosf(pCamera->GetRotation().y + D3DX_PI * -0.75f) * FRONT_DASH_MOVE;
+
+					//BGM再生
+					pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 					m_nDashCounter++;		//ダッシュ回数加算
 				}
@@ -1283,12 +1343,18 @@ void CPlayer::ControlFrontJoyPadDash(void)
 
 				m_moveSave.x = sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_moveSave.y = cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 			}
 			else if (m_bCollisionAlpha == false)
 			{
 				m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 				m_nDashCounter++;		//ダッシュ回数加算
 			}
@@ -1310,11 +1376,17 @@ void CPlayer::ControlFrontJoyPadDash(void)
 
 				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -CURVE_UP) * FRONT_DASH_MOVE;
 				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -CURVE_UP) * FRONT_DASH_MOVE;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 			}
 			else if (m_bCollisionAlpha == false)
 			{
 				m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_DASH_MOVE;
 				m_move.y += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_UP) * FRONT_DASH_MOVE;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 				m_nDashCounter++;		//ダッシュ回数加算
 			}
@@ -1336,11 +1408,17 @@ void CPlayer::ControlFrontJoyPadDash(void)
 
 				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -CURVE_DOWN) * FRONT_DASH_MOVE;
 				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -CURVE_DOWN) * FRONT_DASH_MOVE;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 			}
 			else if (m_bCollisionAlpha == false)
 			{
 				m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_DASH_MOVE;
 				m_move.y += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_DOWN) * FRONT_DASH_MOVE;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 				m_nDashCounter++;		//ダッシュ回数加算
 			}
@@ -1362,12 +1440,18 @@ void CPlayer::ControlFrontJoyPadDash(void)
 
 				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * -CURVE_RL) * FRONT_DASH_MOVE;
 				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * -CURVE_RL) * FRONT_DASH_MOVE;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 			}
 			else if (m_bCollisionAlpha == false)
 			{
 				m_move.x += sinf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_move.z += cosf(pCamera->GetRotation().y + -D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_fRotDest = pCamera->GetRotation().y + D3DX_PI * CURVE_RL;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 				m_nDashCounter++;		//ダッシュ回数加算
 			}
@@ -1384,12 +1468,18 @@ void CPlayer::ControlFrontJoyPadDash(void)
 
 				m_moveSave.x = sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_moveSave.y = cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH_AUTO);
 			}
 			else if (m_bCollisionAlpha == false)
 			{
 				m_move.x += sinf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_move.z += cosf(pCamera->GetRotation().y + D3DX_PI * CURVE_RL) * FRONT_DASH_MOVE;
 				m_fRotDest = pCamera->GetRotation().y + D3DX_PI * -CURVE_RL;
+
+				//BGM再生
+				pSound->Play(pSound->SOUND_LABEL_SE_DASH);
 
 				m_nDashCounter++;		//ダッシュ回数加算
 			}

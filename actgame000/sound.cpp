@@ -16,19 +16,20 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[SOUND_LABEL_MAX] =
 	{ "data/BGM/bgm001.wav", -1 },		// BGM1
 	{ "data/BGM/bgm002.wav", -1 },		// BGM2
 	{ "data/BGM/bgm003.wav", -1 },		// BGM3
-	{ "data/BGM/bgm004.wav", -1 },		// BGM4
 	{ "data/BGM/bgmBoss.wav", -1 },		// ボス戦BGM
 	{ "data/SE/damage001.wav", 0 },		// ダメージ音0
 	{ "data/SE/damage002.wav", 0 },		// ダメージ音1
 	{ "data/SE/shot000.wav", 0 },		// ショット音0
 	{ "data/SE/item000.wav", 0 },		// アイテム音
-	{ "data/SE/item100.wav", 0 },		// 回復音
+	{ "data/SE/item001.wav", 0 },		// 回復音
 	{ "data/SE/enter000.wav", 0 },		// 決定音000
 	{ "data/SE/enter001.wav", 0 },		// 決定音001
 	{ "data/SE/enter002.wav", 0 },		// 決定音002
 	{ "data/SE/switch.wav", 0 },		// スイッチ音
 	{ "data/SE/step.wav", 0 },			// 歩く音
 	{ "data/SE/jump.wav", 0 },			// ジャンプ音
+	{ "data/SE/dash.wav", 0 },			// ダッシュ音
+	{ "data/SE/autodash.wav", 0 },		// オートダッシュ音
 
 };
 

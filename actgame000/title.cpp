@@ -78,7 +78,7 @@ HRESULT CTitle::Init(void)
 	{
 
 		//BGMÄ¶
-		//pSound->Play(pSound->SOUND_LABEL_BGM000);
+		pSound->Play(pSound->SOUND_LABEL_BGM000);
 	}
 
 	return S_OK;

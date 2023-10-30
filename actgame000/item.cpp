@@ -176,13 +176,13 @@ void CItem::Hit(void)
 		m_bRespawn = true;
 
 		//SE再生
-		//pSound->Play(pSound->SOUND_LABEL_SE_ITEM000);
+		pSound->Play(pSound->SOUND_LABEL_SE_ITEM001);
 	}
 	else if (m_type == TYPEITEM_STAR)
 	{//星アイテムのとき
 
 		//SE再生
-		//pSound->Play(pSound->SOUND_LABEL_SE_ITEM000);
+		pSound->Play(pSound->SOUND_LABEL_SE_ITEM000);
 
 		//アイテム取得数加算
 		pItemUI->Add(1);

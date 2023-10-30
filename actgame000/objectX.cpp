@@ -505,15 +505,6 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 			}
 		}
 	}
-	//else
-	//{
-	//	CPlayer *pPlayer = CGame::GetPlayer();
-
-	//	if (type == TYPE_ALPHA_BLOCK && pPlayer->GetIsDashAuto() == true)
-	//	{
-	//		pPlayer->SetDashAuto(false);		//透明ブロックに当たってない状態にする
-	//	}
-	//}
 
 	return bLand;
 }
@@ -616,7 +607,6 @@ bool CObjectX::CollisionEnemy2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3
 
 	return bLand;
 }
-
 
 //==============================================================
 //モデルの3Dの当たり判定処理

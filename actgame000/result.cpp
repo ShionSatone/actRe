@@ -37,7 +37,7 @@ CResult::~CResult()
 //==============================================================
 HRESULT CResult::Init(void)
 {
-	//CSound *pSound = CManager::GetInstance()->GetSound();
+	CSound *pSound = CManager::GetInstance()->GetSound();
 
 	//”wŒi
 	CBg::Create();
@@ -54,7 +54,7 @@ HRESULT CResult::Init(void)
 	////BGMÄ¶
 	//if (CManager::GetResult() == true)
 	//{
-	//	pSound->Play(pSound->SOUND_LABEL_BGM003);
+		pSound->Play(pSound->SOUND_LABEL_BGM003);
 	//}
 	//else if (CManager::GetResult() == false)
 	//{
