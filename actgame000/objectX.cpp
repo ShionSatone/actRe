@@ -301,13 +301,13 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 	CPlayer *pPlayer = CGame::GetPlayer();
 	bool bLand = false;		//’…’n‚µ‚½‚©‚Ç‚¤‚©
 
-	/*if (pPos->y + Max.y > posModel.y + minModel.y
-		&& pPos->y < posModel.y + maxModel.y)*/
+	if (pPos->y + Max.y > posModel.y + minModel.y
+		&& pPos->y < posModel.y + maxModel.y)
 	{
 		if (pPosOld->x - Min.z <= posModel.x + minModel.x
 			&& pPos->x - Min.z > posModel.x + minModel.x
-			&& pPos->y + Max.y > posModel.y + minModel.y
-			&& pPos->y < posModel.y + maxModel.y)
+			/*&& pPos->y + Max.y > posModel.y + minModel.y
+			&& pPos->y < posModel.y + maxModel.y*/)
 		{//¶‚É‚ß‚èž‚ñ‚¾ê‡
 
 			if (pPosOld->y + Max.y <= posModel.y + minModel.y
@@ -356,8 +356,8 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 
 		if (pPosOld->x + Min.z >= posModel.x + maxModel.x
 			&& pPos->x + Min.z < posModel.x + maxModel.x
-			&& pPos->y + Max.y > posModel.y + minModel.y
-			&& pPos->y < posModel.y + maxModel.y)
+			/*&& pPos->y + Max.y > posModel.y + minModel.y
+			&& pPos->y < posModel.y + maxModel.y*/)
 		{//‰E‚É‚ß‚èž‚ñ‚¾ê‡
 
 			if (pPosOld->y + Max.y <= posModel.y + minModel.y

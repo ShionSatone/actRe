@@ -10,6 +10,7 @@
 #include "material.h"
 #include "player.h"
 #include "game.h"
+#include "sound.h"
 
 //マクロ定義
 #define NUM_MODEL			(2)			//モデルの種類
@@ -34,6 +35,8 @@ CModel::CModel()
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//向き
 
 	m_bActionDown = false;		//ブロックを落とすか
+	m_bDown = false;			//落とされてるか
+	m_bCollision = false;		//他のブロックと当たってるか
 }
 
 //==============================================================
@@ -47,6 +50,8 @@ CModel::CModel(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_rot = rot;		//向き
 
 	m_bActionDown = false;		//ブロックを落とすか
+	m_bDown = false;			//落とされてるか
+	m_bCollision = false;		//他のブロックと当たってるか
 
 }
 
@@ -185,6 +190,8 @@ void CModel::Uninit(void)
 //==============================================================
 void CModel::Update(void)
 {
+	CSound *pSound = CManager::GetInstance()->GetSound();
+
 	if (m_bActionDown == true)
 	{//落下させるとき
 
@@ -195,7 +202,18 @@ void CModel::Update(void)
 		m_pos += m_move;	//移動量加算
 
 		CObjectX::SetPosition(m_pos);
-		CObjectX::Collision(&m_pos, &m_posOld, &m_move, CObjectX::GetSizeMin(), CObjectX::GetSizeMax());
+
+		if (m_bCollision == false)
+		{//他のブロックと当たってないとき
+
+			if (CObjectX::Collision(&m_pos, &m_posOld, &m_move, CObjectX::GetSizeMin(), CObjectX::GetSizeMax()) == true)
+			{//当たったら
+
+				pSound->Play(pSound->SOUND_LABEL_SE_COLLAPSE01);
+
+				m_bCollision = true;
+			}
+		}
 	}
 
 	//オブジェクトXの更新処理
@@ -228,6 +246,7 @@ void CModel::SetType(TYPE type)
 void CModel::Hit(void)
 {
 	CPlayer *pPlayer = CGame::GetPlayer();
+	CSound *pSound = CManager::GetInstance()->GetSound();
 
 	switch (m_type)
 	{
@@ -240,13 +259,28 @@ void CModel::Hit(void)
 
 	case TYPE_DOWN_6BLOCK:		//落下ブロック
 
+		if (m_bDown == false)
+		{
+			pSound->Play(pSound->SOUND_LABEL_SE_COLLAPSE00);
+			m_bDown = true;			//落とした状態にする
+
+		}
+
 		m_bActionDown = true;	//ブロックを落とす
 
 		break;
 
 	case TYPE_DOWN_9BLOCK:		//落下ブロック
 
+		if (m_bDown == false)
+		{
+			pSound->Play(pSound->SOUND_LABEL_SE_COLLAPSE00);
+			m_bDown = true;			//落とした状態にする
+
+		}
+
 		m_bActionDown = true;	//ブロックを落とす
+		m_bDown = true;			//落とした状態にする
 
 		break;
 	}

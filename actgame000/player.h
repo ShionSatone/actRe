@@ -147,7 +147,7 @@ private:
 
 	int m_nDashCounter;		//ダッシュした回数
 
-	//int m_particleType;		//パーティクルの種類
+	int m_particleType;		//パーティクルの種類
 	int m_nType;			//何番目のパーティクルか
 	int m_nParticleLife;	//パーティクルの寿命
 	int m_nCntHit;			//ヒットできるまでのカウンター

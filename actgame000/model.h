@@ -44,6 +44,8 @@ private:
 	int m_nIdxModel;		//モデルの番号
 
 	bool m_bActionDown;		//ブロックを落とすか
+	bool m_bDown;			//落とされてるか
+	bool m_bCollision;		//他のブロックと当たってるか
 
 	D3DXVECTOR3 m_pos;		//位置
 	D3DXVECTOR3 m_posOld;	//前回の位置

@@ -48,21 +48,18 @@ public:
 	} TYPE;
 
 	//パーティクルの種類
-	//typedef enum
-	//{
-	//	PARTICLETYPE_NONE = 0,		//何もなし
-	//	PARTICLETYPE_WATER,			//水
-	//	PARTICLETYPE_ICE,			//氷
-	//	PARTICLETYPE_VAPOR,			//蒸気
-	//	PARTICLETYPE_ENEMY,			//敵の弾
-	//	PARTICLETYPE_WITCH,			//魔女の弾
-	//	PARTICLETYPE_EXPLOSION,		//爆発
-	//	PARTICLETYPE_LAND,			//着地
-	//	PARTICLETYPE_LIFE,			//回復
-	//	PARTICLETYPE_JUMP,			//ジャンプ
-	//	PARTICLETYPE_MOVE,			//移動
-	//	PARTICLETYPE_MAX
-	//} PARTICLETYPE;
+	typedef enum
+	{
+		PARTICLETYPE_NONE = 0,		//何もなし
+		PARTICLETYPE_ENEMY,			//敵の弾
+		PARTICLETYPE_WITCH,			//魔女の弾
+		PARTICLETYPE_EXPLOSION,		//爆発
+		PARTICLETYPE_LAND,			//着地
+		PARTICLETYPE_LIFE,			//回復
+		PARTICLETYPE_JUMP,			//ジャンプ
+		PARTICLETYPE_MOVE,			//移動
+		PARTICLETYPE_MAX
+	} PARTICLETYPE;
 
 	//オブジェクトの状態
 	typedef enum

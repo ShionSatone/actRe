@@ -171,6 +171,9 @@
     <ClCompile Include="tutorial_texture.cpp">
       <Filter>ソース ファイル\object3D</Filter>
     </ClCompile>
+    <ClCompile Include="particle.cpp">
+      <Filter>ソース ファイル\billboard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="manager.h">
@@ -292,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="tutorial_texture.h">
       <Filter>ヘッダー ファイル\object3D</Filter>
+    </ClInclude>
+    <ClInclude Include="particle.h">
+      <Filter>ヘッダー ファイル\billboard</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -36,6 +36,8 @@ public:
 		SOUND_LABEL_SE_JUMP,			// ジャンプ音
 		SOUND_LABEL_SE_DASH,			// ダッシュ音
 		SOUND_LABEL_SE_DASH_AUTO,		// オートダッシュ音
+		SOUND_LABEL_SE_COLLAPSE00,		// 崩れる音
+		SOUND_LABEL_SE_COLLAPSE01,		// 崩れた音
 
 		SOUND_LABEL_MAX,
 	};

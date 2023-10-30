@@ -33,10 +33,13 @@ public:
 	void Update(void);		//更新処理
 	void Draw(void);		//描画処理
 	void SetFade(CScene::MODE modeNext);		//フェードの設定
+	void SetNormalFade(void);					//ただのフェードの設定
 	FADE GetFade(void) { return m_fade; }		//フェードの取得
 
 private:
 	int m_nIdxTexture;		//テクスチャの番号
+
+	bool m_bTrans;			//画面遷移するか
 
 	FADE m_fade;										//フェードの状態
 	CScene::MODE m_modeNext;							//次の画面（モード）

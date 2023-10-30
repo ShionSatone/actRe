@@ -178,38 +178,38 @@ void CEffect::Set(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXCOLOR col, float fRadiu
 	CTexture *pTexture = CManager::GetInstance()->GetTexture();
 
 	//テクスチャの読み込み
-	//switch (m_type)
-	//{
-	//case PARTICLETYPE_NONE:		//何もなし
+	switch (m_type)
+	{
+	case PARTICLETYPE_NONE:		//何もなし
 
-	//	m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\effect000.jpg");
+		m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\effect000.jpg");
 
-	//	break;
+		break;
 
-	//case PARTICLETYPE_EXPLOSION:	//爆発
+	case PARTICLETYPE_EXPLOSION:	//爆発
 
-	//	m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\effect000.jpg");
+		m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\effect000.jpg");
 
-	//	break;
+		break;
 
-	//case PARTICLETYPE_LIFE:			//回復
+	case PARTICLETYPE_LIFE:			//回復
 
-	//	m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\effect005.png");
+		m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\effect005.png");
 
-	//	break;
+		break;
 
-	//case PARTICLETYPE_MOVE:			//移動
+	case PARTICLETYPE_MOVE:			//移動
 
-	//	m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\sand.jpg");
+		m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\effect005.png");
 
-	//	break;
+		break;
 
-	//default:		//その他
+	default:		//その他
 
-	//	m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\effect000.jpg");
+		m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\effect000.jpg");
 
-	//	break;
-	//}
+		break;
+	}
 
 	//テクスチャの割り当て
 	CBillboard::BindTexture(m_nIdxTexture);

@@ -166,11 +166,11 @@ void CModelHier::Uninit(void)
 //==============================================================
 void CModelHier::Update(void)
 {
-	//if (m_state == CObject::STATE_APPEAR)
-	//{//ì_ñ≈èÛë‘ÇÃÇ∆Ç´
+	if (m_state == CObject::STATE_APPEAR)
+	{//ì_ñ≈èÛë‘ÇÃÇ∆Ç´
 
-	//	m_bDisp = m_bDisp ? false : true;
-	//}
+		m_bDisp = m_bDisp ? false : true;
+	}
 }
 
 //==============================================================

@@ -30,6 +30,8 @@ CSound::SOUNDINFO CSound::m_aSoundInfo[SOUND_LABEL_MAX] =
 	{ "data/SE/jump.wav", 0 },			// ジャンプ音
 	{ "data/SE/dash.wav", 0 },			// ダッシュ音
 	{ "data/SE/autodash.wav", 0 },		// オートダッシュ音
+	{ "data/SE/collapse00.wav", 0 },	// 崩れる音
+	{ "data/SE/collapse01.wav", 0 },	// 崩れた音
 
 };
 

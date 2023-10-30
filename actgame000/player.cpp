@@ -18,6 +18,7 @@
 #include "fade.h"
 #include "UI_death.h"
 #include "UI_item.h"
+#include "particle.h"
 
 //マクロ定義
 #define PRIORITY			(3)			//優先順位
@@ -120,7 +121,7 @@ CPlayer::CPlayer()
 
 	m_nDashCounter = 0;		//ダッシュした回数
 
-	//m_particleType = PARTICLETYPE_WATER;	//パーティクルの種類
+	m_particleType = PARTICLETYPE_NONE;	//パーティクルの種類
 	m_nType = 1;		//何番目のパーティクルか
 	m_nParticleLife = 50;			//パーティクルの寿命
 	m_state = STATE_NONE;			//状態
@@ -178,7 +179,7 @@ CPlayer::CPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 
 	m_nDashCounter = 0;		//ダッシュした回数
 
-	//m_particleType = PARTICLETYPE_WATER;	//パーティクルの種類
+	m_particleType = PARTICLETYPE_NONE;	//パーティクルの種類
 	m_nType = 1;				//何番目のパーティクルか
 	m_nParticleLife = 50;		//パーティクルの寿命
 	m_state = STATE_NONE;		//状態
@@ -331,6 +332,12 @@ void CPlayer::Update(void)
 	//モーションの更新処理
 	m_pMotion->Update();
 
+	for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
+	{
+		//プレイヤーの更新処理
+		m_apModel[nCntPlayer]->Update();
+	}
+
 	//デバッグ表示
 	pDebugProc->Print("\nプレイヤーの位置    (%f, %f, %f)\n", m_pos.x, m_pos.y, m_pos.z);
 	pDebugProc->Print("プレイヤーの移動量    (%f, %f, %f)\n", m_move.x, m_move.y, m_move.z);
@@ -344,9 +351,9 @@ void CPlayer::Update(void)
 //==============================================================
 void CPlayer::UpdateFront(void)
 {
-	//CLife *pLife = CGame::GetLife();
+	CFade *pFade = CManager::GetInstance()->GetFade();
 
-	if (m_bDashAuto == false)
+	if (m_bDashAuto == false && pFade->GetFade() != CFade::FADE_OUT)
 	{//自動ダッシュしてないとき
 
 		//プレイヤーの操作
@@ -413,9 +420,16 @@ void CPlayer::UpdateFront(void)
 //==============================================================
 void CPlayer::UpdateState(void)
 {
+	CFade *pFade = CManager::GetInstance()->GetFade();
+
 	switch (m_state)
 	{
 	case STATE_NONE:		//通常状態
+
+		if (m_nCntHit > 0 && pFade->GetFade() == CFade::FADE_NONE)
+		{
+			m_nCntHit--;		//攻撃あたるまでのカウンター減算
+		}
 
 		break;
 
@@ -445,6 +459,21 @@ void CPlayer::UpdateState(void)
 
 	case STATE_APPEAR:		//点滅状態
 
+		if (pFade->GetFade() == CFade::FADE_IN)
+		{
+			m_state = CObject::STATE_NONE;		//通常状態にする
+
+			m_pos = m_posSavePoint[m_nNumPosSave];		//セーブした場所に戻る
+			m_nCntDamage = 0;
+
+			//状態設定
+			for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
+			{
+				m_apModel[nCntPlayer]->SetState(m_state);		//状態設定
+
+			}
+		}
+
 		m_nCntDamage--;		//ダメージ時間減算
 
 		if ((m_nCntDamage % 3) == 0)
@@ -458,40 +487,24 @@ void CPlayer::UpdateState(void)
 			}
 		}
 
-		if (m_nCntDamage <= 0)
-		{//ダメージ時間が終わったら
+		//if (m_nCntDamage <= 0)
+		//{//ダメージ時間が終わったら
 
-			m_state = CObject::STATE_NONE;		//通常状態にする
+		//	m_state = CObject::STATE_NONE;		//通常状態にする
 
-			//状態設定
-			for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
-			{
-				m_apModel[nCntPlayer]->SetState(m_state);		//状態設定
+		//	m_pos = m_posSavePoint[m_nNumPosSave];		//セーブした場所に戻る
 
-			}
-		}
+		//	//状態設定
+		//	for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
+		//	{
+		//		m_apModel[nCntPlayer]->SetState(m_state);		//状態設定
+
+		//	}
+		//}
 
 		break;
 
 	case STATE_DEATH:		//死亡状態
-
-		m_pos = m_posSavePoint[m_nNumPosSave];		//セーブした場所に戻る
-
-		m_state = CObject::STATE_NONE;		//点滅状態にする
-
-		//m_nCntDamage = APP_CNT;
-
-		//CScore *pScore = CGame::GetScore();		//スコアの情報
-		//CFade *pFade = CManager::GetInstance()->GetFade();		//フェードの情報取得
-
-		//スコア設定
-		//CManager::SetNumScore(pScore->Get());
-
-		//リザルトの判定
-		//CManager::SetResult(false);
-
-		//リザルト
-		//pFade->SetFade(CScene::MODE_RESULT);
 
 		break;
 	}
@@ -516,29 +529,12 @@ void CPlayer::CollisionAction(void)
 		if (m_bLand == false)
 		{
 			//パーティクルの生成
-			//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y, m_pos.z), D3DXCOLOR(0.8f, 0.7f, 0.6f, 0.8f), PARTICLETYPE_MOVE, 20, 10.0f);
+			//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y, m_pos.z), D3DXCOLOR(0.1f, 0.2f, 0.4f, 0.8f), PARTICLETYPE_MOVE, 20, 10.0f);
 		}
 
 		m_bJump = false;	//ジャンプしてない状態にする
 		m_bLand = true;		//着地した状態にする
 
-		//if ((m_pMotion->GetType() != m_pMotion->MOTIONTYPE_MOVE && m_bMove == true && m_bJump == false && m_bLand == true))
-		//{//地面についたら(そのあと移動)
-
-		//	//移動状態にする
-		//	m_pMotion->Set(m_pMotion->MOTIONTYPE_MOVE);
-
-
-		//}
-		//else if ((m_pMotion->GetType() == m_pMotion->MOTIONTYPE_JUMP && m_bMove == false && m_bJump == false && m_bLand == true))
-		//{//地面についたら(完全に止まる)
-
-		//	//着地状態にする
-		//	m_pMotion->Set(m_pMotion->MOTIONTYPE_LAND);
-		//}
-
-		//パーティクル生成
-		//CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), m_particleType, m_nParticleLife, 50.0f);
 	}
 	else if (bLand == false &&
 		pInputKeyboard->GetPress(DIK_SPACE) == false && pInputJoyPad->GetPress(pInputJoyPad->BUTTON_A, 0) == false)
@@ -1099,6 +1095,19 @@ void CPlayer::ControlFrontKeyboardDash(void)
 		m_bDash = true;		//ダッシュした状態にする
 		m_bJump = true;		//ジャンプした状態にする
 	}
+
+	if (m_bDashAuto == true)
+	{
+		//パーティクルの生成
+		CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y, m_pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), PARTICLETYPE_MOVE, 20, 30.0f);
+	}
+
+	if (m_bDash == true && m_bJump == true)
+	{
+		//パーティクルの生成
+		CParticle::Create(D3DXVECTOR3(m_pos.x, m_pos.y, m_pos.z), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), PARTICLETYPE_MOVE, 20, 20.0f);
+
+	}
 }
 
 //==============================================================
@@ -1612,10 +1621,10 @@ void CPlayer::Hit(void)
 {
 	CSound *pSound = CManager::GetInstance()->GetSound();
 	CDeathUI *pDeathUI = CGame::GetDeathUI();
+	CFade *pFade = CManager::GetInstance()->GetFade();
 
-	int nLife = 0;
-
-	if (m_state != CObject::STATE_DAMAGE && m_state != CObject::STATE_APPEAR && m_nCntDamage <= 0)
+	if (m_state != CObject::STATE_DAMAGE && m_state != CObject::STATE_APPEAR && m_nCntDamage <= 0 && m_nCntHit <= 0 &&
+		pFade->GetFade() != CFade::FADE_IN)
 	{
 		//BGM再生
 		pSound->Play(pSound->SOUND_LABEL_SE_DAMAGE001);
@@ -1623,11 +1632,12 @@ void CPlayer::Hit(void)
 		m_state = CObject::STATE_APPEAR;
 
 		m_nCntDamage = HIT_CNT;				//ダメージ状態を保つ時間設定
-		m_nCntHit = HIT_CNT;				//攻撃あたるまでのカウンター
+		m_nCntHit = 60;				//攻撃あたるまでのカウンター
 
 		pDeathUI->Add(1);		//死亡数加算
 
-		m_pos = m_posSavePoint[m_nNumPosSave];		//セーブした場所に戻る
+		//フェードさせる
+		pFade->SetNormalFade();
 
 		for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
 		{
@@ -1635,16 +1645,14 @@ void CPlayer::Hit(void)
 			m_apModel[nCntPlayer]->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
 		}
 
-		//m_state = CObject::STATE_DEATH;
-
 		//パーティクル生成
 		//CParticle::Create(m_pos, D3DXCOLOR(0.1f, 0.4f, 0.5f, 1.0f), PARTICLETYPE_ENEMY, 30, 40);
 
 		//状態設定
-		//for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
-		//{
-		//	m_apModel[nCntPlayer]->SetState(m_state);		//ダメージ状態にする
-		//}
+		for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
+		{
+			m_apModel[nCntPlayer]->SetState(m_state);		//ダメージ状態にする
+		}
 	}
 }
 

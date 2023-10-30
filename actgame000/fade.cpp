@@ -23,6 +23,8 @@ CFade::CFade()
 	m_fade = FADE_IN;										//何もしてない状態
 	m_modeNext = CScene::MODE_TITLE;						//次の画面（モード）を設定
 	m_colorFade = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);		//黒いポリゴン（不透明）にしておく
+
+	m_bTrans = false;		//ただのフェードか
 }
 
 //==============================================================
@@ -126,8 +128,12 @@ void CFade::Update(void)
 				m_colorFade.a = 1.0f;
 				m_fade = FADE_IN;		//フェードイン状態に
 
-				//モード設定（次の画面に移行）
-				CManager::GetInstance()->SetMode(m_modeNext);
+				if (m_bTrans == true)
+				{//画面遷移させるフェードのとき
+
+					//モード設定（次の画面に移行）
+					CManager::GetInstance()->SetMode(m_modeNext);
+				}
 			}
 		}
 
@@ -161,8 +167,23 @@ void CFade::SetFade(CScene::MODE modeNext)
 	if (m_fade == FADE_NONE)
 	{//何もしていない状態のとき
 
+		m_bTrans = true;			//画面遷移させない
 		m_fade = FADE_OUT;										//フェードアウト状態
 		m_modeNext = modeNext;									//次の画面（モード）を設定
+		m_colorFade = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);		//黒いポリゴン（透明）にしておく
+	}
+}
+
+//==============================================================
+//ただのフェードの設定処理
+//==============================================================
+void CFade::SetNormalFade(void)
+{
+	if (m_fade == FADE_NONE)
+	{//何もしていない状態のとき
+
+		m_bTrans = false;			//画面遷移させる
+		m_fade = FADE_OUT;										//フェードアウト状態
 		m_colorFade = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);		//黒いポリゴン（透明）にしておく
 	}
 }
