@@ -31,3 +31,9 @@ GitHubURL https://github.com/ShionSatone/actRe.git
 ・インゲーム以外の処理実装
 ・アイテム修正
 ・当たり判定修正
+
+10/30
+・BGM、SE追加
+・テクスチャ変更
+・パーティクル追加
+・操作説明追加
