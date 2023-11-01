@@ -240,7 +240,7 @@ void CGame::SetEnemy(void)
 		pSound->Play(pSound->SOUND_LABEL_SE_APPEAR);
 
 		//ìGÇÃê∂ê¨
-		CEnemy::Create(D3DXVECTOR3(100.0f, -3600.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		CEnemy::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 		m_bEnemySpawnSecond = true;		//ìGèoåªÇµÇΩèÛë‘Ç…Ç∑ÇÈ
 	}
