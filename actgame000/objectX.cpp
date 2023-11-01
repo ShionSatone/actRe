@@ -314,12 +314,17 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				&& pPos->y + Max.y > posModel.y + minModel.y)
 			{//底にめり込んだ場合
 
-
+				pPos->y = posModel.y + minModel.y - Max.y;		//ブロックの底下に立たせる
+				pMove->y = 0.0f;		//移動量を０にする
 			}
 			else if (pPosOld->y >= posModel.y + maxModel.y
 				&& pPos->y < posModel.y + maxModel.y)
 			{//上にめり込んだ場合
 
+				pPos->y = posModel.y + maxModel.y;		//ブロックの上に立たせる
+				pMove->y = 0.0f;		//移動量を０にする
+
+				bLand = true;		//着地した状態にする
 			}
 			else
 			{
@@ -364,12 +369,17 @@ bool CObjectX::Collision2DModel(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pPosOld, D3DXVEC
 				&& pPos->y + Max.y > posModel.y + minModel.y)
 			{//底にめり込んだ場合
 
-
+				pPos->y = posModel.y + minModel.y - Max.y;		//ブロックの底下に立たせる
+				pMove->y = 0.0f;		//移動量を０にする
 			}
 			else if (pPosOld->y >= posModel.y + maxModel.y
 				&& pPos->y < posModel.y + maxModel.y)
 			{//上にめり込んだ場合
 
+				pPos->y = posModel.y + maxModel.y;		//ブロックの上に立たせる
+				pMove->y = 0.0f;		//移動量を０にする
+
+				bLand = true;		//着地した状態にする
 			}
 			else
 			{

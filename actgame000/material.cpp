@@ -110,10 +110,10 @@ void CMaterial::Unload(void)
 		//テクスチャの破棄
 		for (int nCntMat = 0; nCntMat < (int)m_Material[nCntModel].dwNumMat; nCntMat++)
 		{
-			if (m_Material[nCntModel].pTexture[nCntMat] != NULL)
+			if (m_Material[nCntModel].pTexture != NULL)
 			{
-				m_Material[nCntModel].pTexture[nCntMat]->Release();
-				m_Material[nCntModel].pTexture[nCntMat] = NULL;
+				delete m_Material[nCntModel].pTexture;
+				m_Material[nCntModel].pTexture = NULL;
 			}
 		}
 

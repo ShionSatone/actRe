@@ -182,7 +182,7 @@ void CEffect::Set(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXCOLOR col, float fRadiu
 	{
 	case PARTICLETYPE_NONE:		//‰½‚à‚È‚µ
 
-		m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\effect000.jpg");
+		m_nIdxTexture = pTexture->Regist("data\\TEXTURE\\effect004.png");
 
 		break;
 

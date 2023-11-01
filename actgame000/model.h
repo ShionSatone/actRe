@@ -10,7 +10,7 @@
 #include"objectX.h"
 
 //マクロ定義
-#define MAX_MODEL			(1080)		//モデルの数
+#define MAX_MODEL			(1160)		//モデルの数
 
 //前方宣言
 class CPlayer;		//プレイヤー

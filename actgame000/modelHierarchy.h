@@ -24,7 +24,6 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	void SetModel(void);		//モデルの設定処理
 
 	void SetParent(CModelHier *pModelHier) { m_pParent = pModelHier; }		//親モデルの設定
 	D3DXMATRIX GetMtxWorld(void) { return m_mtxWorld; }	//ワールドマトリックス取得
@@ -45,6 +44,8 @@ public:
 	CObjectX::STATE GetState(void) { return m_state; }			//敵の状態取得
 
 private:
+	void SetModel(void);		//モデルの設定処理
+
 	LPD3DXMESH m_pMesh;					//メッシュ（頂点情報）へのポインタ
 	LPD3DXBUFFER m_pBuffMat;			//マテリアルへのポインタ
 	DWORD m_dwNumMat;					//マテリアルの数

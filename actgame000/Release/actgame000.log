@@ -1,21 +1,8 @@
 ﻿  enemy.cpp
-  game.cpp
-  item.cpp
-  manager.cpp
-  model.cpp
-  modelHierarchy.cpp
-  pause.cpp
-  player.cpp
-  ranking.cpp
-  result.cpp
-  sound.cpp
-  title.cpp
-  titleTexture.cpp
-  tutorial.cpp
   コード生成しています。
-  12 of 522 functions ( 2.3%) were compiled, the rest were copied from previous compilation.
+  1 of 522 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    21 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   actgame000.vcxproj -> C:\Users\student\Desktop\act\actRe\actgame000\actgame000.exe
   actgame000.vcxproj -> C:\Users\student\Desktop\act\actRe\actgame000\actgame000.pdb (Full PDB)

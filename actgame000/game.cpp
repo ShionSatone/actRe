@@ -29,7 +29,8 @@ bool CGame::m_bReset = true;				//リセットしたかどうか
 bool CGame::m_bPause = false;				//ポーズ画面か
 CPause *CGame::m_pPause = NULL;				//ポーズ画面の情報
 CScore *CGame::m_pScore = NULL;				//スコアの情報
-bool CGame::m_bEnemySpawn = false;			//スタートしたか
+bool CGame::m_bEnemySpawnFirst = false;			//スタートしたか
+bool CGame::m_bEnemySpawnSecond = false;		//敵が出現したか
 CDeathUI *CGame::m_pDeathUI = NULL;			//死亡UIの情報
 CItemUI *CGame::m_pItemUI = NULL;			//アイテムUIの情報
 CGame::GAMEMODE CGame::m_gameMode = GAMEMODE_START;	//ゲームモード
@@ -41,7 +42,8 @@ CGame::CGame()
 {
 	m_nCntEnemy = 0;				//敵出現カウント
 
-	m_bEnemySpawn = false;			//敵出現したか
+	m_bEnemySpawnFirst = false;			//敵出現したか
+	m_bEnemySpawnSecond = false;
 }
 
 //==============================================================
@@ -222,7 +224,7 @@ void CGame::SetEnemy(void)
 	CSound *pSound = CManager::GetInstance()->GetSound();
 	int nNumSavePoint = m_pPlayer->GetNumSavePoint();		//何番目のセーブポイントか取得
 
-	if (nNumSavePoint == CPlayer::POINT_ENEMYBRIDGE && m_bEnemySpawn == false)
+	if (nNumSavePoint == CPlayer::POINT_ENEMYBRIDGE && m_bEnemySpawnFirst == false)
 	{//敵が出現する場所に来たら
 
 		pSound->Play(pSound->SOUND_LABEL_SE_APPEAR);
@@ -230,6 +232,17 @@ void CGame::SetEnemy(void)
 		//敵の生成
 		CEnemy::Create(D3DXVECTOR3(-5400.0f, 1000.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
-		m_bEnemySpawn = true;		//敵出現した状態にする
+		m_bEnemySpawnFirst = true;		//敵出現した状態にする
 	}
+	else if (nNumSavePoint == CPlayer::POINT_BIGINEND && m_bEnemySpawnSecond == false)
+	{//敵が出現する場所に来たら
+
+		pSound->Play(pSound->SOUND_LABEL_SE_APPEAR);
+
+		//敵の生成
+		CEnemy::Create(D3DXVECTOR3(100.0f, -3600.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+		m_bEnemySpawnSecond = true;		//敵出現した状態にする
+	}
+
 }

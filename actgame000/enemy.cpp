@@ -17,6 +17,7 @@
 #include "sound.h"
 #include "fade.h"
 #include "player.h"
+#include "effect.h"
 
 //マクロ定義
 #define PRIORITY			(3)			//優先順位
@@ -38,8 +39,10 @@
 #define DAMAGE_CNT			(9)			//ダメージカウント数
 #define APP_CNT				(100)		//点滅時間
 #define STEP_CNT			(25)		//歩く音のカウンター
+#define ACTION_FRAME		(50)		//2体目以降の敵の行動フレーム
 
 //静的メンバ変数宣言
+int CEnemy::m_nNumAll = 0;						//敵の総数
 char *CEnemy::m_apFileName[PARTS_MAX] =
 {
 	"data\\MODEL\\enemy\\00_body.x",
@@ -82,7 +85,7 @@ CEnemy::CEnemy()
 	m_pMotion = NULL;
 
 	//保存用構造体の初期化
-	for (int nCntSave = 0; nCntSave < MAX_ENEMY_POS; nCntSave++)
+	for (int nCntSave = 0; nCntSave < ENEMY_FRAME; nCntSave++)
 	{
 		m_aSaveAction[nCntSave].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//位置
 		m_aSaveAction[nCntSave].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//向き
@@ -116,6 +119,11 @@ CEnemy::CEnemy()
 	m_state = STATE_NONE;			//状態
 	m_enemyState = ENEMYSTATE_NONE;	//止まってる状態
 	m_nCntDamage = 0;				//ダメージカウンター
+
+	m_nNum = m_nNumAll;
+
+	m_nNumAll++;
+
 }
 
 //==============================================================
@@ -170,6 +178,10 @@ CEnemy::CEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_state = STATE_NONE;		//状態
 	m_enemyState = ENEMYSTATE_NONE;	//止まってる状態
 	m_nCntDamage = 0;			//ダメージカウンター
+
+	m_nNum = m_nNumAll;
+
+	m_nNumAll++;
 }
 
 //==============================================================
@@ -177,7 +189,7 @@ CEnemy::CEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 //==============================================================
 CEnemy::~CEnemy()
 {
-
+	m_nNumAll--;
 }
 
 //==============================================================
@@ -305,6 +317,16 @@ void CEnemy::Update(void)
 	//前回の位置更新
 	m_posOld = m_pos;
 
+	D3DXCOLOR RandCol = D3DXCOLOR((rand() % 15 + 5) * 0.1f, (rand() % 15 + 5) * 0.1f, (rand() % 15 + 5) * 0.1f, 0.7f);
+
+	//エフェクトの生成
+	CEffect::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 50.0f, m_pos.z),
+		m_move,
+		RandCol,
+		20.0f,
+		20,
+		0);
+
 	if (m_bChaseStart == true)
 	{//追いかけ開始したら
 
@@ -334,9 +356,7 @@ void CEnemy::Update(void)
 	//モーションの更新処理
 	m_pMotion->Update();
 
-	m_nFrameCounter++;		//フレーム数加算
-
-	if (m_nFrameCounter >= MAX_ENEMY_POS)
+	if (m_nFrameCounter >= (MAX_ENEMY_POS + (m_nNum * ACTION_FRAME)))
 	{//一定のフレーム数になったら
 
 		m_nFrameCounter = 0;		//フレーム数初期化
@@ -346,6 +366,10 @@ void CEnemy::Update(void)
 
 			m_bChaseStart = true;		//追いかけ開始
 		}
+	}
+	else
+	{
+		m_nFrameCounter++;		//フレーム数加算
 	}
 
 	//状態設定

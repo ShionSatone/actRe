@@ -10,6 +10,9 @@
 #include "object.h"
 #include "game.h"
 
+//マクロ定義
+#define ENEMY_FRAME		((MAX_ENEMY_POS * 2) + 1)		//敵が動くフレーム
+
 //前方宣言
 class CModelHier;	//モデルの階層構造
 class CMotion;		//モーションの階層構造
@@ -99,6 +102,8 @@ private:
 	void RotCorrection(void);				//向きの補正処理
 
 	static char *m_apFileName[PARTS_MAX];		//ファイル名
+	static int m_nNumAll;						//敵の総数
+	int m_nNum;									//敵の番号
 
 	D3DXVECTOR3 m_pos;		//位置
 	D3DXVECTOR3 m_posOld;	//前回の位置
@@ -132,7 +137,7 @@ private:
 
 	int m_nFrameCounter;	//フレーム数カウンタ
 
-	SaveAction m_aSaveAction[MAX_ENEMY_POS];		//行動保存用
+	SaveAction m_aSaveAction[ENEMY_FRAME];		//行動保存用
 	CMotion *m_pMotion;		//モーション情報
 };
 

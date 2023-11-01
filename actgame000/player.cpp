@@ -390,11 +390,11 @@ void CPlayer::UpdateFront(void)
 		m_pos += m_move;			//普通の移動量加算
 	}
 
-	//状態更新
-	CPlayer::UpdateState();
-
 	//当たった時の行動処理
 	CPlayer::CollisionAction();
+
+	//状態更新
+	CPlayer::UpdateState();
 
 	if (m_bDashAuto == false)
 	{
@@ -486,21 +486,6 @@ void CPlayer::UpdateState(void)
 
 			}
 		}
-
-		//if (m_nCntDamage <= 0)
-		//{//ダメージ時間が終わったら
-
-		//	m_state = CObject::STATE_NONE;		//通常状態にする
-
-		//	m_pos = m_posSavePoint[m_nNumPosSave];		//セーブした場所に戻る
-
-		//	//状態設定
-		//	for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)
-		//	{
-		//		m_apModel[nCntPlayer]->SetState(m_state);		//状態設定
-
-		//	}
-		//}
 
 		break;
 
@@ -1566,6 +1551,13 @@ void CPlayer::Screen(void)
 		m_move.x = 0.0f;
 	}
 
+	if (m_pos.y <= 0.0f && m_pos.x >= 1330.0f)
+	{//壁通り抜けたら
+
+		m_pos.x = 1300.0f;
+		m_move.x = 0.0f;
+	}
+
 	if (m_pos.y <= -6000.0f)
 	{//一番下まで行ったら
 
@@ -1646,7 +1638,7 @@ void CPlayer::Hit(void)
 		}
 
 		//パーティクル生成
-		//CParticle::Create(m_pos, D3DXCOLOR(0.1f, 0.4f, 0.5f, 1.0f), PARTICLETYPE_ENEMY, 30, 40);
+		//CParticle::Create(m_pos, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), PARTICLETYPE_EXPLOSION, 30, 40);
 
 		//状態設定
 		for (int nCntPlayer = 0; nCntPlayer < PARTS_MAX; nCntPlayer++)

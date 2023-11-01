@@ -66,7 +66,8 @@ private:
 
 	static bool m_bReset;			//リセットしたか
 	static bool m_bPause;			//ポーズ画面か
-	static bool m_bEnemySpawn;		//敵が出現したか
+	static bool m_bEnemySpawnFirst;			//敵が出現したか
+	static bool m_bEnemySpawnSecond;		//敵が出現したか
 
 	static GAMEMODE m_gameMode;		//ゲームモード
 	int m_nCntEnemy;				//敵出現カウント
